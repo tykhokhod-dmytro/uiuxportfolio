@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="static/main.css">
+    <link rel="stylesheet" href="static/default.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=DM Sans">
+    <link rel="icon" type="image/png" href="assets/images/img_Profile.png">
+    <link rel="stylesheet" href="static/font-awesome-4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: "DM Sans", sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="main">
+        <header>
+            <div class="logo-section">
+                <div class="avatar">
+                    <img src="assets/images/img_Profile.png" alt="avatar">
+                </div>
+                <div class="wrap-description">
+                    <div class="profile">UX/UI for Gaming</div>
+                    <div class="name">
+                        <div>Tykhokhod</div>
+                        <div class="first-name">Dmytro</div>
+                    </div>
+                    <div class="description">
+                        Helping to make games the best versions of themselves!
+                        My expertise spans from initial concept creation to delivery of a final,
+                        pixel-perfect, product and engine implementation.
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <nav>
+            <div class="btn-block">
+                <div class="adapted">
+                    <button class="btn btn-portfolio" type="button" onclick="moveToPosition(portfolioSection)">
+                        <span>Portfolio</span>
+                        <i class="fa fa-briefcase"></i>
+                    </button>
+                    <button class="btn btn-common" type="button" onclick="openUrlInNewTab(telegramUrl)">
+                        <span class="telegram">Telegram</span>
+                        <i class="fa fa-telegram"></i>
+                    </button>
+                    <button class="btn btn-common" type="button" onclick="openUrlInNewTab(linkedinUrl)">
+                        <span class="linkedin">Linkedin</span>
+                        <i class="fa fa-linkedin-square"></i>
+                    </button>
+                </div>
+                <button class="btn btn-common" type="button" onclick="openUrlInNewTab(cvUrl)">
+                    <span>Open CV</span>
+                    <i class="fa fa-download"></i>
+                </button>
+            </div>
+        </nav>
+
+    </div>
+</div>
+
+<main>
+    <div class="portfolio">
+        <div class="title">
+            Portfolio
+        </div>
+        <div class="content">
+            <div class="cards">
+                <div class="card" onclick="openUrlInNewTab(guildManagement)">
+                    <img src="assets/images/img_SectionImage.png" alt="image">
+                    <div class="card-name">Guild Management UI</div>
+                </div>
+
+                <div class="card" onclick="openCard(propsOverlay)">
+                    <img src="assets/images/img_SectionImage%20(1).png" alt="image">
+                    <div class="card-name">Sci-fi props and ui for mobile game</div>
+                </div>
+
+                <div class="card">
+                    <iframe src="https://www.youtube.com/embed/bzh3uiaKFiM/?rel=0"
+                            title="YouTube video player"
+                            style="border-radius: 26px 26px 0 0;"
+                            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    <div class="card-name-video">Fighting game ui</div>
+                </div>
+
+                <!-- TODO Here you can add additional items same vay as on cards block -->
+
+                <button class="btn to-top" onclick="moveToPosition(logoSection)"><i class="fa fa-arrow-circle-up"></i>
+                </button>
+            </div>
+        </div>
+        <div class="props-overlay">
+            <div class="props-image">
+                <i class="fa fa-close close" onclick="closeCard(propsOverlay)"></i>
+                <img src="assets/images/img_Bg.png" alt="image">
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="static/app.js"></script>
+</body>
+</html>
