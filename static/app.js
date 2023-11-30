@@ -9,7 +9,7 @@ const linkedinUrl = 'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQFvJVOUka
 const telegramUrl = 'https://t.me/dimatyk'
 const cvUrl = 'https://drive.google.com/file/d/165eS-ck1_4QATVF8BjENkgAQ3p_48ve6/view?usp=sharing'
 const guildManagement = 'https://www.behance.net/gallery/183406741/Guild-Management-Game-UIUX-Design'
-const uiScifi = 'https://tykhokhod-dmytro.github.io/uiuxportfolio/assets/images/img_1.png'
+const uiScifi = 'https://tykhokhod-dmytro.github.io/uiuxportfolio/assets/images/scifi_mobile_game.png'
 
 
 
