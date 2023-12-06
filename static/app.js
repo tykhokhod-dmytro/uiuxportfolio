@@ -10,7 +10,8 @@ const telegramUrl = 'https://t.me/dimatyk'
 const cvUrl = 'https://drive.google.com/file/d/165eS-ck1_4QATVF8BjENkgAQ3p_48ve6/view?usp=sharing'
 const guildManagement = 'https://www.behance.net/gallery/183406741/Guild-Management-Game-UIUX-Design'
 const uiScifi = 'https://tykhokhod-dmytro.github.io/uiuxportfolio/assets/images/scifi_mobile_game.png'
-
+const gameIcons = 'https://www.artstation.com/artwork/xJELr4'
+const registrationForm = 'https://www.figma.com/file/7AlN049v7YyGA1jC8XgDGQ/Registration-Form-for-RPG-Game%2C-input-and-button-kit?type=design&node-id=0-1&mode=design&t=4PBK07kCo82uoW28-0'
 
 
 window.addEventListener('scroll', function() {
