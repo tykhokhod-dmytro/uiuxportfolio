@@ -159,11 +159,19 @@ body {
     font-weight: 600;
     line-height: 1;
     text-decoration: none;
+    touch-action: manipulation;
     transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
 .btn i {
     font-size: 0.95em;
+}
+
+.btn:active {
+    color: #ffffff;
+    background: var(--accent);
+    box-shadow: 0 6px 14px rgba(234, 68, 38, 0.24);
+    transform: scale(0.98);
 }
 
 .btn:focus-visible,
@@ -433,7 +441,8 @@ body {
     }
 
     .btn:active {
-        transform: translateY(0);
+        box-shadow: 0 6px 14px rgba(234, 68, 38, 0.24);
+        transform: scale(0.98);
     }
 
     .card:not(.card-video):hover {
@@ -448,26 +457,6 @@ body {
 
     .to-top:hover {
         background: #f0492b;
-    }
-}
-
-@media (hover: none), (pointer: coarse) {
-    .btn:hover,
-    .btn:focus,
-    .btn:active {
-        color: var(--primary);
-        background: var(--surface);
-        box-shadow: 0 8px 20px rgba(28, 43, 121, 0.12);
-        transform: none;
-    }
-
-    .to-top:hover,
-    .to-top:focus,
-    .to-top:active {
-        color: #ffffff;
-        background: var(--accent);
-        box-shadow: 0 12px 28px rgba(234, 68, 38, 0.32);
-        transform: translateY(0);
     }
 }
 
