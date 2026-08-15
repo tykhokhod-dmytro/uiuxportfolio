@@ -50,10 +50,12 @@ body {
     height: auto;
 }
 
+/* Kicker above the name: it labels the name rather than competing with
+   it, so it sits a step down in both size and contrast. */
 .profile {
     font-weight: 700;
-    font-size: clamp(16px, 1.8vw, 24px);
-    color: #FAEBFF;
+    font-size: clamp(14px, 1.45vw, 20px);
+    color: rgba(250, 235, 255, 0.7);
 }
 
 /* One fluid ramp replaces the 88px / 28px / 28px / 28px staircase. */
