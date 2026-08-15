@@ -1,5 +1,6 @@
 const toTop = document.querySelector('.to-top')
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+const coarsePointer = window.matchMedia('(pointer: coarse)')
 const coverMode = new URLSearchParams(window.location.search).get('covers')
 
 if (coverMode !== 'original') {
@@ -25,6 +26,10 @@ document.querySelectorAll('[data-scroll-target]').forEach((button) => {
                 behavior: reduceMotion.matches ? 'auto' : 'smooth',
                 block: 'start'
             })
+        }
+
+        if (coarsePointer.matches) {
+            button.blur()
         }
     })
 })

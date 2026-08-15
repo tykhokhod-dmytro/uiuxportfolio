@@ -166,10 +166,6 @@ body {
     font-size: 0.95em;
 }
 
-.btn:active {
-    transform: translateY(0);
-}
-
 .btn:focus-visible,
 .card:focus-visible {
     outline: 3px solid rgba(255, 255, 255, 0.95);
@@ -436,6 +432,10 @@ body {
         transform: translateY(-2px);
     }
 
+    .btn:active {
+        transform: translateY(0);
+    }
+
     .card:not(.card-video):hover {
         border-color: rgba(70, 89, 215, 0.2);
         box-shadow: var(--shadow-md);
@@ -448,6 +448,26 @@ body {
 
     .to-top:hover {
         background: #f0492b;
+    }
+}
+
+@media (hover: none), (pointer: coarse) {
+    .btn:hover,
+    .btn:focus,
+    .btn:active {
+        color: var(--primary);
+        background: var(--surface);
+        box-shadow: 0 8px 20px rgba(28, 43, 121, 0.12);
+        transform: none;
+    }
+
+    .to-top:hover,
+    .to-top:focus,
+    .to-top:active {
+        color: #ffffff;
+        background: var(--accent);
+        box-shadow: 0 12px 28px rgba(234, 68, 38, 0.32);
+        transform: translateY(0);
     }
 }
 
