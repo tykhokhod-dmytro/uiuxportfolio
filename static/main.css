@@ -267,6 +267,10 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* If a cover is ever taller than the box, take the excess off the
+       bottom rather than the middle: the top of a screenshot carries the
+       header and headline, which is the part worth keeping. */
+    object-position: top center;
 }
 
 .card-name {
