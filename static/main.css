@@ -8,73 +8,94 @@ body {
 }
 
 .container {
-    width: 1450px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 1450px;
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
+/* Fluid padding instead of the old fixed 40px 255px: that padding alone
+   claimed 510px, which is why every narrow breakpoint had to pin .main to
+   a hand-picked width to stop it bursting out of the viewport. */
 .main {
+    width: 100%;
     background: linear-gradient(to left, #3686DA, #4C53D6);
     border-radius: 34px;
-    padding: 40px 255px;
+    padding: clamp(24px, 3vw, 40px) clamp(20px, 5vw, 70px);
     margin-top: 40px;
 }
 
+/* wrap does the work a `flex-direction: column` breakpoint used to do:
+   the text drops under the avatar exactly when it no longer fits. */
 .logo-section {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
+    gap: clamp(16px, 3vw, 40px);
+    max-width: 940px;
+    margin: 0 auto;
+}
+.wrap-description {
+    flex: 1 1 340px;
+    min-width: 0;
+}
+
+.avatar img {
+    display: block;
+    width: clamp(120px, 15vw, 221px);
+    height: auto;
 }
 
 .profile {
     font-weight: 700;
-    font-size: 24px;
+    font-size: clamp(16px, 1.8vw, 24px);
     color: #FAEBFF;
 }
 
+/* One fluid ramp replaces the 88px / 28px / 28px / 28px staircase. */
 .name {
     color: white;
     font-weight: 700 !important;
-    font-size: 88px;
+    font-size: clamp(36px, 6.2vw, 88px);
+    line-height: 0.95;
     display: flex;
     flex-direction: column;
 }
-.first-name {
-    margin-top: -28px;
-}
 
 .description {
-    font-size: 18px;
+    font-size: clamp(14px, 1.3vw, 18px);
     font-weight: 500;
     color: white
 }
 
-.avatar img {
-    margin-right: 40px;
-}
 .adapted {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
 }
 
 .btn-block {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    margin-top: 40px;
+    gap: 12px;
+    margin-top: clamp(24px, 3vw, 40px);
 }
 
 .btn {
     border: none;
     outline: none;
     border-radius: 27px;
-    padding: 18px 28px;
+    padding: clamp(12px, 1.5vw, 18px) clamp(18px, 2.2vw, 28px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 10px;
-    font-size: 18px;
+    font-size: clamp(15px, 1.2vw, 18px);
     font-weight: 700;
     cursor: pointer;
 }
@@ -101,17 +122,9 @@ body {
     box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.5);
     background: #F04B26;
 }
-
-.btn-portfolio {
-    color: white;
-    background: linear-gradient(to right, #FD5C33 0%, #FF5033 100%, #FC5F33 100%);
-}
-.btn-portfolio:hover {
-    background: linear-gradient(to bottom, #FD5C33 0%, #FF7058 50%, #FF9577 100%);
-}
-.btn-portfolio:active {
-    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.5);
-    background: #F04B26;
+.btn-common:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 3px;
 }
 .btn-play {
     background: #3B7BDA;
@@ -146,7 +159,7 @@ body {
 }
 .portfolio .title {
     font-weight: 700;
-    font-size: 68px;
+    font-size: clamp(32px, 5vw, 68px);
     margin: 40px 0 30px;
 }
 .content {
@@ -301,63 +314,18 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
-    .first-name {
-        margin-top: -8px;
-    }
-    .container {
-        width: 98%;
-    }
-    .profile {
-        font-size: 16px;
-        margin-top: 20px;
-    }
-    .logo-section {
-        flex-direction: column;
-        align-items: center;
-    }
-    .name {
-        font-size: 28px;
-        margin: 15px 0 20px;
-    }
+    /* Below this width the hero has wrapped, so the copy is under the
+       avatar rather than beside it and reads better centred. */
     .wrap-description {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .description {
         text-align: center;
-        font-size: 14px;
-    }
-    .avatar img {
-        margin-right: 0;
-    }
-    .telegram, .linkedin {
-        display: none;
-    }
-    .btn-block {
-        flex-direction: column;
-        align-items: center;
-        margin: 20px 0 40px
-    }
-    .btn {
-        padding: 12px 24px;
     }
     .main {
-        padding: 20px 15px;
-        width: 340px;
-        max-width: 100%;
         margin-top: 0;
     }
     .to-top {
         right: 5px;
         bottom: 5px;
         width: 65px;
-    }
-    .portfolio {
-        width: 98%;
-    }
-    .portfolio .title {
-        font-size: 28px;
     }
     .props-overlay img {
         width: 340px;
@@ -377,63 +345,13 @@ body {
 }
 
 @media only screen and (min-width: 601px) and (max-width: 1023px) {
-    .first-name {
-        margin-top: -8px;
-    }
-    .container {
-        width: 98%;
-    }
-    .profile {
-        font-size: 16px;
-        margin-top: 20px;
-    }
-    .logo-section {
-        flex-direction: column;
-        align-items: center;
-    }
-    .name {
-        font-size: 28px;
-        margin: 15px 0 20px;
-    }
-    .wrap-description {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .description {
-        text-align: center;
-        font-size: 14px;
-    }
-    .avatar img {
-        margin-right: 0;
-    }
-    .telegram, .linkedin {
-        display: none;
-    }
-    .btn-block {
-        flex-direction: column;
-        align-items: center;
-        margin: 20px 0 40px
-    }
-    .btn {
-        padding: 12px 24px;
-    }
     .main {
-        padding: 20px 15px;
-        width: 540px;
-        max-width: 100%;
         margin-top: 0;
     }
     .to-top {
         right: 5px;
         bottom: 5px;
         width: 65px;
-    }
-    .portfolio {
-        width: 98%;
-    }
-    .portfolio .title {
-        font-size: 28px;
     }
     .props-overlay img {
         width: 540px;
@@ -453,47 +371,6 @@ body {
 }
 
 @media only screen and (min-width: 1024px) and (max-width: 1366px) {
-
-    .logo-section {
-        flex-direction: column;
-        align-items: center;
-    }
-    .name {
-        font-size: 28px;
-        margin: 15px 0 20px;
-    }
-    .first-name {
-        margin-top: -5px;
-    }
-    .wrap-description {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .description {
-        text-align: center;
-        font-size: 14px;
-    }
-    .avatar img {
-        margin-right: 0;
-    }
-    .telegram, .linkedin {
-        display: none;
-    }
-    .btn-block {
-        flex-direction: column;
-        align-items: center;
-        margin: 20px 0 40px
-    }
-    .btn {
-        padding: 17px 24px;
-    }
-    .main {
-        padding: 20px 15px;
-        width: 840px;
-        max-width: 100%;
-        margin-top: 0;
-    }
     .props-overlay img {
         width: 840px;
         max-width: 80%;
