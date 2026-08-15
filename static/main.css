@@ -61,7 +61,12 @@ body {
     color: white;
     font-weight: 700 !important;
     font-size: clamp(36px, 6.2vw, 88px);
+    /* 0.95 keeps the two lines tight, but a line box that short is
+       shorter than the glyphs themselves, so the descender of the y in
+       "Dmytro" hangs below it and lands on the paragraph underneath.
+       Reserve that overhang in em so it tracks the fluid size. */
     line-height: 0.95;
+    margin: 0.12em 0 0.22em;
     display: flex;
     flex-direction: column;
 }
