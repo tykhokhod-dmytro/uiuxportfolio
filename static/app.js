@@ -8,12 +8,10 @@ const closeBtn = document.querySelector('.close')
 const linkedinUrl = 'https://www.linkedin.com/authwall?trk=bf&trkInfo=AQFvJVOUkaRfPwAAAYvtPduA40YaHeMDNFEPDSNBvxTTu3OH43_UBsW7PgckQty5dNQIcbWbs_VYeq8eLAv8Za_TYrz2QWV4nkm3QwS4PXrQuqvaESkywZ8llFUOYvnG0fMTbJM=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fin%2Fdmytro-tykhokhod-5a72621b6%2F'
 const telegramUrl = 'https://t.me/dimatyk'
 const cvUrl = 'https://drive.google.com/file/d/1KQ-A8HuBuYhqAQ2YOmH59eBYQNU2JqgN/view?usp=sharing'
-const guildManagement = 'https://www.behance.net/gallery/183406741/Guild-Management-Game-UIUX-Design'
-const uiScifi = 'https://tykhokhod-dmytro.github.io/uiuxportfolio/assets/images/scifi_mobile_game.png'
-const gameIcons = 'https://www.artstation.com/artwork/xJELr4'
-const registrationForm = 'https://www.figma.com/file/7AlN049v7YyGA1jC8XgDGQ/Registration-Form-for-RPG-Game%2C-input-and-button-kit?type=design&node-id=0-1&mode=design&t=4PBK07kCo82uoW28-0'
-const sandRaiders = 'https://store.steampowered.com/app/1431300/SAND_Raiders_of_Sophie/'
-const duckhub = 'https://www.duck-hub.com/'
+
+// Portfolio cards are plain <a> links in index.html, so they need no JS:
+// they survive a script error, open in a new tab on middle-click and are
+// reachable by keyboard. Only the header buttons still call openUrlInNewTab.
 
 
 window.addEventListener('scroll', function() {

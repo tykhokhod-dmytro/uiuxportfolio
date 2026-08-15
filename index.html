@@ -72,57 +72,64 @@
         </div>
         <div class="content">
             
+            <!-- One wrapping grid: add a card anywhere and the rows re-flow themselves. -->
             <div class="cards">
-                <div class="card" onclick="openUrlInNewTab(guildManagement)">
-                    <img src="assets/images/img_SectionImage.png" alt="image">
-                    <div class="card-name">Guild Management UI</div>
-                </div>
-
-                <div class="card" onclick="openUrlInNewTab(uiScifi)">
-                    <img src="assets/images/img_SectionImage%20(1).png" alt="image">
-                    <div class="card-name">Sci-fi props and ui for mobile game</div>
-                </div>
-
-                <div class="card">
-                    <iframe src="https://www.youtube.com/embed/bzh3uiaKFiM/?rel=0"
-                            title="YouTube video player"
-                            style="border-radius: 26px 26px 0 0;"
-                            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                    <div class="card-name-video">Fighting game ui</div>
-                </div>
-
-                
-
-            </div>
-                        <div class="cards">
-                <div class="card" onclick="openUrlInNewTab(gameIcons)">
-                    <img src="assets/images/img_SectionImage%20(4).png" alt="image">
-                    <div class="card-name">Game icons</div>
-                </div>
-
-                <div class="card" onclick="openUrlInNewTab(registrationForm)">
-                    <img src="assets/images/img_SectionImage%20(5).png" alt="image">
-                    <div class="card-name">Registration form for RPG Game</div>
-                </div>
-
-                <div class="card" onclick="openUrlInNewTab(sandRaiders)">
-                    <img src="assets/images/sand_raiders_of_sophie.jpg" alt="image">
+                <a class="card" href="https://store.steampowered.com/app/1431300/SAND_Raiders_of_Sophie/"
+                   target="_blank" rel="noopener noreferrer">
+                    <div class="card-media">
+                        <img src="assets/images/sand_raiders_of_sophie.jpg"
+                             alt="SAND: Raiders of Sophie key art and in-game builder interface">
+                    </div>
                     <div class="card-name">SAND: Raiders of Sophie — game UI</div>
-                </div>
+                </a>
 
-            </div>
-
-            <div class="cards">
-                <div class="card" onclick="openUrlInNewTab(duckhub)">
-                    <img src="assets/images/duckhub.png" alt="image">
+                <a class="card" href="https://www.duck-hub.com/" target="_blank" rel="noopener noreferrer">
+                    <div class="card-media">
+                        <img src="assets/images/duckhub.png" alt="Duckhub QR menu platform">
+                    </div>
                     <div class="card-name">Duckhub — QR menu SaaS platform</div>
+                </a>
+
+                <a class="card" href="https://www.behance.net/gallery/183406741/Guild-Management-Game-UIUX-Design"
+                   target="_blank" rel="noopener noreferrer">
+                    <div class="card-media">
+                        <img src="assets/images/img_SectionImage.png" alt="Guild management game UI">
+                    </div>
+                    <div class="card-name">Guild Management UI</div>
+                </a>
+
+                <a class="card" href="assets/images/scifi_mobile_game.png" target="_blank" rel="noopener noreferrer">
+                    <div class="card-media">
+                        <img src="assets/images/img_SectionImage%20(1).png" alt="Sci-fi props and UI for a mobile game">
+                    </div>
+                    <div class="card-name">Sci-fi props and ui for mobile game</div>
+                </a>
+
+                <div class="card card-video">
+                    <div class="card-media">
+                        <iframe src="https://www.youtube.com/embed/bzh3uiaKFiM/?rel=0"
+                                title="Fighting game UI showreel"
+                                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                    </div>
+                    <div class="card-name">Fighting game ui</div>
                 </div>
 
+                <a class="card" href="https://www.artstation.com/artwork/xJELr4" target="_blank" rel="noopener noreferrer">
+                    <div class="card-media">
+                        <img src="assets/images/img_SectionImage%20(4).png" alt="Game icons">
+                    </div>
+                    <div class="card-name">Game icons</div>
+                </a>
+
+                <a class="card" href="https://www.figma.com/file/7AlN049v7YyGA1jC8XgDGQ/Registration-Form-for-RPG-Game%2C-input-and-button-kit?type=design&node-id=0-1&mode=design&t=4PBK07kCo82uoW28-0"
+                   target="_blank" rel="noopener noreferrer">
+                    <div class="card-media">
+                        <img src="assets/images/img_SectionImage%20(5).png" alt="Registration form for an RPG game">
+                    </div>
+                    <div class="card-name">Registration form for RPG Game</div>
+                </a>
             </div>
-
-
-            <!-- TODO Here you can add additional items same vay as on cards block -->
 
 
             <button class="btn to-top" onclick="moveToPosition(logoSection)"><i class="fa fa-arrow-circle-up"></i></button>
@@ -131,7 +138,5 @@
 </main>
 
 <script src="static/app.js"></script>
-</body>
-</html>
 </body>
 </html>
