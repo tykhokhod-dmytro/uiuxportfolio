@@ -1,84 +1,136 @@
+:root {
+    --page-bg: #f3f5f9;
+    --surface: #ffffff;
+    --text: #202335;
+    --muted: #697086;
+    --primary: #4659d7;
+    --primary-dark: #3446bd;
+    --accent: #ff5938;
+    --border: rgba(32, 35, 53, 0.09);
+    --shadow-sm: 0 8px 24px rgba(35, 42, 88, 0.08);
+    --shadow-md: 0 18px 50px rgba(35, 42, 88, 0.14);
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #F3F3F3;
-    max-width: 100%;
+    min-width: 320px;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+        radial-gradient(circle at 50% 0, rgba(76, 83, 214, 0.08), transparent 32rem),
+        var(--page-bg);
+    color: var(--text);
+    font-family: "DM Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
 .container {
     width: 100%;
-    max-width: 1450px;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    max-width: 1490px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 3vw, 30px);
 }
 
-/* Fluid padding instead of the old fixed 40px 255px: that padding alone
-   claimed 510px, which is why every narrow breakpoint had to pin .main to
-   a hand-picked width to stop it bursting out of the viewport. */
 .main {
+    position: relative;
+    isolation: isolate;
     width: 100%;
-    background: linear-gradient(to left, #3686DA, #4C53D6);
-    border-radius: 34px;
-    padding: clamp(24px, 3vw, 40px) clamp(20px, 5vw, 70px);
-    margin-top: 40px;
+    margin-top: clamp(16px, 3vw, 40px);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: clamp(24px, 3vw, 36px);
+    padding: clamp(28px, 4.5vw, 64px) clamp(20px, 6vw, 84px);
+    background: linear-gradient(125deg, #4d50d6 0%, #3e67d9 52%, #3289db 100%);
+    box-shadow: 0 28px 70px rgba(55, 76, 184, 0.2);
 }
 
-/* wrap does the work a `flex-direction: column` breakpoint used to do:
-   the text drops under the avatar exactly when it no longer fits. */
+.main::before,
+.main::after {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.main::before {
+    top: -230px;
+    right: -170px;
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.main::after {
+    bottom: -260px;
+    left: -160px;
+    width: 420px;
+    height: 420px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
 .logo-section {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     align-items: center;
-    gap: clamp(16px, 3vw, 40px);
-    max-width: 940px;
+    justify-content: center;
+    gap: clamp(24px, 4vw, 56px);
+    max-width: 1040px;
     margin: 0 auto;
 }
-.wrap-description {
-    flex: 1 1 340px;
-    min-width: 0;
+
+.avatar {
+    flex: 0 0 auto;
+    padding: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 20px 45px rgba(24, 38, 122, 0.18);
 }
 
 .avatar img {
     display: block;
-    width: clamp(120px, 15vw, 221px);
+    width: clamp(144px, 16vw, 220px);
     height: auto;
 }
 
-/* Kicker above the name: it labels the name rather than competing with
-   it, so it sits a step down in both size and contrast. */
-.profile {
-    font-weight: 700;
-    font-size: clamp(14px, 1.45vw, 20px);
-    color: rgba(250, 235, 255, 0.7);
+.wrap-description {
+    flex: 1 1 520px;
+    min-width: 0;
+    max-width: 700px;
 }
 
-/* One fluid ramp replaces the 88px / 28px / 28px / 28px staircase. */
+.profile {
+    color: rgba(255, 255, 255, 0.74);
+    font-size: clamp(14px, 1.4vw, 19px);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
 .name {
-    color: white;
-    font-weight: 700 !important;
-    font-size: clamp(36px, 6.2vw, 88px);
-    /* 0.95 keeps the two lines tight, but a line box that short is
-       shorter than the glyphs themselves, so the descender of the y in
-       "Dmytro" hangs below it and lands on the paragraph underneath.
-       Reserve that overhang in em so it tracks the fluid size. */
-    line-height: 0.95;
-    margin: 0.12em 0 0.22em;
     display: flex;
     flex-direction: column;
+    margin: 0.12em 0 0.24em;
+    color: #ffffff;
+    font-size: clamp(44px, 6vw, 84px);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
 }
 
 .description {
-    font-size: clamp(14px, 1.3vw, 18px);
+    max-width: 650px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(15px, 1.35vw, 18px);
     font-weight: 500;
-    color: white
+    line-height: 1.55;
 }
 
+.btn-block,
 .adapted {
     display: flex;
     flex-wrap: wrap;
@@ -87,314 +139,337 @@ body {
 }
 
 .btn-block {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-top: clamp(24px, 3vw, 40px);
+    margin-top: clamp(28px, 4vw, 44px);
 }
 
 .btn {
-    border: none;
-    outline: none;
-    border-radius: 27px;
-    padding: clamp(12px, 1.5vw, 18px) clamp(18px, 2.2vw, 28px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: clamp(15px, 1.2vw, 18px);
-    font-weight: 700;
-    cursor: pointer;
-}
-.btn span {
-    margin-right: 6px;
-}
-
-.btn img {
-    width: 12px;
-    height: 12px;
-}
-
-.btn-common {
-    color: #426CD9;
-    background: white;
-}
-
-.btn-common:hover {
-    color: white;
-    background: linear-gradient(to right, #FD5C33 0%, #FF5033 100%, #FC5F33 100%);
-}
-
-.btn-common:active {
-    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.5);
-    background: #F04B26;
-}
-.btn-common:focus-visible {
-    outline: 3px solid white;
-    outline-offset: 3px;
-}
-.btn-play {
-    background: #3B7BDA;
-    width: 82px;
-    height: 82px;
-    border-radius: 50%;
-    display: flex;justify-content: center;
-    align-items: center;
-    position: absolute;
-    z-index: 12;
-    top: 40%;
-    left: 44%
-}
-.btn-play:hover {
-    background: #5F9FFF;
-}
-.btn-play:active {
-    background: #3B7BDA;
-    box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.5);
-}
-.btn-play img {
-    width: 38px;
-    height: 38px;
-}
-.portfolio {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
+    min-height: 52px;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
-}
-.portfolio .title {
+    gap: 9px;
+    border: 0;
+    border-radius: 999px;
+    padding: 14px 22px;
+    color: var(--primary);
+    background: var(--surface);
+    box-shadow: 0 8px 20px rgba(28, 43, 121, 0.12);
+    cursor: pointer;
+    font-size: 16px;
     font-weight: 700;
-    font-size: clamp(28px, 4.2vw, 56px);
-    /* Charcoal rather than pure black: it is a section marker, so it can
-       sit a shade back from the card titles under it. */
-    color: #333333;
-    margin: 40px 0 30px;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
+
+.btn i {
+    font-size: 0.95em;
+}
+
+.btn:hover {
+    color: #ffffff;
+    background: var(--accent);
+    box-shadow: 0 12px 26px rgba(234, 68, 38, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:focus-visible,
+.card:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.95);
+    outline-offset: 4px;
+}
+
+.portfolio {
+    width: 100%;
+    padding-top: clamp(48px, 7vw, 88px);
+}
+
+.portfolio .title {
+    margin: 0 auto clamp(24px, 4vw, 40px);
+    padding: 0 20px;
+    color: var(--text);
+    font-size: clamp(34px, 5vw, 58px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-align: center;
+}
+
 .content {
     position: relative;
     width: 100%;
-    max-width: 1469px; /* grid 1429 + 20px gutter each side */
+    max-width: 1490px;
     margin: 0 auto;
-    padding: 0 20px 40px;
+    padding: 0 clamp(16px, 3vw, 30px) clamp(64px, 8vw, 110px);
 }
-.to-top {
-    position: fixed;
-    z-index: 10;
-    right: 20px;
-    bottom: 30px;
-    border-radius: 50%;
-    width: 76px;
-    font-size: 40px;
-    color: white;
-    background: linear-gradient(to right, #FD5C33 0%, #FF5033 100%, #FC5F33 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
-}
-.to-top:hover {
-    color: white;
-    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
-}
-.to-top:active {
-    color: white;
-    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.5);
-}
-/* Responsive grid: cards reflow on their own, so rows are never hand-split.
-   auto-fit keeps every column the same width, so a lone card on the last
-   row stays the size of its siblings instead of stretching to fill it.
-   min(100%, 380px) lets the track shrink below 380px on narrow phones
-   instead of overflowing the screen. */
+
 .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 24px);
     width: 100%;
-    max-width: 1429px; /* 3 x 463 + 2 x 20 gap */
-    margin: 0 auto;
 }
+
 .card {
-    width: 100%;
-    max-width: 463px;
-    margin: 0 auto;
-    border-radius: 26px;
-    overflow: hidden;
-    background: white;
-    color: inherit;
-    text-decoration: none;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.08);
-    /* Short and decelerating: the motion is nearly over by the time the eye
-       settles on the card, which is what makes a hover feel responsive
-       rather than slow. ease-in-out spends its first third accelerating,
-       so the same distance reads as sluggish. */
-    transition: transform 160ms cubic-bezier(0.2, 0, 0, 1),
-                box-shadow 160ms cubic-bezier(0.2, 0, 0, 1);
     display: flex;
+    min-width: 0;
     flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    color: inherit;
     cursor: pointer;
+    text-decoration: none;
+    transition: transform 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms ease;
 }
-/* Lift carries the "this is clickable" message; the scale only has to be
-   large enough to be felt, not seen. The deeper shadow does the rest. */
+
 .card:hover {
-    transform: translateY(-4px) scale(1.015);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07), 0 12px 24px rgba(0, 0, 0, 0.14);
+    border-color: rgba(70, 89, 215, 0.2);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-5px);
 }
+
 .card:active {
-    transform: translateY(-1px) scale(1.005);
-    transition-duration: 80ms;
+    transform: translateY(-1px);
 }
+
 .card:focus-visible {
-    outline: 3px solid #426CD9;
-    outline-offset: 3px;
+    outline-color: var(--primary);
 }
-.card-video, .card-video:hover, .card-video:active {
+
+.card-video,
+.card-video:hover,
+.card-video:active {
+    border-color: var(--border);
+    box-shadow: var(--shadow-sm);
     cursor: default;
     transform: none;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .card {
-        transition: box-shadow 160ms ease;
-    }
-    .card:hover, .card:active {
-        transform: none;
-    }
-}
-
-/* Fixed ratio box: the media keeps its shape at any card width, and
-   flex: none stops the column layout from squeezing its height. */
 .card-media {
-    flex: none;
+    position: relative;
     width: 100%;
     aspect-ratio: 461 / 334;
+    overflow: hidden;
+    background: #dfe3ef;
 }
+
+.card-media::after {
+    position: absolute;
+    inset: 0;
+    border-bottom: 1px solid rgba(32, 35, 53, 0.06);
+    content: "";
+    pointer-events: none;
+}
+
 .card-media img,
 .card-media iframe {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* If a cover is ever taller than the box, take the excess off the
-       bottom rather than the middle: the top of a screenshot carries the
-       header and headline, which is the part worth keeping. */
     object-position: top center;
 }
 
+.card-media img {
+    transition: transform 420ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.card:hover .card-media img {
+    transform: scale(1.025);
+}
+
 .card-name {
-    flex: 1 0 auto;
     display: flex;
+    min-height: 76px;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 16px 24px 20px;
-    font-size: 18px;
+    padding: 18px 22px 20px;
+    color: var(--text);
+    font-size: clamp(16px, 1.25vw, 18px);
     font-weight: 700;
+    line-height: 1.35;
 }
 
-.props-overlay {
-    display: none;
-    width: 100%;
-    min-height: 100vh;
-    height: 1500px;
-    background: rgba(0, 0, 0, 0.4);
-    position: absolute;
-    z-index: 20;
-    top: 0;
+.to-top {
+    position: fixed;
+    z-index: 10;
+    right: clamp(14px, 2vw, 26px);
+    bottom: clamp(14px, 2vw, 26px);
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border-radius: 50%;
+    color: #ffffff;
+    background: var(--accent);
+    box-shadow: 0 12px 28px rgba(234, 68, 38, 0.32);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
 }
 
-.props-overlay i {
-    position: absolute;
-    z-index: 40;
-    right: 22%;
-    top: 12px;
+.to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
 }
 
-.props-overlay img {
-    position: absolute;
-    z-index: 30;
-    width: 800px;
-    max-width: 80%;
-    min-height: 96%;
-    height: 1460px;
-    top: 30px;
-    right: 25%;
-}
-.fa-close {
-    color: white;
-    cursor: pointer;
+.to-top:hover {
+    background: #f0492b;
 }
 
-@media only screen and (max-width: 600px) {
-    /* Below this width the hero has wrapped, so the copy is under the
-       avatar rather than beside it and reads better centred. */
-    .wrap-description {
+@media (max-width: 1023px) {
+    .logo-section {
+        gap: 28px;
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    body {
+        background: var(--page-bg);
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .main {
+        margin-top: 12px;
+        border-radius: 24px;
+        padding: 32px 18px 22px;
+    }
+
+    .logo-section {
+        flex-direction: column;
+        gap: 20px;
         text-align: center;
     }
-    .main {
-        margin-top: 0;
+
+    .avatar {
+        padding: 5px;
     }
+
+    .avatar img {
+        width: clamp(126px, 38vw, 168px);
+    }
+
+    .wrap-description {
+        flex-basis: auto;
+    }
+
+    .profile {
+        font-size: 14px;
+    }
+
+    .name {
+        margin-top: 0.15em;
+        font-size: clamp(42px, 14vw, 58px);
+        line-height: 0.94;
+    }
+
+    .description {
+        max-width: 34rem;
+        margin: 0 auto;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .btn-block {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 26px;
+    }
+
+    .adapted {
+        display: contents;
+    }
+
+    .btn {
+        width: 100%;
+        min-width: 0;
+        min-height: 50px;
+        padding: 13px 12px;
+        font-size: 15px;
+    }
+
+    .portfolio {
+        padding-top: 48px;
+    }
+
+    .portfolio .title {
+        margin-bottom: 24px;
+        font-size: 36px;
+    }
+
+    .content {
+        padding: 0 12px 72px;
+    }
+
+    .cards {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .card {
+        width: 100%;
+        max-width: none;
+        border-radius: 20px;
+    }
+
+    .card-name {
+        min-height: 68px;
+        padding: 16px 18px 18px;
+        font-size: 17px;
+    }
+
     .to-top {
-        right: 5px;
-        bottom: 5px;
-        width: 65px;
-    }
-    .props-overlay img {
-        width: 340px;
-        max-width: 80%;
-        right: 9%;
-        height: 400px;
-    }
-    .props-overlay {
-        background: none;
-        height: 400px;
-        margin-top: 15rem;
-    }
-    .props-overlay i {
-        right: 7%;
-        top: 3px;
+        right: 12px;
+        bottom: 12px;
+        width: 48px;
+        height: 48px;
     }
 }
 
-@media only screen and (min-width: 601px) and (max-width: 1023px) {
+@media (max-width: 340px) {
+    .btn-block {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
     .main {
-        margin-top: 0;
+        padding-inline: 14px;
     }
+}
+
+@media (hover: none) {
+    .card:hover,
+    .btn:hover {
+        transform: none;
+    }
+
+    .card:hover .card-media img {
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .btn,
+    .card,
+    .card-media img,
     .to-top {
-        right: 5px;
-        bottom: 5px;
-        width: 65px;
-    }
-    .props-overlay img {
-        width: 540px;
-        max-width: 80%;
-        right: 15%;
-        height: 800px;
-    }
-    .props-overlay {
-        background: none;
-        height: 800px;
-        margin-top: 15rem;
-    }
-    .props-overlay i {
-        right: 17%;
-        top: 0;
+        transition: none;
     }
 }
-
-@media only screen and (min-width: 1024px) and (max-width: 1366px) {
-    .props-overlay img {
-        width: 840px;
-        max-width: 80%;
-        right: 18%;
-        height: 800px;
-    }
-    .props-overlay {
-        background: none;
-        height: 800px;
-        margin-top: 15rem;
-    }
-}
-
