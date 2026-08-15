@@ -166,7 +166,10 @@ body {
 }
 .portfolio .title {
     font-weight: 700;
-    font-size: clamp(32px, 5vw, 68px);
+    font-size: clamp(28px, 4.2vw, 56px);
+    /* Charcoal rather than pure black: it is a section marker, so it can
+       sit a shade back from the card titles under it. */
+    color: #333333;
     margin: 40px 0 30px;
 }
 .content {
