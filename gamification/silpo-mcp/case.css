@@ -383,11 +383,14 @@ h1 span::after {
 }
 
 .rank-badge {
+    display: inline-flex;
     width: auto;
     min-width: 0;
-    height: 21px;
+    height: 22px;
     flex: none;
     gap: 4px;
+    align-items: center;
+    justify-content: center;
     padding: 0 7px;
     border-radius: 999px;
     color: #fff;
@@ -397,6 +400,7 @@ h1 span::after {
     font-style: normal;
     letter-spacing: -.01em;
     line-height: 1;
+    white-space: nowrap;
 }
 
 .rank-badge span {
@@ -563,7 +567,7 @@ h1 span::after {
         url("reward-banner-wide-v2.png");
     background-repeat: no-repeat;
     background-position: center, right 8px center;
-    background-size: 100% 100%, auto 82%;
+    background-size: 100% 100%, auto 100%;
 }
 
 .grand-card::after {
@@ -769,9 +773,8 @@ h1 span::after {
     }
 
     .winner-card:hover .card-arrow {
-        border-radius: 50%;
-        background: #171717;
-        transform: translateX(4px) rotate(-4deg);
+        color: #000;
+        transform: translateX(4px);
     }
 
     .round-button:hover {
