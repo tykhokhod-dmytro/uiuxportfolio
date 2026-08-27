@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#111111">
-    <meta name="description" content="Three gamification concepts by Dmytro Tykhokhod.">
-    <title>Gamification Apps — Dmytro Tykhokhod</title>
+    <meta name="theme-color" content="#111116">
+    <meta name="description" content="Gamification concepts by Dmytro Tykhokhod.">
+    <title>Gamification — Dmytro Tykhokhod</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
@@ -13,59 +13,28 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <main class="stage">
-        <section class="phone" aria-label="Gamification app concepts">
-            <div class="status-bar" aria-hidden="true">
-                <strong>9:41</strong>
-                <span>▮▮▮ ᯤ ▰</span>
-            </div>
+    <main>
+        <a class="back" href="../"><span>←</span> Back to portfolio</a>
 
-            <nav class="phone-nav">
-                <a class="back-button" href="../" aria-label="Back to portfolio">
-                    <span>‹</span> Back to portfolio
-                </a>
-                <span class="profile">DT</span>
-            </nav>
+        <section class="content" aria-labelledby="page-title">
+            <h1 id="page-title">Gamification</h1>
 
-            <header class="intro">
-                <h1>Gamification<br>apps</h1>
-                <p>Three concepts. Tap one to explore.</p>
-            </header>
-
-            <div class="apps">
-                <a class="app app--silpo" href="silpo-mcp/">
-                    <span class="app-icon app-icon--silpo" aria-hidden="true">
-                        <i>AI</i>
-                        <b>✦</b>
-                    </span>
-                    <strong>Silpo</strong>
-                    <small>AI Factory</small>
-                    <em>Open</em>
+            <div class="apps" aria-label="Gamification projects">
+                <a class="app" href="silpo-mcp/">
+                    <img src="silpo-app-icon.webp" alt="Silpo app icon">
+                    <span>Silpo</span>
                 </a>
 
-                <div class="app app--locked" aria-label="Uklon concept, coming soon">
-                    <span class="app-icon app-icon--uklon" aria-hidden="true">
-                        <i>U</i>
-                        <b>⌁</b>
-                    </span>
-                    <strong>Uklon</strong>
-                    <small>City Missions</small>
-                    <em>Soon</em>
+                <div class="app app--inactive" aria-label="Uklon project, coming soon">
+                    <span class="placeholder placeholder--uklon" aria-hidden="true">U</span>
+                    <span>Uklon</span>
                 </div>
 
-                <div class="app app--locked" aria-label="Nova Post concept, coming soon">
-                    <span class="app-icon app-icon--nova" aria-hidden="true">
-                        <i>N</i>
-                        <b>↗</b>
-                    </span>
-                    <strong>Nova Post</strong>
-                    <small>Parcel Quest</small>
-                    <em>Soon</em>
+                <div class="app app--inactive" aria-label="Nova Post project, coming soon">
+                    <span class="placeholder placeholder--nova" aria-hidden="true">N</span>
+                    <span>Nova Post</span>
                 </div>
             </div>
-
-            <p class="hint"><span>1</span> concept ready to explore</p>
-            <div class="home-indicator" aria-hidden="true"></div>
         </section>
     </main>
 </body>

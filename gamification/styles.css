@@ -1,8 +1,5 @@
 :root {
     color-scheme: dark;
-    --ink: #f8f6ef;
-    --muted: #aaa7b6;
-    --line: rgba(255, 255, 255, .13);
     font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
@@ -16,322 +13,124 @@ body {
 
 body {
     margin: 0;
-    color: var(--ink);
-    background: radial-gradient(circle at 50% 20%, #35344a 0, #17171d 38%, #09090c 100%);
+    color: #f7f5ef;
+    background: #111116;
     -webkit-font-smoothing: antialiased;
 }
 
-a { color: inherit; }
-
-.stage {
-    display: grid;
+main {
+    display: flex;
+    width: min(100% - 40px, 760px);
     min-height: 100svh;
-    place-items: center;
-    padding: 20px;
-}
-
-.phone {
-    position: relative;
-    display: flex;
-    width: min(100%, 430px);
-    height: min(860px, calc(100svh - 40px));
-    min-height: 660px;
+    margin: 0 auto;
     flex-direction: column;
-    overflow: hidden;
-    padding: 0 26px 25px;
-    border: 1px solid rgba(255, 255, 255, .21);
-    border-radius: 48px;
-    background:
-        radial-gradient(circle at 88% 6%, rgba(151, 131, 255, .22), transparent 29%),
-        linear-gradient(155deg, #1f1e2b, #111118 72%);
-    box-shadow: 0 40px 100px rgba(0, 0, 0, .58), inset 0 0 0 1px rgba(255, 255, 255, .04);
+    padding: 32px 0;
 }
 
-.phone::before {
-    position: absolute;
-    top: 11px;
-    left: 50%;
-    width: 96px;
-    height: 27px;
-    border-radius: 999px;
-    background: #050506;
-    content: "";
-    transform: translateX(-50%);
-}
-
-.status-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 50px;
-    padding: 0 8px;
-    font-size: 13px;
-}
-
-.status-bar span {
-    font-size: 10px;
-    letter-spacing: .08em;
-}
-
-.phone-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 6px;
-}
-
-.back-button {
+.back {
     display: inline-flex;
+    width: fit-content;
     min-height: 44px;
     align-items: center;
-    gap: 7px;
-    padding: 8px 14px 8px 10px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, .06);
-    font-size: 13px;
-    font-weight: 800;
+    gap: 10px;
+    color: #d8d5de;
+    font-size: 14px;
+    font-weight: 700;
     text-decoration: none;
 }
 
-.back-button span {
-    display: grid;
-    width: 27px;
-    height: 27px;
-    place-items: center;
-    border-radius: 50%;
-    color: #111;
-    background: #f5f2e9;
-    font-size: 23px;
+.back span {
+    font-size: 22px;
     line-height: 1;
 }
 
-.profile {
-    display: grid;
-    width: 43px;
-    height: 43px;
-    place-items: center;
-    border-radius: 50%;
-    color: #111;
-    background: #e9ff5c;
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.intro {
-    padding: clamp(34px, 7vh, 68px) 0 clamp(28px, 5vh, 46px);
+.content {
+    margin: auto 0;
+    padding-bottom: 76px;
 }
 
 h1 {
-    margin: 0;
-    font-size: clamp(48px, 8vh, 72px);
+    margin: 0 0 42px;
+    font-size: clamp(42px, 8vw, 68px);
     font-weight: 800;
-    letter-spacing: -.07em;
-    line-height: .88;
-}
-
-.intro p {
-    margin: 18px 0 0;
-    color: #c3c0cc;
-    font-size: 15px;
-    font-weight: 600;
+    letter-spacing: -.065em;
+    line-height: 1;
 }
 
 .apps {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    gap: clamp(22px, 7vw, 58px);
 }
 
 .app {
-    position: relative;
     display: flex;
     min-width: 0;
     flex-direction: column;
     align-items: center;
-    color: var(--ink);
-    text-align: center;
+    gap: 13px;
+    color: #f7f5ef;
+    font-size: 15px;
+    font-weight: 600;
     text-decoration: none;
 }
 
-.app-icon {
-    position: relative;
+.app img,
+.placeholder {
     display: grid;
     width: 100%;
     aspect-ratio: 1;
     place-items: center;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, .25);
-    border-radius: 25%;
-    box-shadow: 0 15px 28px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .28);
-    transition: transform .2s ease, box-shadow .2s ease;
+    border-radius: 23%;
 }
 
-.app-icon::after {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(145deg, rgba(255, 255, 255, .3), transparent 42%);
-    content: "";
+.app img {
+    object-fit: cover;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, .28);
+    transition: transform .18s ease;
 }
 
-.app-icon i {
-    position: relative;
-    z-index: 1;
-    font-size: clamp(26px, 8vw, 40px);
-    font-style: normal;
-    font-weight: 800;
-    letter-spacing: -.08em;
-}
-
-.app-icon b {
-    position: absolute;
-    z-index: 2;
-    right: 10px;
-    bottom: 7px;
-    font-size: 20px;
-}
-
-.app-icon--silpo {
-    color: #151515;
-    background: linear-gradient(145deg, #ffe06a, #ffb800 68%, #ff7a00);
-}
-
-.app-icon--silpo i {
-    display: grid;
-    width: 54%;
-    aspect-ratio: 1;
-    place-items: center;
-    border: 3px solid currentColor;
-    border-radius: 18px;
-}
-
-.app-icon--uklon {
-    color: #111;
-    background: linear-gradient(145deg, #ddff74, #8eea2b 66%, #50a617);
-}
-
-.app-icon--nova {
-    color: #fff;
-    background: linear-gradient(145deg, #ff7b72, #ef3737 60%, #a80d1a);
-}
-
-.app strong {
-    max-width: 100%;
-    margin-top: 12px;
-    overflow: hidden;
-    font-size: 14px;
-    letter-spacing: -.025em;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.app small {
-    max-width: 100%;
-    margin-top: 2px;
-    overflow: hidden;
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.app em {
-    margin-top: 9px;
-    padding: 5px 9px;
-    border-radius: 999px;
-    color: #111;
-    background: #e9ff5c;
-    font-size: 9px;
-    font-style: normal;
-    font-weight: 800;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-}
-
-.app--locked { opacity: .54; }
-
-.app--locked em {
-    color: #d1ced8;
-    background: rgba(255, 255, 255, .11);
-}
-
-.hint {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin: auto auto 20px;
-    color: var(--muted);
-    font-size: 12px;
+.placeholder {
+    color: rgba(255, 255, 255, .75);
+    background: #292931;
+    font-size: clamp(30px, 8vw, 48px);
     font-weight: 700;
 }
 
-.hint span {
-    display: grid;
-    width: 25px;
-    height: 25px;
-    place-items: center;
-    border-radius: 50%;
-    color: #111;
-    background: #e9ff5c;
-    font-size: 11px;
-}
+.placeholder--uklon { background: #415c2d; }
+.placeholder--nova { background: #603033; }
 
-.home-indicator {
-    width: 132px;
-    height: 5px;
-    margin: 0 auto;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, .8);
+.app--inactive {
+    color: #77747f;
+    cursor: default;
 }
 
 @media (hover: hover) {
-    .app--silpo:hover .app-icon {
-        box-shadow: 0 19px 36px rgba(255, 177, 0, .26), inset 0 1px 0 rgba(255, 255, 255, .36);
-        transform: translateY(-6px) scale(1.03);
-    }
-
-    .back-button:hover { background: rgba(255, 255, 255, .12); }
+    a.app:hover img { transform: translateY(-5px); }
+    .back:hover { color: #fff; }
 }
 
-@media (max-width: 470px) {
-    body { background: #111118; }
-
-    .stage {
-        display: block;
-        padding: 0;
+@media (max-width: 520px) {
+    main {
+        width: min(100% - 32px, 760px);
+        padding-top: 20px;
     }
 
-    .phone {
-        width: 100%;
-        height: 100svh;
-        min-height: 620px;
-        padding-right: 20px;
-        padding-left: 20px;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
+    .content { padding-bottom: 48px; }
+
+    h1 {
+        margin-bottom: 34px;
+        font-size: 46px;
     }
 
-    .phone::before { display: none; }
+    .apps { gap: 14px; }
 
-    .intro { padding-top: clamp(34px, 8vh, 62px); }
-}
-
-@media (max-height: 730px) {
-    .intro {
-        padding-top: 26px;
-        padding-bottom: 25px;
+    .app {
+        gap: 10px;
+        font-size: 13px;
     }
-
-    h1 { font-size: 48px; }
-    .app strong { margin-top: 8px; }
-    .app em { margin-top: 6px; }
-    .hint { margin-bottom: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after { transition: none !important; }
+    * { transition: none !important; }
 }
