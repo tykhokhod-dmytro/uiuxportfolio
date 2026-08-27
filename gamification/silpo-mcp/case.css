@@ -272,8 +272,8 @@ h1 span::after {
     padding: 18px 22px 20px;
     border: 0;
     border-radius: 22px;
-    background: linear-gradient(135deg, #f9e9bd, #f1d68f);
-    box-shadow: 0 10px 24px rgba(165, 120, 0, .08);
+    background: #fff;
+    box-shadow: 0 10px 24px rgba(66, 51, 24, .08);
 }
 
 .progress-panel > div:first-child {
@@ -384,16 +384,23 @@ h1 span::after {
 
 .rank-badge {
     width: auto;
-    min-width: 30px;
-    height: 24px;
+    min-width: 0;
+    height: 21px;
     flex: none;
-    padding: 0 9px;
+    gap: 4px;
+    padding: 0 7px;
     border-radius: 999px;
     color: #fff;
     background: #171717;
     box-shadow: none;
-    font-size: 12px;
+    font-size: 10px;
     font-style: normal;
+    letter-spacing: -.01em;
+    line-height: 1;
+}
+
+.rank-badge span {
+    font-size: 10px;
 }
 
 .large-medal--silver {
@@ -465,17 +472,15 @@ h1 span::after {
 
 .card-arrow {
     display: grid;
-    width: 42px;
-    height: 42px;
+    width: 30px;
+    height: 30px;
     place-items: center;
     justify-self: end;
-    border-radius: 14px;
-    color: #fff;
-    background: rgba(23, 23, 23, .88);
-    box-shadow: 0 7px 16px rgba(23, 23, 23, .16);
-    font-size: 22px;
-    font-weight: 800;
-    transition: transform .18s ease, border-radius .18s ease, background .18s ease;
+    color: rgba(23, 23, 23, .82);
+    background: transparent;
+    font-size: 25px;
+    font-weight: 500;
+    transition: transform .18s ease, color .18s ease;
 }
 
 .grand-card,
@@ -553,9 +558,12 @@ h1 span::after {
     padding: 22px 24px;
     border: 2px solid rgba(255, 255, 255, .14);
     background-color: #101010;
-    background-image: url("reward-banner-wide-v2.png");
-    background-position: right center;
-    background-size: cover;
+    background-image:
+        linear-gradient(90deg, #101010 0%, #101010 43%, rgba(16, 16, 16, .08) 72%),
+        url("reward-banner-wide-v2.png");
+    background-repeat: no-repeat;
+    background-position: center, right 8px center;
+    background-size: 100% 100%, auto 82%;
 }
 
 .grand-card::after {
@@ -613,7 +621,7 @@ h1 span::after {
     padding: 14px 24px;
     border: 0;
     color: #111;
-    background: #ffd45a;
+    background: var(--yellow);
     box-shadow: 0 7px 0 #d39d00, 0 12px 21px rgba(183, 128, 0, .2);
     font-size: 18px;
     letter-spacing: -.02em;
@@ -671,8 +679,8 @@ h1 span::after {
     margin-top: 18px;
     border: 1px solid rgba(255, 255, 255, .92);
     border-radius: 999px;
-    background: #ffb66f;
-    box-shadow: 0 12px 26px rgba(161, 83, 17, .24);
+    background: var(--yellow);
+    box-shadow: 0 12px 26px rgba(168, 119, 0, .2);
     user-select: none;
 }
 
@@ -681,7 +689,7 @@ h1 span::after {
     inset: 0 auto 0 0;
     width: var(--swipe-progress);
     border-radius: inherit;
-    background: #ffd66a;
+    background: var(--yellow-bright);
     content: "";
 }
 
@@ -1319,17 +1327,30 @@ h1 span::after {
     }
 
     .winner-card {
-        grid-template-columns: 108px minmax(0, 1fr) 38px;
-        gap: 12px;
+        grid-template-columns: 108px minmax(0, 1fr) 30px;
+        gap: 10px;
         min-height: 132px;
         padding: 0 12px 0 10px;
     }
 
+    .winner-card-title {
+        gap: 5px;
+    }
+
+    .rank-badge {
+        gap: 3px;
+        padding: 0 5px;
+        font-size: 9px;
+    }
+
+    .rank-badge span {
+        font-size: 9px;
+    }
+
     .card-arrow {
-        width: 38px;
-        height: 38px;
-        border-radius: 13px;
-        font-size: 20px;
+        width: 28px;
+        height: 28px;
+        font-size: 23px;
     }
 
     .winner-card-copy b {

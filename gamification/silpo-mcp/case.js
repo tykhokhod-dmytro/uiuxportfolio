@@ -83,11 +83,12 @@ function progressMarkup() {
 function winnerCard(id) {
     const product = products[id]
     const completed = state.completed.has(id)
+    const place = ['1st', '2nd', '3rd'][product.rank - 1]
     return `
         <button class="winner-card winner-card--${product.medal} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
             <span class="winner-thumb winner-thumb--${id}"></span>
             <span class="winner-card-copy">
-                <span class="winner-card-title"><b>${product.name}</b><i class="rank-badge rank-badge--${product.medal}">${completed ? '✓' : product.rank}</i></span>
+                <span class="winner-card-title"><b>${product.name}</b><i class="rank-badge rank-badge--${product.medal}"><span aria-hidden="true">🏆</span>${place} place</i></span>
                 <small>${product.short}</small>
             </span>
             <span class="card-arrow" aria-hidden="true">→</span>
