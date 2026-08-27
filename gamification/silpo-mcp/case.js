@@ -53,6 +53,7 @@ const state = {
 }
 
 let toastTimer
+let swipeGesture = null
 
 function topBar(backAction = 'exit') {
     return `
@@ -82,14 +83,14 @@ function progressMarkup() {
 function winnerCard(id) {
     const product = products[id]
     const completed = state.completed.has(id)
-    const claimed = state.claimed.has(id)
-    const status = claimed ? 'Claimed' : completed ? 'Reward ready' : id === nextProduct() ? 'Start here' : ''
     return `
         <button class="winner-card winner-card--${product.medal} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
-            <span class="mini-medal">${completed ? '✓' : product.rank}</span>
             <span class="winner-thumb winner-thumb--${id}"></span>
-            <span class="winner-card-copy"><b>${product.name}</b><small>${product.short}</small>${status ? `<em>${status}</em>` : ''}</span>
-            <span class="chevron">›</span>
+            <span class="winner-card-copy">
+                <span class="winner-card-title"><b>${product.name}</b><i class="rank-badge rank-badge--${product.medal}">${completed ? '✓' : product.rank}</i></span>
+                <small>${product.short}</small>
+            </span>
+            <span class="card-arrow" aria-hidden="true">→</span>
         </button>`
 }
 
@@ -98,7 +99,6 @@ function nextProduct() {
 }
 
 function hubScreen() {
-    const next = nextProduct()
     const allClaimed = state.claimed.size === 3
     return `
         <section class="screen screen--hub">
@@ -113,10 +113,15 @@ function hubScreen() {
                     ${winnerCard('cooklist')}${winnerCard('restock')}${winnerCard('gather')}
                 </div>
                 <section class="grand-card ${allClaimed ? 'is-ready' : ''}">
-                    <div><small>${allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points<br>+ 3 prize boxes</strong></div>
+                    <div><small>${allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points</strong><em class="grand-chip">+ 3 prize boxes</em></div>
                 </section>
-                <button class="primary-button sticky-action" type="button" data-action="${allClaimed ? 'show-final' : 'start'}">${allClaimed ? 'Open grand reward' : state.completed.size ? 'Continue' : 'Start'} ✦</button>
-                <small class="next-label">${allClaimed ? 'All rewards claimed' : `Next: ${products[next].name}`}</small>
+                ${allClaimed
+                    ? '<button class="primary-button sticky-action" type="button" data-action="show-final">Open grand reward ✦</button>'
+                    : `<div class="swipe-control" data-swipe>
+                        <button class="swipe-thumb" type="button" data-action="swipe-start" aria-label="Swipe right to ${state.completed.size ? 'continue' : 'start'}">›</button>
+                        <strong>Swipe to ${state.completed.size ? 'continue' : 'start'}</strong>
+                        <span aria-hidden="true">››</span>
+                    </div>`}
             </div>
         </section>`
 }
@@ -221,6 +226,12 @@ function render() {
     app.scrollTop = 0
 }
 
+function openNextProduct() {
+    state.selected = nextProduct()
+    state.screen = 'detail'
+    render()
+}
+
 function showToast() {
     window.clearTimeout(toastTimer)
     toast.hidden = false
@@ -245,7 +256,8 @@ document.addEventListener('click', (event) => {
 
     if (action === 'exit') window.location.href = '../'
     if (action === 'hub') { state.screen = 'hub'; render() }
-    if (action === 'start') { state.selected = nextProduct(); state.screen = 'detail'; render() }
+    if (action === 'start') openNextProduct()
+    if (action === 'swipe-start' && event.detail === 0) openNextProduct()
     if (action === 'open-detail') { state.selected = id; state.screen = 'detail'; render() }
     if (action === 'detail') { state.screen = 'detail'; render() }
     if (action === 'open-demo') { state.selected = id; state.screen = 'demo'; render() }
@@ -288,6 +300,47 @@ document.addEventListener('click', (event) => {
     if (action === 'show-info') infoModal.hidden = false
     if (action === 'close-info') infoModal.hidden = true
 })
+
+document.addEventListener('pointerdown', (event) => {
+    const thumb = event.target.closest('.swipe-thumb')
+    if (!thumb) return
+    const track = thumb.closest('.swipe-control')
+    const max = Math.max(1, track.clientWidth - thumb.offsetWidth - 10)
+    swipeGesture = { pointerId: event.pointerId, startX: event.clientX, max, thumb, track }
+    thumb.setPointerCapture(event.pointerId)
+    track.classList.add('is-dragging')
+})
+
+document.addEventListener('pointermove', (event) => {
+    if (!swipeGesture || swipeGesture.pointerId !== event.pointerId) return
+    event.preventDefault()
+    const distance = Math.min(swipeGesture.max, Math.max(0, event.clientX - swipeGesture.startX))
+    swipeGesture.distance = distance
+    swipeGesture.thumb.style.transform = `translateX(${distance}px)`
+    swipeGesture.track.style.setProperty('--swipe-progress', `${(distance / swipeGesture.max) * 100}%`)
+})
+
+function finishSwipe(event) {
+    if (!swipeGesture || swipeGesture.pointerId !== event.pointerId) return
+    const { track, thumb, max, distance = 0 } = swipeGesture
+    swipeGesture = null
+
+    if (distance / max >= .72) {
+        track.classList.remove('is-dragging')
+        track.classList.add('is-complete')
+        track.style.setProperty('--swipe-progress', '100%')
+        thumb.style.transform = `translateX(${max}px)`
+        window.setTimeout(openNextProduct, 220)
+        return
+    }
+
+    track.classList.remove('is-dragging')
+    track.style.setProperty('--swipe-progress', '0%')
+    thumb.style.transform = ''
+}
+
+document.addEventListener('pointerup', finishSwipe)
+document.addEventListener('pointercancel', finishSwipe)
 
 toast.addEventListener('click', () => {
     hideToast()
