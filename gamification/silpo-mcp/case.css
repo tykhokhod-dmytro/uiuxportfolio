@@ -86,8 +86,10 @@ button:focus-visible {
 .screen--hub {
     background: linear-gradient(
         180deg,
-        transparent calc(100% - 270px),
-        rgba(73, 54, 36, .17) 100%
+        transparent 12%,
+        rgba(255, 255, 255, .34) 48%,
+        rgba(255, 255, 255, .24) calc(100% - 270px),
+        #bdb09e 100%
     );
 }
 
