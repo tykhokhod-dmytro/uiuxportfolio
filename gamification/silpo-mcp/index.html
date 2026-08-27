@@ -3,82 +3,38 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#ff681e">
-    <meta name="description" content="A quick product-trial campaign for three fictional Silpo MCP hackathon winners.">
-    <meta property="og:title" content="Silpo MCP Quest — Gamification Case Study">
-    <meta property="og:description" content="Try three fictional Silpo MCP winners through quick shopping missions.">
-    <title>Silpo MCP Quest — Gamification Case Study</title>
+    <meta name="theme-color" content="#171717">
+    <meta name="description" content="A fictional Silpo in-app event for three MCP hackathon winners.">
+    <meta property="og:title" content="Silpo AI Factory Winners">
+    <meta property="og:description" content="Try three winning products, complete their missions, and claim rewards.">
+    <title>Silpo AI Factory Winners</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Unbounded:wght@600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../../assets/images/img_Profile.png">
     <link rel="stylesheet" href="case.css">
 </head>
 <body>
-    <nav class="case-nav">
-        <a href="../">← Case lab</a>
-        <span>Concept case · 2026</span>
-        <a href="#prototype">Try prototype ↓</a>
-    </nav>
+    <div class="demo-stage">
+        <main class="event-app" id="app" aria-live="polite"></main>
+    </div>
 
-    <main>
-        <section class="hero">
-            <div class="hero-copy">
-                <h1>Meet the winners.<br><em>Try the products.</em></h1>
-                <p class="hero-lede">A Silpo MCP campaign where customers try three winning tools through quick shopping missions.</p>
-                <div class="hero-brief">
-                    <div><strong>Idea</strong><span>Turn three product demos into shopping missions.</span></div>
-                    <div><strong>Goal</strong><span>Show the value of each tool in one minute.</span></div>
-                </div>
-                <a class="hero-cta" href="#prototype">Try the prototype <span>↓</span></a>
-                <p class="hero-note">Independent concept. Winners and product names are fictional.</p>
-            </div>
-            <div class="hero-demo" aria-label="Campaign preview">
-                <div class="sun"></div>
-                <span class="hero-fruit fruit-a">🍐</span>
-                <span class="hero-fruit fruit-b">🍅</span>
-                <span class="hero-fruit fruit-c">🌶️</span>
-                <div class="phone-shell">
-                    <div class="phone-top"><span>9:41</span><span>● ● ●</span></div>
-                    <div class="phone-brand"><strong>SILPO</strong><span>AI Factory</span></div>
-                    <p class="phone-eyebrow">MCP QUEST</p>
-                    <h2>3 winners.<br>3 missions. 1 grand prize.</h2>
-                    <div class="phone-progress"><span></span><span></span><span></span></div>
-                    <div class="winner-row"><b>01</b><span>Cooklist<small>Dinner → ready-to-buy cart</small></span><i>→</i></div>
-                    <div class="winner-row"><b>02</b><span>Restock<small>Regulars → zero routine</small></span><i>→</i></div>
-                    <div class="winner-row"><b>03</b><span>Gather<small>Occasion → a plan for everyone</small></span><i>→</i></div>
-                </div>
-            </div>
-        </section>
+    <button class="success-toast" id="success-toast" type="button" hidden>
+        <span class="toast-icon">🏆</span>
+        <span><strong>Mission complete!</strong><small>Tap to return and claim your reward.</small></span>
+        <i></i>
+    </button>
 
-        <section class="prototype" id="prototype">
-            <div class="prototype-heading">
-                <h2>Try the campaign.</h2>
-                <p>Pick a product. Complete one task. Open your reward.</p>
-            </div>
+    <div class="modal" id="info-modal" hidden>
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button class="round-button modal-close" type="button" data-action="close-info" aria-label="Close">×</button>
+            <span class="modal-icon">🏆</span>
+            <h2 id="modal-title">About this event</h2>
+            <p>A fictional Silpo campaign for three MCP hackathon winners. No real orders or rewards are created.</p>
+            <button class="primary-button" type="button" data-action="close-info">Got it</button>
+        </div>
+    </div>
 
-            <div class="prototype-stage">
-                <div class="device">
-                    <div class="device-bar"><span>9:41</span><span class="dynamic-island"></span><span>● ●</span></div>
-                    <div id="app" class="app" aria-live="polite"></div>
-                </div>
-                <div class="prototype-sticker" aria-hidden="true">PLAY<br>ME ↗</div>
-            </div>
-        </section>
-
-        <section class="finale">
-            <h2>Learn by doing.</h2>
-            <div class="finale-row">
-                <p>Each mission explains a product through one useful result.</p>
-                <a href="#prototype">Try the prototype again ↑</a>
-            </div>
-            <footer class="case-footer">
-                <span>Concept &amp; design: Dmytro Tykhokhod</span>
-                <span>Independent portfolio concept · 2026</span>
-                <a href="../">All gamification cases ↗</a>
-            </footer>
-        </section>
-    </main>
     <script src="case.js"></script>
 </body>
 </html>

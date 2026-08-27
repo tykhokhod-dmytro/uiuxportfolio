@@ -1,313 +1,310 @@
 const app = document.querySelector('#app')
+const toast = document.querySelector('#success-toast')
+const infoModal = document.querySelector('#info-modal')
 
-const missions = {
+const products = {
     cooklist: {
-        number: '01',
-        rank: '1st place · Meal planner',
+        rank: 1,
+        medal: 'gold',
         name: 'Cooklist',
-        icon: '🍝',
-        color: '#ffd0b6',
-        summary: 'Builds a recipe and cart around your budget, time, and diet.',
-        task: 'Build one complete dinner under UAH 500',
-        reward: '+20 loyalty points',
-        tools: ['food_restrictions', 'find_products_batch', 'cart.add'],
-        question: 'What are you in the mood for?',
-        choices: [
-            ['🍝', 'Quick comfort', '25 min · for two'],
-            ['🥗', 'Fresh & light', '20 min · for two'],
-            ['🌶️', 'Something bold', '35 min · for two'],
-            ['🥦', 'Plant powered', '30 min · for two']
-        ],
-        loadingTitle: 'Building your dinner',
-        logs: ['Reading dietary preferences', 'Matching 8 ingredients in stock', 'Optimising the cart under UAH 500'],
-        resultTitle: 'Creamy tomato pasta',
-        resultMeta: '25 min · dinner for two',
-        items: [
-            ['🍝', 'Tagliatelle', '1 pack', 'UAH 79'],
-            ['🍅', 'Cherry tomatoes', '300 g', 'UAH 99'],
-            ['🧀', 'Parmesan', '150 g', 'UAH 145'],
-            ['🌿', 'Fresh basil', '1 pack', 'UAH 45']
-        ],
-        total: 'UAH 368',
-        resultAction: 'Add recipe to cart',
-        surprise: ['10% off Italian food', 'Saved for your next shop']
+        type: 'Recipe-to-cart',
+        short: 'Builds a recipe and adds every ingredient to your cart.',
+        mission: 'Create one recipe and add all ingredients',
+        reward: '20 loyalty points + 1 prize box',
+        action: 'Add all to cart',
+        demoTitle: 'Tomato pasta for two',
+        demoMeta: '25 min · UAH 368',
+        items: [['🍝', 'Tagliatelle'], ['🍅', 'Cherry tomatoes'], ['🧀', 'Parmesan'], ['🌿', 'Fresh basil']]
     },
     restock: {
-        number: '02',
-        rank: '2nd place · Routine agent',
+        rank: 2,
+        medal: 'silver',
         name: 'Restock',
-        icon: '🥛',
-        color: '#9bd6ff',
-        summary: 'Drafts your regular cart from past orders. You approve every item.',
-        task: 'Save one weekly essentials cart',
-        reward: 'Free delivery',
-        tools: ['online_orders', 'favorites', 'promotions'],
-        question: 'Which routine should Restock learn?',
-        choices: [
-            ['🥛', 'Breakfast basics', 'milk · eggs · bread'],
-            ['☕', 'Coffee station', 'beans · milk · snacks'],
-            ['🐈', 'Pet supplies', 'food · litter · treats'],
-            ['🧼', 'Home basics', 'cleaning · paper goods']
-        ],
-        loadingTitle: 'Drafting your weekly cart',
-        logs: ['Reviewing the last 8 orders', 'Filtering unusually large purchases', 'Checking this week’s promotions'],
-        resultTitle: 'Your weekly basics',
-        resultMeta: 'Suggested every Saturday',
-        items: [
-            ['🥛', 'Milk 2.5%', '2 bottles', 'UAH 102'],
-            ['🥚', 'Free-range eggs', '10 pcs', 'UAH 89'],
-            ['🍞', 'Sourdough bread', '1 loaf', 'UAH 65'],
-            ['☕', 'Coffee beans', '250 g', 'UAH 219']
-        ],
-        total: 'UAH 475',
-        resultAction: 'Save this routine',
-        surprise: ['Free delivery unlocked', 'Valid on your next online order']
+        type: 'Routine shopper',
+        short: 'Finds repeat buys and drafts your next regular cart.',
+        mission: 'Create one weekly essentials cart',
+        reward: 'Free delivery + 1 prize box',
+        action: 'Create AutoCart',
+        demoTitle: 'Weekly essentials',
+        demoMeta: 'Every Saturday · UAH 475',
+        items: [['🥛', 'Milk'], ['🥚', 'Free-range eggs'], ['☕', 'Coffee beans'], ['🍞', 'Sourdough bread']]
     },
     gather: {
-        number: '03',
-        rank: '3rd place · Group planner',
+        rank: 3,
+        medal: 'bronze',
         name: 'Gather',
-        icon: '🧺',
-        color: '#d4c9ff',
-        summary: 'Builds one shared cart for a group and budget.',
-        task: 'Plan one picnic for four people',
-        reward: '+40 loyalty points',
-        tools: ['family', 'product_sets', 'find_products_batch'],
-        question: 'What are you getting together for?',
-        choices: [
-            ['🧺', 'Picnic', '4 people · UAH 900'],
-            ['🎂', 'Birthday', '6 people · UAH 1,500'],
-            ['🍿', 'Movie night', '4 people · UAH 700'],
-            ['🔥', 'Barbecue', '6 people · UAH 1,800']
-        ],
-        loadingTitle: 'Building the group cart',
-        logs: ['Checking group preferences', 'Balancing portions and budget', 'Finding easy-to-share alternatives'],
-        resultTitle: 'Park picnic for four',
-        resultMeta: '12 items · vegetarian-friendly',
-        items: [
-            ['🥖', 'Baguettes', '2 pcs', 'UAH 78'],
-            ['🧀', 'Cheese selection', '1 set', 'UAH 289'],
-            ['🍇', 'Seedless grapes', '500 g', 'UAH 119'],
-            ['🥤', 'Craft lemonade', '4 bottles', 'UAH 196']
-        ],
-        total: 'UAH 682',
-        resultAction: 'Add picnic to cart',
-        surprise: ['+15 extra loyalty points', 'A little bonus for the whole group']
+        type: 'Group planner',
+        short: 'Builds one shared cart for your occasion and budget.',
+        mission: 'Create a picnic cart for four guests',
+        reward: '40 loyalty points + 1 prize box',
+        action: 'Build event cart',
+        demoTitle: 'Park picnic for four',
+        demoMeta: '12 items · UAH 682',
+        items: [['🥖', 'Baguettes'], ['🧀', 'Cheese selection'], ['🍇', 'Seedless grapes'], ['🥤', 'Craft lemonade']]
     }
 }
 
 const state = {
-    view: 'hub',
+    screen: 'hub',
     selected: null,
-    choice: 0,
     completed: new Set(),
-    surpriseOpen: false
+    claimed: new Set(),
+    pickedPrize: null
+}
+
+let toastTimer
+
+function topBar(backAction = 'exit') {
+    return `
+        <div class="status-bar"><strong>9:41</strong><span>▮▮▮ ᯤ ▰</span></div>
+        <nav class="top-bar">
+            <button class="round-button" type="button" data-action="${backAction}" aria-label="Back">‹</button>
+            <strong class="silpo-logo">Silpo</strong>
+            <button class="round-button" type="button" data-action="show-info" aria-label="About this concept">i</button>
+        </nav>`
+}
+
+function circuitMark() {
+    return '<div class="circuit-mark" aria-hidden="true"><span>AI</span><i></i><i></i><i></i><i></i></div>'
 }
 
 function progressMarkup() {
     const count = state.completed.size
     return `
-        <div class="app-progress-card">
-            <div class="app-progress-head"><span>Your progress</span><strong>${count}/3</strong></div>
-            <div class="app-progress" aria-label="${count} of 3 missions completed">
-                ${Object.keys(missions).map((key) => `<i class="${state.completed.has(key) ? 'done' : ''}"></i>`).join('')}
+        <section class="progress-panel">
+            <div><strong>Your progress</strong><b>${count}/3</b></div>
+            <div class="checkpoint-track" aria-label="${count} of 3 missions complete">
+                ${Object.keys(products).map((id, index) => `<span class="${state.completed.has(id) ? 'done' : ''}">${state.completed.has(id) ? '✓' : index + 1}</span>`).join('')}
             </div>
-        </div>`
+        </section>`
+}
+
+function winnerCard(id) {
+    const product = products[id]
+    const completed = state.completed.has(id)
+    const claimed = state.claimed.has(id)
+    const status = claimed ? 'Claimed' : completed ? 'Reward ready' : id === nextProduct() ? 'Start here' : ''
+    return `
+        <button class="winner-card winner-card--${product.medal} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
+            <span class="mini-medal">${completed ? '✓' : product.rank}</span>
+            <span class="winner-thumb winner-thumb--${id}"></span>
+            <span class="winner-card-copy"><b>${product.name}</b><small>${product.short}</small>${status ? `<em>${status}</em>` : ''}</span>
+            <span class="chevron">›</span>
+        </button>`
+}
+
+function nextProduct() {
+    return Object.keys(products).find((id) => !state.completed.has(id)) || Object.keys(products).find((id) => !state.claimed.has(id)) || null
 }
 
 function hubScreen() {
-    const allDone = state.completed.size === 3
+    const next = nextProduct()
+    const allClaimed = state.claimed.size === 3
     return `
-        <section class="app-screen">
-            <div class="app-top"><span class="app-brand">SILPO</span><span class="app-pill">AI Factory</span></div>
-            <h2 class="app-title" style="margin-top:34px">Try three winning tools.</h2>
-            <p class="app-copy">Complete one task in each. Get a reward every time.</p>
-            ${progressMarkup()}
-            <div class="mission-list">
-                ${Object.entries(missions).map(([key, mission]) => `
-                    <button class="mission-card ${state.completed.has(key) ? 'completed' : ''}" style="--mission-color:${mission.color}" data-action="open-mission" data-id="${key}">
-                        <span class="mission-icon">${state.completed.has(key) ? '✓' : mission.icon}</span>
-                        <span><b>${mission.number} · ${mission.name}</b><small>${mission.task}</small></span>
-                        <span>→</span>
-                    </button>`).join('')}
-            </div>
-            <div class="grand-card">
-                <small>${allDone ? 'Grand prize unlocked' : 'Finish all three'}</small>
-                <b>${allDone ? 'Your reward is ready.' : '100 points + 3 surprise packs'}</b>
-                ${allDone ? '<button class="app-button app-button--lime" data-action="claim-grand">Claim the grand prize →</button>' : ''}
-            </div>
-        </section>`
-}
-
-function detailScreen(mission) {
-    return `
-        <section class="app-screen" style="--mission-color:${mission.color}">
-            <div class="app-top">
-                <button class="app-back" data-action="go-hub" aria-label="Back to missions">←</button>
-                <span class="app-pill">${state.completed.has(state.selected) ? 'Completed' : mission.reward}</span>
-            </div>
-            <div class="detail-hero">${mission.icon}</div>
-            <h2 class="detail-title">${mission.name}</h2>
-            <p class="detail-copy">${mission.summary}</p>
-            <div class="task-card">
-                <small>Your mission</small>
-                <b>${mission.task}</b>
-                <div class="tool-chips">${mission.tools.map((tool) => `<span>${tool}</span>`).join('')}</div>
-            </div>
-            <button class="app-button" data-action="configure">${state.completed.has(state.selected) ? 'Try again' : 'Start mission'} →</button>
-        </section>`
-}
-
-function configureScreen(mission) {
-    return `
-        <section class="app-screen" style="--mission-color:${mission.color}">
-            <div class="app-top">
-                <button class="app-back" data-action="open-current" aria-label="Back to product">←</button>
-                <span class="app-pill">${mission.name}</span>
-            </div>
-            <h2 class="app-title" style="margin-top:28px">${mission.question}</h2>
-            <p class="app-copy">Pick one option.</p>
-            <div class="choice-grid">
-                ${mission.choices.map((choice, index) => `
-                    <button class="choice ${state.choice === index ? 'selected' : ''}" data-action="choose" data-index="${index}">
-                        <span>${choice[0]}</span>${choice[1]}<small>${choice[2]}</small>
-                    </button>`).join('')}
-            </div>
-            <div class="task-card">
-                <small>Safety checkpoint</small>
-                <b>You review the cart before anything is added.</b>
-            </div>
-            <button class="app-button" data-action="run-agent">Run ${mission.name} →</button>
-        </section>`
-}
-
-function loadingScreen(mission) {
-    return `
-        <section class="app-screen" style="--mission-color:${mission.color}">
-            <div class="app-top"><span class="app-brand">SILPO</span><span class="app-pill">MCP connected</span></div>
-            <div class="agent-card">
-                <div class="agent-orb">✦</div>
-                <h3>${mission.loadingTitle}</h3>
-                <div class="agent-log">${mission.logs.map((log, index) => `<span style="opacity:${1 - index * .2}">✓ ${log}</span>`).join('')}</div>
-            </div>
-            <p class="app-copy" style="text-align:center;margin-top:22px">You will review the result before it reaches your cart.</p>
-        </section>`
-}
-
-function resultScreen(mission) {
-    return `
-        <section class="app-screen" style="--mission-color:${mission.color}">
-            <div class="app-top"><button class="app-back" data-action="configure" aria-label="Change brief">←</button><span class="app-pill">Draft ready</span></div>
-            <h2 class="app-title" style="margin-top:28px">${mission.resultTitle}</h2>
-            <p class="app-copy">${mission.resultMeta}. Review the items below.</p>
-            <div class="basket">
-                <div class="basket-head"><span>Suggested cart</span><span>${mission.items.length} items</span></div>
-                ${mission.items.map((item) => `
-                    <div class="basket-row"><span>${item[0]}</span><span><b>${item[1]}</b><small>${item[2]}</small></span><strong>${item[3]}</strong></div>`).join('')}
-                <div class="basket-total"><span>Estimated total</span><strong>${mission.total}</strong></div>
-            </div>
-            <button class="app-button" data-action="complete">${mission.resultAction} →</button>
-            <button class="app-button app-button--plain" data-action="configure">Change the brief</button>
-        </section>`
-}
-
-function rewardScreen(mission) {
-    if (!state.surpriseOpen) {
-        return `
-            <section class="reward-screen" style="--mission-color:${mission.color}">
-                <div class="reward-burst">✓</div>
-                <h2 style="margin-top:38px">Mission complete.</h2>
-                <p>${mission.name} finished a real shopping task.</p>
-                <span class="reward-chip">Guaranteed: ${mission.reward}</span>
-                <p><strong>One more thing:</strong> pick a surprise pack.</p>
-                <div class="packs" aria-label="Choose a surprise pack">
-                    <button class="pack" data-action="open-pack" aria-label="Open orange pack">?</button>
-                    <button class="pack" data-action="open-pack" aria-label="Open lime pack">?</button>
-                    <button class="pack" data-action="open-pack" aria-label="Open blue pack">?</button>
+        <section class="screen screen--hub">
+            ${topBar('exit')}
+            <div class="screen-content hub-content">
+                ${circuitMark()}
+                <h1>AI Factory:<br><span>Meet the winners</span></h1>
+                <p class="hero-copy">Try three MCP-powered products. Complete their missions. Claim the rewards.</p>
+                <div class="chip-row"><span class="yellow-chip">● 12 days left</span><span class="dark-chip">🏆 3 winners</span></div>
+                ${progressMarkup()}
+                <div class="winner-cards">
+                    ${winnerCard('cooklist')}${winnerCard('restock')}${winnerCard('gather')}
                 </div>
-            </section>`
-    }
+                <section class="grand-card ${allClaimed ? 'is-ready' : ''}">
+                    <div><small>${allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points<br>+ 3 prize boxes</strong></div>
+                    <span>${allClaimed ? '🏆' : '🎁'}</span>
+                </section>
+                <button class="primary-button sticky-action" type="button" data-action="${allClaimed ? 'show-final' : 'start'}">${allClaimed ? 'Open grand reward' : state.completed.size ? 'Continue' : 'Start'} ✦</button>
+                <small class="next-label">${allClaimed ? 'All rewards claimed' : `Next: ${products[next].name}`}</small>
+            </div>
+        </section>`
+}
 
+function detailScreen(id) {
+    const product = products[id]
+    const completed = state.completed.has(id)
+    const claimed = state.claimed.has(id)
     return `
-        <section class="reward-screen" style="--mission-color:${mission.color}">
-            <div class="reward-burst">🎁</div>
-            <div class="surprise" style="margin-top:38px"><strong>${mission.surprise[0]}</strong><span>${mission.surprise[1]}</span></div>
-            ${progressMarkup()}
-            <button class="app-button" data-action="go-hub">Continue to the next mission →</button>
+        <section class="screen screen--detail">
+            ${topBar('hub')}
+            <div class="screen-content detail-content">
+                ${circuitMark()}
+                <header class="product-heading">
+                    <span class="large-medal large-medal--${product.medal}">${product.rank}<small>${product.rank === 1 ? 'ST' : product.rank === 2 ? 'ND' : 'RD'}</small></span>
+                    <div><h1>${product.name}</h1><p>${product.short}</p></div>
+                </header>
+                <div class="product-visual product-visual--${id}" role="img" aria-label="${product.name} product illustration"></div>
+                <section class="task-panel">
+                    <h2>Your mission</h2>
+                    <p>${product.mission}</p>
+                    <div class="mini-stepper"><span class="done">✓<small>Choose</small></span><i></i><span class="done">✓<small>Build</small></span><i></i><span class="${completed ? 'done' : ''}">${completed ? '✓' : '3'}<small>Confirm</small></span></div>
+                </section>
+                <section class="reward-panel"><span>🎁</span><div><small>Reward</small><strong>${product.reward}</strong></div></section>
+                <div class="detail-actions">
+                    <button class="primary-button" type="button" data-action="open-demo" data-id="${id}">${completed ? 'View product' : 'Open product'} ✦</button>
+                    <button class="secondary-button" type="button" data-action="claim" data-id="${id}" ${!completed || claimed ? 'disabled' : ''}>${claimed ? 'Reward claimed ✓' : completed ? 'Claim reward' : 'Complete mission to claim'}</button>
+                    <button class="text-button" type="button" data-action="hub">Other winners ›</button>
+                </div>
+            </div>
+        </section>`
+}
+
+function demoScreen(id) {
+    const product = products[id]
+    const completed = state.completed.has(id)
+    return `
+        <section class="screen screen--demo">
+            ${topBar('detail')}
+            <div class="screen-content demo-content">
+                <h1>${product.name}</h1>
+                <p class="demo-subtitle">${product.short}</p>
+                <div class="demo-hero product-visual--${id}"></div>
+                <section class="demo-card">
+                    <div class="demo-card-head"><div><small>Ready to build</small><h2>${product.demoTitle}</h2><p>${product.demoMeta}</p></div><span>${product.rank === 1 ? '🍽️' : product.rank === 2 ? '↻' : '🎉'}</span></div>
+                    <div class="item-list">${product.items.map((item) => `<div><span>${item[0]}</span><b>${item[1]}</b><i>${completed ? '✓' : '+'}</i></div>`).join('')}</div>
+                </section>
+                <button class="primary-button" type="button" data-action="complete" data-id="${id}" ${completed ? 'disabled' : ''}>${completed ? 'Mission complete ✓' : product.action}</button>
+                ${completed ? '<button class="secondary-button" type="button" data-action="detail">Back to winner</button>' : ''}
+            </div>
+        </section>`
+}
+
+function rewardScreen(id) {
+    const product = products[id]
+    const prize = state.pickedPrize
+    return `
+        <section class="screen screen--reward">
+            ${topBar('hub')}
+            <div class="screen-content reward-content">
+                ${circuitMark()}
+                <h1>Reward<br><span>unlocked!</span></h1>
+                <p>${product.name} mission complete.</p>
+                <div class="reward-summary"><span>✓ ${product.name}</span><b>🏆 ${state.claimed.size}/3</b></div>
+                <section class="reward-hero"><strong>${product.reward}</strong><span>🪙 🎁 ✦</span></section>
+                <section class="prize-shelf">
+                    <h2>${prize ? 'Prize opened!' : 'Pick one prize box'}</h2>
+                    <p>${prize || 'One extra bonus is waiting inside.'}</p>
+                    <div class="gift-row">
+                        ${[0,1,2,3,4].map((index) => `<button type="button" data-action="pick-prize" data-index="${index}" ${prize ? 'disabled' : ''}>${prize && index === 2 ? '✨' : '🎁'}</button>`).join('')}
+                    </div>
+                </section>
+                <button class="primary-button" type="button" data-action="next">${state.claimed.size === 3 ? 'Open grand reward' : 'Next winner'} ✦</button>
+                <button class="secondary-button" type="button" data-action="hub">Back to event</button>
+            </div>
         </section>`
 }
 
 function finalScreen() {
     return `
-        <section class="final-prize">
-            <div>
-                <div class="final-prize-visual">🏆</div>
-                <h2>All three tools tried.</h2>
-                <p>You earned 100 loyalty points and three additional surprise packs.</p>
-                <button class="app-button" data-action="reset">Play the prototype again</button>
+        <section class="screen screen--final">
+            ${topBar('hub')}
+            <div class="screen-content final-content">
+                ${circuitMark()}
+                <div class="trophy">🏆</div>
+                <h1>All winners<br><span>unlocked!</span></h1>
+                <p>You completed every AI Factory mission.</p>
+                <div class="completed-list">${Object.values(products).map((product) => `<span>✓ ${product.name}</span>`).join('')}</div>
+                <section class="grand-prize"><small>Grand reward</small><strong>100 loyalty points<br>+ 3 prize boxes</strong><span>🪙 🎁 🎁 🎁</span></section>
+                <button class="primary-button" type="button" data-action="play-grand">Play the prize game ✦</button>
+                <button class="secondary-button" type="button" data-action="hub">Back to event</button>
             </div>
         </section>`
 }
 
 function render() {
-    const mission = state.selected ? missions[state.selected] : null
-    const views = {
-        hub: () => hubScreen(),
-        detail: () => detailScreen(mission),
-        configure: () => configureScreen(mission),
-        loading: () => loadingScreen(mission),
-        result: () => resultScreen(mission),
-        reward: () => rewardScreen(mission),
-        final: () => finalScreen()
-    }
-
-    app.innerHTML = views[state.view]()
+    if (state.screen === 'hub') app.innerHTML = hubScreen()
+    if (state.screen === 'detail') app.innerHTML = detailScreen(state.selected)
+    if (state.screen === 'demo') app.innerHTML = demoScreen(state.selected)
+    if (state.screen === 'reward') app.innerHTML = rewardScreen(state.selected)
+    if (state.screen === 'final') app.innerHTML = finalScreen()
     app.scrollTop = 0
 }
 
-app.addEventListener('click', (event) => {
+function showToast() {
+    window.clearTimeout(toastTimer)
+    toast.hidden = false
+    toast.classList.remove('is-visible')
+    requestAnimationFrame(() => toast.classList.add('is-visible'))
+    toastTimer = window.setTimeout(() => {
+        toast.classList.remove('is-visible')
+        window.setTimeout(() => { toast.hidden = true }, 240)
+    }, 5000)
+}
+
+function hideToast() {
+    window.clearTimeout(toastTimer)
+    toast.classList.remove('is-visible')
+    toast.hidden = true
+}
+
+document.addEventListener('click', (event) => {
     const control = event.target.closest('[data-action]')
     if (!control) return
+    const { action, id } = control.dataset
 
-    const action = control.dataset.action
-
-    if (action === 'open-mission') {
-        state.selected = control.dataset.id
-        state.choice = 0
-        state.view = 'detail'
-    } else if (action === 'go-hub') {
-        state.view = 'hub'
-        state.surpriseOpen = false
-    } else if (action === 'open-current') {
-        state.view = 'detail'
-    } else if (action === 'configure') {
-        state.view = 'configure'
-    } else if (action === 'choose') {
-        state.choice = Number(control.dataset.index)
-    } else if (action === 'run-agent') {
-        state.view = 'loading'
-        render()
+    if (action === 'exit') window.location.href = '../'
+    if (action === 'hub') { state.screen = 'hub'; render() }
+    if (action === 'start') { state.selected = nextProduct(); state.screen = 'detail'; render() }
+    if (action === 'open-detail') { state.selected = id; state.screen = 'detail'; render() }
+    if (action === 'detail') { state.screen = 'detail'; render() }
+    if (action === 'open-demo') { state.selected = id; state.screen = 'demo'; render() }
+    if (action === 'complete') {
+        control.disabled = true
+        control.textContent = 'Building…'
         window.setTimeout(() => {
-            state.view = 'result'
+            state.completed.add(id)
+            state.selected = id
+            state.screen = 'demo'
             render()
-        }, 1500)
-        return
-    } else if (action === 'complete') {
-        state.completed.add(state.selected)
-        state.surpriseOpen = false
-        state.view = 'reward'
-    } else if (action === 'open-pack') {
-        state.surpriseOpen = true
-    } else if (action === 'claim-grand') {
-        state.view = 'final'
-    } else if (action === 'reset') {
-        state.completed.clear()
-        state.selected = null
-        state.surpriseOpen = false
-        state.view = 'hub'
+            showToast()
+        }, 650)
     }
+    if (action === 'claim') {
+        if (!state.completed.has(id) || state.claimed.has(id)) return
+        state.claimed.add(id)
+        state.selected = id
+        state.pickedPrize = null
+        state.screen = 'reward'
+        render()
+    }
+    if (action === 'pick-prize') {
+        const prizes = ['+10 loyalty points', '10% off your next shop', 'Free delivery unlocked', '+1 extra prize box', '15% off fresh food']
+        state.pickedPrize = prizes[Number(control.dataset.index)]
+        render()
+    }
+    if (action === 'next') {
+        if (state.claimed.size === 3) state.screen = 'final'
+        else { state.screen = 'hub'; state.selected = null }
+        render()
+    }
+    if (action === 'show-final') { state.screen = 'final'; render() }
+    if (action === 'play-grand') {
+        infoModal.querySelector('.modal-icon').textContent = '🎁'
+        infoModal.querySelector('h2').textContent = 'Grand prize claimed!'
+        infoModal.querySelector('p').textContent = '100 loyalty points and 3 prize boxes are now yours.'
+        infoModal.hidden = false
+    }
+    if (action === 'show-info') infoModal.hidden = false
+    if (action === 'close-info') infoModal.hidden = true
+})
 
+toast.addEventListener('click', () => {
+    hideToast()
+    state.screen = 'detail'
     render()
+})
+
+infoModal.addEventListener('click', (event) => {
+    if (event.target === infoModal) infoModal.hidden = true
+})
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        infoModal.hidden = true
+        hideToast()
+    }
 })
 
 render()
