@@ -114,7 +114,6 @@ function hubScreen() {
                 </div>
                 <section class="grand-card ${allClaimed ? 'is-ready' : ''}">
                     <div><small>${allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points<br>+ 3 prize boxes</strong></div>
-                    <span>${allClaimed ? '🏆' : '🎁'}</span>
                 </section>
                 <button class="primary-button sticky-action" type="button" data-action="${allClaimed ? 'show-final' : 'start'}">${allClaimed ? 'Open grand reward' : state.completed.size ? 'Continue' : 'Start'} ✦</button>
                 <small class="next-label">${allClaimed ? 'All rewards claimed' : `Next: ${products[next].name}`}</small>
