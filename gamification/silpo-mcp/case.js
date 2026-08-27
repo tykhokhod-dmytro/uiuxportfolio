@@ -7,7 +7,7 @@ const missions = {
         name: 'Cooklist',
         icon: '🍝',
         color: '#ffd0b6',
-        summary: 'A recipe-to-cart agent for decisions that usually start with “What should we eat?”',
+        summary: 'Builds a recipe and cart around your budget, time, and diet.',
         task: 'Build one complete dinner under UAH 500',
         reward: '+20 loyalty points',
         tools: ['food_restrictions', 'find_products_batch', 'cart.add'],
@@ -18,7 +18,7 @@ const missions = {
             ['🌶️', 'Something bold', '35 min · for two'],
             ['🥦', 'Plant powered', '30 min · for two']
         ],
-        loadingTitle: 'Cooklist is building dinner',
+        loadingTitle: 'Building your dinner',
         logs: ['Reading dietary preferences', 'Matching 8 ingredients in stock', 'Optimising the cart under UAH 500'],
         resultTitle: 'Creamy tomato pasta',
         resultMeta: '25 min · dinner for two',
@@ -38,7 +38,7 @@ const missions = {
         name: 'Restock',
         icon: '🥛',
         color: '#9bd6ff',
-        summary: 'A routine agent that drafts recurring essentials, then waits for human approval.',
+        summary: 'Drafts your regular cart from past orders. You approve every item.',
         task: 'Save one weekly essentials cart',
         reward: 'Free delivery',
         tools: ['online_orders', 'favorites', 'promotions'],
@@ -49,7 +49,7 @@ const missions = {
             ['🐈', 'Pet supplies', 'food · litter · treats'],
             ['🧼', 'Home basics', 'cleaning · paper goods']
         ],
-        loadingTitle: 'Restock is finding your rhythm',
+        loadingTitle: 'Drafting your weekly cart',
         logs: ['Reviewing the last 8 orders', 'Filtering unusually large purchases', 'Checking this week’s promotions'],
         resultTitle: 'Your weekly basics',
         resultMeta: 'Suggested every Saturday',
@@ -69,7 +69,7 @@ const missions = {
         name: 'Gather',
         icon: '🧺',
         color: '#d4c9ff',
-        summary: 'A group planner that turns different tastes and one budget into a shared cart.',
+        summary: 'Builds one shared cart for a group and budget.',
         task: 'Plan one picnic for four people',
         reward: '+40 loyalty points',
         tools: ['family', 'product_sets', 'find_products_batch'],
@@ -80,7 +80,7 @@ const missions = {
             ['🍿', 'Movie night', '4 people · UAH 700'],
             ['🔥', 'Barbecue', '6 people · UAH 1,800']
         ],
-        loadingTitle: 'Gather is planning for everyone',
+        loadingTitle: 'Building the group cart',
         logs: ['Checking group preferences', 'Balancing portions and budget', 'Finding easy-to-share alternatives'],
         resultTitle: 'Park picnic for four',
         resultMeta: '12 items · vegetarian-friendly',
@@ -120,9 +120,8 @@ function hubScreen() {
     return `
         <section class="app-screen">
             <div class="app-top"><span class="app-brand">SILPO</span><span class="app-pill">AI Factory</span></div>
-            <p class="app-eyebrow">MCP Quest · Winners edition</p>
-            <h2 class="app-title">Meet three agents.<br>Make shopping lighter.</h2>
-            <p class="app-copy">Try each winning product in one short mission and unlock the grand prize.</p>
+            <h2 class="app-title" style="margin-top:34px">Try three winning tools.</h2>
+            <p class="app-copy">Complete one task in each. Get a reward every time.</p>
             ${progressMarkup()}
             <div class="mission-list">
                 ${Object.entries(missions).map(([key, mission]) => `
@@ -133,8 +132,8 @@ function hubScreen() {
                     </button>`).join('')}
             </div>
             <div class="grand-card">
-                <small>${allDone ? 'Grand prize unlocked' : 'Complete all three'}</small>
-                <b>${allDone ? 'Your full MCP Quest reward is ready.' : '100 points + 3 surprise packs'}</b>
+                <small>${allDone ? 'Grand prize unlocked' : 'Finish all three'}</small>
+                <b>${allDone ? 'Your reward is ready.' : '100 points + 3 surprise packs'}</b>
                 ${allDone ? '<button class="app-button app-button--lime" data-action="claim-grand">Claim the grand prize →</button>' : ''}
             </div>
         </section>`
@@ -148,7 +147,6 @@ function detailScreen(mission) {
                 <span class="app-pill">${state.completed.has(state.selected) ? 'Completed' : mission.reward}</span>
             </div>
             <div class="detail-hero">${mission.icon}</div>
-            <p class="detail-rank">${mission.rank}</p>
             <h2 class="detail-title">${mission.name}</h2>
             <p class="detail-copy">${mission.summary}</p>
             <div class="task-card">
@@ -167,9 +165,8 @@ function configureScreen(mission) {
                 <button class="app-back" data-action="open-current" aria-label="Back to product">←</button>
                 <span class="app-pill">${mission.name}</span>
             </div>
-            <p class="app-eyebrow">Set the brief</p>
-            <h2 class="app-title">${mission.question}</h2>
-            <p class="app-copy">Pick one starting point. The agent will handle the product-level work.</p>
+            <h2 class="app-title" style="margin-top:28px">${mission.question}</h2>
+            <p class="app-copy">Pick one option.</p>
             <div class="choice-grid">
                 ${mission.choices.map((choice, index) => `
                     <button class="choice ${state.choice === index ? 'selected' : ''}" data-action="choose" data-index="${index}">
@@ -178,7 +175,7 @@ function configureScreen(mission) {
             </div>
             <div class="task-card">
                 <small>Safety checkpoint</small>
-                <b>Nothing is ordered until you review and confirm the cart.</b>
+                <b>You review the cart before anything is added.</b>
             </div>
             <button class="app-button" data-action="run-agent">Run ${mission.name} →</button>
         </section>`
@@ -193,7 +190,7 @@ function loadingScreen(mission) {
                 <h3>${mission.loadingTitle}</h3>
                 <div class="agent-log">${mission.logs.map((log, index) => `<span style="opacity:${1 - index * .2}">✓ ${log}</span>`).join('')}</div>
             </div>
-            <p class="app-copy" style="text-align:center;margin-top:22px">A real product would show live MCP tool calls and ask before any action that changes the cart.</p>
+            <p class="app-copy" style="text-align:center;margin-top:22px">You will review the result before it reaches your cart.</p>
         </section>`
 }
 
@@ -201,9 +198,8 @@ function resultScreen(mission) {
     return `
         <section class="app-screen" style="--mission-color:${mission.color}">
             <div class="app-top"><button class="app-back" data-action="configure" aria-label="Change brief">←</button><span class="app-pill">Draft ready</span></div>
-            <p class="app-eyebrow">Agent result</p>
-            <h2 class="app-title">${mission.resultTitle}</h2>
-            <p class="app-copy">${mission.resultMeta}. Review every item before it reaches your cart.</p>
+            <h2 class="app-title" style="margin-top:28px">${mission.resultTitle}</h2>
+            <p class="app-copy">${mission.resultMeta}. Review the items below.</p>
             <div class="basket">
                 <div class="basket-head"><span>Suggested cart</span><span>${mission.items.length} items</span></div>
                 ${mission.items.map((item) => `
@@ -220,9 +216,8 @@ function rewardScreen(mission) {
         return `
             <section class="reward-screen" style="--mission-color:${mission.color}">
                 <div class="reward-burst">✓</div>
-                <p class="app-eyebrow">Mission complete</p>
-                <h2>First value<br>delivered.</h2>
-                <p>You used ${mission.name} for a real shopping task — not just a demo tour.</p>
+                <h2 style="margin-top:38px">Mission complete.</h2>
+                <p>${mission.name} finished a real shopping task.</p>
                 <span class="reward-chip">Guaranteed: ${mission.reward}</span>
                 <p><strong>One more thing:</strong> pick a surprise pack.</p>
                 <div class="packs" aria-label="Choose a surprise pack">
@@ -236,8 +231,7 @@ function rewardScreen(mission) {
     return `
         <section class="reward-screen" style="--mission-color:${mission.color}">
             <div class="reward-burst">🎁</div>
-            <p class="app-eyebrow">Surprise unlocked</p>
-            <div class="surprise"><strong>${mission.surprise[0]}</strong><span>${mission.surprise[1]}</span></div>
+            <div class="surprise" style="margin-top:38px"><strong>${mission.surprise[0]}</strong><span>${mission.surprise[1]}</span></div>
             ${progressMarkup()}
             <button class="app-button" data-action="go-hub">Continue to the next mission →</button>
         </section>`
@@ -248,8 +242,7 @@ function finalScreen() {
         <section class="final-prize">
             <div>
                 <div class="final-prize-visual">🏆</div>
-                <p class="app-eyebrow" style="color:#e8fa54">MCP Quest · 3/3</p>
-                <h2>All three winners,<br>now part of your toolkit.</h2>
+                <h2>All three tools tried.</h2>
                 <p>You earned 100 loyalty points and three additional surprise packs.</p>
                 <button class="app-button" data-action="reset">Play the prototype again</button>
             </div>
