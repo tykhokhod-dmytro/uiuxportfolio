@@ -163,7 +163,7 @@ function detailScreen(id) {
             ${topBar('hub')}
             <header class="product-heading">
                 <div class="product-hero product-hero--${id}">
-                    <span class="product-place"><span aria-hidden="true">🏆</span><b>${place}</b> place</span>
+                    <span class="product-place product-place--${product.medal}" aria-label="${place} place"><b>${product.rank}</b><small>place</small></span>
                     <div class="product-visual product-visual--${id}" role="img" aria-label="${product.name} product illustration"></div>
                 </div>
                 <div class="product-intro"><h1>${product.name}</h1><p>${product.short}</p></div>
