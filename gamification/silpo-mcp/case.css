@@ -111,9 +111,44 @@ button:focus-visible {
     position: relative;
     z-index: 5;
     display: grid;
-    grid-template-columns: 48px 1fr 48px;
+    grid-template-columns: 80px 1fr 80px;
     align-items: center;
     padding: 10px 28px 18px;
+}
+
+.points-wallet {
+    position: relative;
+    display: inline-flex;
+    min-width: 69px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    justify-self: end;
+    gap: 7px;
+    padding: 0 11px;
+    border-radius: 999px;
+    color: #171717;
+    background: var(--yellow);
+    box-shadow: 0 6px 15px rgba(181, 128, 0, .2);
+    font-size: 14px;
+    font-weight: 800;
+    transition: transform .22s cubic-bezier(.2, 1.7, .4, 1), box-shadow .22s ease;
+}
+
+.points-wallet > span {
+    width: 15px;
+    height: 15px;
+    border: 3px solid #fff0a3;
+    border-radius: 50%;
+    color: #c48b00;
+    background: #e4a700;
+    box-shadow: inset 0 0 0 2px #fbc52c;
+    font-size: 0;
+}
+
+.points-wallet.is-updated {
+    box-shadow: 0 8px 22px rgba(181, 128, 0, .42);
+    transform: scale(1.12) rotate(2deg);
 }
 
 .round-button {
@@ -482,6 +517,30 @@ h1 span::after {
     line-height: 1.28;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+}
+
+.winner-card-reward {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 19px;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    color: #171717;
+    background: rgba(255, 255, 255, .62);
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.winner-card-reward i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    color: transparent;
+    background: #d99b00;
+    box-shadow: inset 0 0 0 2px #ffd965;
 }
 
 .card-arrow {
@@ -922,6 +981,7 @@ h1 span::after {
     width: 29px;
     height: 29px;
     place-items: center;
+    border: 2px solid #d2cabd;
     border-radius: 50%;
     color: #625b50;
     background: #fff;
@@ -958,8 +1018,18 @@ h1 span::after {
 }
 
 .quest-step.is-current > b {
+    position: relative;
+    border-color: var(--yellow);
     color: #171717;
+    background: #fff;
+}
+
+.quest-step.is-current > b::after {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
     background: var(--yellow);
+    content: "";
 }
 
 .quest-step.is-current em {
@@ -967,6 +1037,7 @@ h1 span::after {
 }
 
 .quest-step.is-done > b {
+    border-color: var(--green);
     color: #fff;
     background: var(--green);
 }
@@ -975,21 +1046,78 @@ h1 span::after {
     color: var(--green);
 }
 
-.quest-step.is-locked {
-    opacity: .58;
-}
-
 .reward-panel {
     min-height: 92px;
     margin-top: 13px;
+    padding: 17px 18px;
+    border: 1px solid rgba(255, 255, 255, .12);
 }
 
-.reward-panel > span {
-    font-size: 42px;
+.reward-panel > .reward-coin {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    place-items: center;
+    border: 4px solid #fff0a3;
+    border-radius: 50%;
+    color: transparent;
+    background: #d99b00;
+    box-shadow: inset 0 0 0 3px #ffcf3b, 0 6px 14px rgba(255, 190, 0, .22);
+    font-size: 0;
 }
 
 .reward-panel > div {
+    min-width: 0;
     flex: 1;
+}
+
+.reward-panel > div em {
+    display: block;
+    margin-top: 3px;
+    color: #fff;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.reward-panel.is-ready {
+    box-shadow: 0 11px 26px rgba(200, 143, 0, .26);
+}
+
+.reward-panel.is-claimed {
+    background: #173f31;
+}
+
+.claim-button {
+    min-width: 72px;
+    min-height: 40px;
+    padding: 8px 13px;
+    border: 0;
+    border-radius: 999px;
+    color: #171717;
+    background: var(--yellow);
+    box-shadow: 0 5px 0 #bd8500;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.claim-button:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 3px 0 #bd8500;
+}
+
+.claim-button:disabled {
+    color: rgba(255, 255, 255, .58);
+    background: rgba(255, 255, 255, .12);
+    box-shadow: none;
+    cursor: default;
+}
+
+.reward-panel.is-claimed .claim-button:disabled {
+    color: #173f31;
+    background: #d9f4e8;
 }
 
 .detail-actions {
@@ -1329,6 +1457,50 @@ h1 span::after {
 
 .success-toast.is-visible i {
     animation: toast-timer 5s linear forwards;
+}
+
+.reward-token {
+    position: fixed;
+    z-index: 1000;
+    width: 18px;
+    height: 18px;
+    border: 3px solid #fff0a3;
+    border-radius: 50%;
+    opacity: 0;
+    background: #d99b00;
+    box-shadow: inset 0 0 0 2px #ffcf3b, 0 4px 9px rgba(85, 55, 0, .2);
+    pointer-events: none;
+    animation: reward-token-flight .9s var(--token-delay) cubic-bezier(.28, .75, .27, 1) both;
+}
+
+.points-gain {
+    position: absolute;
+    right: 8px;
+    bottom: -22px;
+    color: #0f7350;
+    font-size: 12px;
+    font-weight: 800;
+    animation: points-gain .85s ease both;
+}
+
+@keyframes reward-token-flight {
+    0% {
+        opacity: 0;
+        transform: translate(var(--token-scatter), 12px) scale(.55);
+    }
+    18% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(var(--token-x), var(--token-y)) scale(.72);
+    }
+}
+
+@keyframes points-gain {
+    0% { opacity: 0; transform: translateY(7px); }
+    25% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-9px); }
 }
 
 @keyframes toast-timer {

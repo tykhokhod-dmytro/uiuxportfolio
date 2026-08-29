@@ -11,7 +11,9 @@ const products = {
         short: 'Builds a recipe and adds every ingredient to your cart.',
         mission: 'Add all 4 tomato pasta ingredients to your cart.',
         selectStep: 'Add 4 ingredients',
+        points: 20,
         reward: '20 loyalty points + 1 prize box',
+        rewardExtra: '+ 1 prize box',
         action: 'Add all to cart',
         demoTitle: 'Tomato pasta for two',
         demoMeta: '25 min · UAH 368',
@@ -25,7 +27,9 @@ const products = {
         short: 'Finds repeat buys and drafts your next regular cart.',
         mission: 'Approve all 4 repeat buys for your Saturday AutoCart.',
         selectStep: 'Approve 4 repeat buys',
-        reward: 'Free delivery + 1 prize box',
+        points: 30,
+        reward: '30 loyalty points + free delivery',
+        rewardExtra: '+ free delivery',
         action: 'Create AutoCart',
         demoTitle: 'Weekly essentials',
         demoMeta: 'Every Saturday · UAH 475',
@@ -39,7 +43,9 @@ const products = {
         short: 'Builds one shared cart for your occasion and budget.',
         mission: 'Add all 4 picnic picks to one shared cart.',
         selectStep: 'Add 4 picnic picks',
+        points: 40,
         reward: '40 loyalty points + 1 prize box',
+        rewardExtra: '+ 1 prize box',
         action: 'Build event cart',
         demoTitle: 'Park picnic for four',
         demoMeta: '12 items · UAH 682',
@@ -56,6 +62,7 @@ const state = {
         restock: new Set(),
         gather: new Set()
     },
+    points: 0,
     completed: new Set(),
     claimed: new Set(),
     pickedPrize: null
@@ -70,7 +77,7 @@ function topBar(backAction = 'exit') {
         <nav class="top-bar">
             <button class="round-button" type="button" data-action="${backAction}" aria-label="Back">‹</button>
             <strong class="silpo-logo">Silpo</strong>
-            <button class="round-button" type="button" data-action="show-info" aria-label="About this concept">i</button>
+            <div class="points-wallet" aria-label="${state.points} loyalty points"><span aria-hidden="true">●</span><b>${state.points}</b></div>
         </nav>`
 }
 
@@ -84,7 +91,7 @@ function progressMarkup() {
         <section class="progress-panel">
             <div><strong>Your progress</strong><b>${count}/3</b></div>
             <div class="checkpoint-track" aria-label="${count} of 3 missions complete">
-                ${Object.keys(products).map((id, index) => `<span class="${state.completed.has(id) ? 'done' : ''}">${state.completed.has(id) ? '✓' : index + 1}</span>`).join('')}
+                ${Object.keys(products).map((id) => `<span class="${state.completed.has(id) ? 'done' : ''}" aria-label="${state.completed.has(id) ? 'Mission complete' : 'Mission not complete'}">${state.completed.has(id) ? '✓' : ''}</span>`).join('')}
             </div>
         </section>`
 }
@@ -96,10 +103,11 @@ function winnerCard(id) {
     return `
         <button class="winner-card winner-card--${product.medal} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
             <span class="winner-thumb winner-thumb--${id}"></span>
-            <span class="winner-card-copy">
-                <span class="winner-card-title"><b>${product.name}</b><i class="rank-badge rank-badge--${product.medal}"><span aria-hidden="true">🏆</span>${place} place</i></span>
-                <small>${product.short}</small>
-            </span>
+                <span class="winner-card-copy">
+                    <span class="winner-card-title"><b>${product.name}</b><i class="rank-badge rank-badge--${product.medal}"><span aria-hidden="true">🏆</span>${place} place</i></span>
+                    <small>${product.short}</small>
+                    <span class="winner-card-reward"><i aria-hidden="true">●</i>${product.points} points</span>
+                </span>
             <span class="card-arrow" aria-hidden="true">→</span>
         </button>`
 }
@@ -162,15 +170,18 @@ function detailScreen(id) {
                     <p>${product.mission}</p>
                     <ol class="quest-steps">
                         ${steps.map((step, index) => {
-                            const mode = step.done ? 'is-done' : step.current ? 'is-current' : 'is-locked'
-                            return `<li class="quest-step ${mode}"><b>${step.done ? '✓' : index + 1}</b><span><strong>${step.title}</strong><small>${step.note}</small></span><em>${step.done ? 'Done' : step.current ? 'Now' : 'Locked'}</em></li>`
+                            const mode = step.done ? 'is-done' : step.current ? 'is-current' : 'is-todo'
+                            return `<li class="quest-step ${mode}"><b aria-hidden="true">${step.done ? '✓' : ''}</b><span><strong>${step.title}</strong><small>${step.note}</small></span><em>${step.done ? 'Done' : step.current ? 'Active' : 'To do'}</em></li>`
                         }).join('')}
                     </ol>
                 </section>
-                <section class="reward-panel"><span>🎁</span><div><small>Reward</small><strong>${product.reward}</strong></div></section>
+                <section class="reward-panel ${completed && !claimed ? 'is-ready' : ''} ${claimed ? 'is-claimed' : ''}">
+                    <span class="reward-coin" aria-hidden="true">●</span>
+                    <div><small>${claimed ? 'Collected' : completed ? 'Ready to collect' : 'Quest reward'}</small><strong>${product.points} points</strong><em>${product.rewardExtra}</em></div>
+                    <button class="claim-button" type="button" data-action="claim" data-id="${id}" ${!completed || claimed ? 'disabled' : ''}>${claimed ? 'Claimed' : completed ? 'Claim' : 'Locked'}</button>
+                </section>
                 <div class="detail-actions">
                     <button class="primary-button" type="button" data-action="open-demo" data-id="${id}">${completed ? 'Review mission' : started ? 'Continue mission' : 'Start mission'} ✦</button>
-                    <button class="secondary-button" type="button" data-action="claim" data-id="${id}" ${!completed || claimed ? 'disabled' : ''}>${claimed ? 'Reward claimed ✓' : completed ? 'Claim reward' : 'Reward locked'}</button>
                     <button class="text-button" type="button" data-action="hub">Other winners ›</button>
                 </div>
             </div>
@@ -283,6 +294,53 @@ function hideToast() {
     toast.hidden = true
 }
 
+function animateRewardClaim(control, id) {
+    const product = products[id]
+    const wallet = document.querySelector('.points-wallet')
+    if (!wallet) return
+
+    const start = control.getBoundingClientRect()
+    const target = wallet.getBoundingClientRect()
+    control.disabled = true
+    control.textContent = 'Claiming…'
+
+    for (let index = 0; index < 7; index += 1) {
+        const token = document.createElement('span')
+        token.className = 'reward-token'
+        token.style.left = `${start.left + start.width / 2 - 9}px`
+        token.style.top = `${start.top + start.height / 2 - 9}px`
+        token.style.setProperty('--token-x', `${target.left + target.width / 2 - start.left - start.width / 2}px`)
+        token.style.setProperty('--token-y', `${target.top + target.height / 2 - start.top - start.height / 2}px`)
+        token.style.setProperty('--token-scatter', `${(index - 3) * 7}px`)
+        token.style.setProperty('--token-delay', `${index * 55}ms`)
+        document.body.appendChild(token)
+        window.setTimeout(() => token.remove(), 1250)
+    }
+
+    window.setTimeout(() => {
+        state.points += product.points
+        wallet.querySelector('b').textContent = state.points
+        wallet.setAttribute('aria-label', `${state.points} loyalty points`)
+        wallet.classList.add('is-updated')
+        const gain = document.createElement('span')
+        gain.className = 'points-gain'
+        gain.textContent = `+${product.points}`
+        wallet.appendChild(gain)
+        window.setTimeout(() => {
+            wallet.classList.remove('is-updated')
+            gain.remove()
+        }, 900)
+    }, 820)
+
+    window.setTimeout(() => {
+        state.claimed.add(id)
+        state.selected = id
+        state.pickedPrize = null
+        state.screen = 'reward'
+        render()
+    }, 1280)
+}
+
 document.addEventListener('click', (event) => {
     const control = event.target.closest('[data-action]')
     if (!control) return
@@ -317,11 +375,7 @@ document.addEventListener('click', (event) => {
     }
     if (action === 'claim') {
         if (!state.completed.has(id) || state.claimed.has(id)) return
-        state.claimed.add(id)
-        state.selected = id
-        state.pickedPrize = null
-        state.screen = 'reward'
-        render()
+        animateRewardClaim(control, id)
     }
     if (action === 'pick-prize') {
         const prizes = ['+10 loyalty points', '10% off your next shop', 'Free delivery unlocked', '+1 extra prize box', '15% off fresh food']
