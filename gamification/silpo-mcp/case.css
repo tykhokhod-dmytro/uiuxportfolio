@@ -79,7 +79,7 @@ button:focus-visible {
 
 .screen {
     min-height: 100%;
-    overflow: hidden;
+    overflow: visible;
     animation: screen-in .42s cubic-bezier(.22, .9, .3, 1) both;
 }
 
