@@ -182,7 +182,6 @@ function detailScreen(id) {
                 </section>
                 <div class="detail-actions">
                     <button class="primary-button" type="button" data-action="open-demo" data-id="${id}">${completed ? 'Review mission' : started ? 'Continue mission' : 'Start mission'} ✦</button>
-                    <button class="text-button" type="button" data-action="hub">Other winners ›</button>
                 </div>
             </div>
         </section>`
