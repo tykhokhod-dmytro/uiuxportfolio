@@ -146,6 +146,7 @@ function hubScreen() {
 
 function detailScreen(id) {
     const product = products[id]
+    const place = ['1st', '2nd', '3rd'][product.rank - 1]
     const completed = state.completed.has(id)
     const claimed = state.claimed.has(id)
     const started = state.started.has(id) || completed
@@ -158,13 +159,16 @@ function detailScreen(id) {
         { title: product.action, note: 'Finish and unlock the reward', done: completed, current: selectionDone && !completed }
     ]
     return `
-        <section class="screen screen--detail">
+        <section class="screen screen--detail screen--detail-${id}">
             ${topBar('hub')}
-            <div class="screen-content detail-content">
-                <header class="product-heading">
+            <header class="product-heading">
+                <div class="product-hero product-hero--${id}">
+                    <span class="product-place"><span aria-hidden="true">🏆</span><b>${place}</b> place</span>
                     <div class="product-visual product-visual--${id}" role="img" aria-label="${product.name} product illustration"></div>
-                    <div><h1>${product.name}</h1><p>${product.short}</p></div>
-                </header>
+                </div>
+                <div class="product-intro"><h1>${product.name}</h1><p>${product.short}</p></div>
+            </header>
+            <div class="screen-content detail-content">
                 <section class="task-panel">
                     <div class="task-panel-head"><h2>Your task</h2><span class="quest-state quest-state--${completed ? 'done' : started ? 'active' : 'idle'}">${status}</span></div>
                     <p>${product.mission}</p>
