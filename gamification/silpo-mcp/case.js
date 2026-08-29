@@ -9,7 +9,8 @@ const products = {
         name: 'Cooklist',
         type: 'Recipe-to-cart',
         short: 'Builds a recipe and adds every ingredient to your cart.',
-        mission: 'Create one recipe and add all ingredients',
+        mission: 'Add all 4 tomato pasta ingredients to your cart.',
+        selectStep: 'Add 4 ingredients',
         reward: '20 loyalty points + 1 prize box',
         action: 'Add all to cart',
         demoTitle: 'Tomato pasta for two',
@@ -22,7 +23,8 @@ const products = {
         name: 'Restock',
         type: 'Routine shopper',
         short: 'Finds repeat buys and drafts your next regular cart.',
-        mission: 'Create one weekly essentials cart',
+        mission: 'Approve all 4 repeat buys for your Saturday AutoCart.',
+        selectStep: 'Approve 4 repeat buys',
         reward: 'Free delivery + 1 prize box',
         action: 'Create AutoCart',
         demoTitle: 'Weekly essentials',
@@ -35,7 +37,8 @@ const products = {
         name: 'Gather',
         type: 'Group planner',
         short: 'Builds one shared cart for your occasion and budget.',
-        mission: 'Create a picnic cart for four guests',
+        mission: 'Add all 4 picnic picks to one shared cart.',
+        selectStep: 'Add 4 picnic picks',
         reward: '40 loyalty points + 1 prize box',
         action: 'Build event cart',
         demoTitle: 'Park picnic for four',
@@ -47,6 +50,12 @@ const products = {
 const state = {
     screen: 'hub',
     selected: null,
+    started: new Set(),
+    selectedItems: {
+        cooklist: new Set(),
+        restock: new Set(),
+        gather: new Set()
+    },
     completed: new Set(),
     claimed: new Set(),
     pickedPrize: null
@@ -131,6 +140,15 @@ function detailScreen(id) {
     const product = products[id]
     const completed = state.completed.has(id)
     const claimed = state.claimed.has(id)
+    const started = state.started.has(id) || completed
+    const selectedCount = state.selectedItems[id].size
+    const selectionDone = selectedCount === product.items.length || completed
+    const status = completed ? 'Completed' : started ? 'In progress' : 'Not started'
+    const steps = [
+        { title: 'Open the product', note: 'See the generated suggestion', done: started, current: !started },
+        { title: product.selectStep, note: 'Tap every item to add it', done: selectionDone, current: started && !selectionDone },
+        { title: product.action, note: 'Finish and unlock the reward', done: completed, current: selectionDone && !completed }
+    ]
     return `
         <section class="screen screen--detail">
             ${topBar('hub')}
@@ -142,14 +160,19 @@ function detailScreen(id) {
                 </header>
                 <div class="product-visual product-visual--${id}" role="img" aria-label="${product.name} product illustration"></div>
                 <section class="task-panel">
-                    <h2>Your mission</h2>
+                    <div class="task-panel-head"><h2>Your task</h2><span class="quest-state quest-state--${completed ? 'done' : started ? 'active' : 'idle'}">${status}</span></div>
                     <p>${product.mission}</p>
-                    <div class="mini-stepper"><span class="done">✓<small>Choose</small></span><i></i><span class="done">✓<small>Build</small></span><i></i><span class="${completed ? 'done' : ''}">${completed ? '✓' : '3'}<small>Confirm</small></span></div>
+                    <ol class="quest-steps">
+                        ${steps.map((step, index) => {
+                            const mode = step.done ? 'is-done' : step.current ? 'is-current' : 'is-locked'
+                            return `<li class="quest-step ${mode}"><b>${step.done ? '✓' : index + 1}</b><span><strong>${step.title}</strong><small>${step.note}</small></span><em>${step.done ? 'Done' : step.current ? 'Now' : 'Locked'}</em></li>`
+                        }).join('')}
+                    </ol>
                 </section>
                 <section class="reward-panel"><span>🎁</span><div><small>Reward</small><strong>${product.reward}</strong></div></section>
                 <div class="detail-actions">
-                    <button class="primary-button" type="button" data-action="open-demo" data-id="${id}">${completed ? 'View product' : 'Open product'} ✦</button>
-                    <button class="secondary-button" type="button" data-action="claim" data-id="${id}" ${!completed || claimed ? 'disabled' : ''}>${claimed ? 'Reward claimed ✓' : completed ? 'Claim reward' : 'Complete mission to claim'}</button>
+                    <button class="primary-button" type="button" data-action="open-demo" data-id="${id}">${completed ? 'Review mission' : started ? 'Continue mission' : 'Start mission'} ✦</button>
+                    <button class="secondary-button" type="button" data-action="claim" data-id="${id}" ${!completed || claimed ? 'disabled' : ''}>${claimed ? 'Reward claimed ✓' : completed ? 'Claim reward' : 'Reward locked'}</button>
                     <button class="text-button" type="button" data-action="hub">Other winners ›</button>
                 </div>
             </div>
@@ -159,6 +182,10 @@ function detailScreen(id) {
 function demoScreen(id) {
     const product = products[id]
     const completed = state.completed.has(id)
+    const selectedItems = state.selectedItems[id]
+    const selectedCount = selectedItems.size
+    const remaining = product.items.length - selectedCount
+    const ready = remaining === 0
     return `
         <section class="screen screen--demo">
             ${topBar('detail')}
@@ -166,11 +193,18 @@ function demoScreen(id) {
                 <h1>${product.name}</h1>
                 <p class="demo-subtitle">${product.short}</p>
                 <div class="demo-hero product-visual--${id}"></div>
-                <section class="demo-card">
-                    <div class="demo-card-head"><div><small>Ready to build</small><h2>${product.demoTitle}</h2><p>${product.demoMeta}</p></div><span>${product.rank === 1 ? '🍽️' : product.rank === 2 ? '↻' : '🎉'}</span></div>
-                    <div class="item-list">${product.items.map((item) => `<div><span>${item[0]}</span><b>${item[1]}</b><i>${completed ? '✓' : '+'}</i></div>`).join('')}</div>
+                <section class="demo-task">
+                    <div><h2>Your task</h2><span class="quest-state quest-state--${completed ? 'done' : 'active'}">${completed ? 'Completed' : `${selectedCount}/${product.items.length} added`}</span></div>
+                    <p>${product.mission}</p>
                 </section>
-                <button class="primary-button" type="button" data-action="complete" data-id="${id}" ${completed ? 'disabled' : ''}>${completed ? 'Mission complete ✓' : product.action}</button>
+                <section class="demo-card">
+                    <div class="demo-card-head"><div><h2>${product.demoTitle}</h2><p>${product.demoMeta}</p></div><span>${product.rank === 1 ? '🍽️' : product.rank === 2 ? '↻' : '🎉'}</span></div>
+                    <div class="item-list">${product.items.map((item, index) => {
+                        const added = selectedItems.has(index) || completed
+                        return `<button class="${added ? 'is-added' : ''}" type="button" data-action="toggle-item" data-id="${id}" data-index="${index}" aria-pressed="${added}" ${completed ? 'disabled' : ''}><span>${item[0]}</span><b>${item[1]}</b><em>${added ? 'Added' : 'Add'}</em><i>${added ? '✓' : '+'}</i></button>`
+                    }).join('')}</div>
+                </section>
+                <button class="primary-button" type="button" data-action="complete" data-id="${id}" ${completed || !ready ? 'disabled' : ''}>${completed ? 'Mission complete ✓' : ready ? product.action : `Add ${remaining} more to continue`}</button>
                 ${completed ? '<button class="secondary-button" type="button" data-action="detail">Back to winner</button>' : ''}
             </div>
         </section>`
@@ -218,13 +252,14 @@ function finalScreen() {
         </section>`
 }
 
-function render() {
+function render(preserveScroll = false) {
+    const scrollPosition = app.scrollTop
     if (state.screen === 'hub') app.innerHTML = hubScreen()
     if (state.screen === 'detail') app.innerHTML = detailScreen(state.selected)
     if (state.screen === 'demo') app.innerHTML = demoScreen(state.selected)
     if (state.screen === 'reward') app.innerHTML = rewardScreen(state.selected)
     if (state.screen === 'final') app.innerHTML = finalScreen()
-    app.scrollTop = 0
+    app.scrollTop = preserveScroll ? scrollPosition : 0
 }
 
 function openNextProduct() {
@@ -261,8 +296,17 @@ document.addEventListener('click', (event) => {
     if (action === 'swipe-start' && event.detail === 0) openNextProduct()
     if (action === 'open-detail') { state.selected = id; state.screen = 'detail'; render() }
     if (action === 'detail') { state.screen = 'detail'; render() }
-    if (action === 'open-demo') { state.selected = id; state.screen = 'demo'; render() }
+    if (action === 'open-demo') { state.started.add(id); state.selected = id; state.screen = 'demo'; render() }
+    if (action === 'toggle-item') {
+        if (state.completed.has(id)) return
+        const index = Number(control.dataset.index)
+        const selectedItems = state.selectedItems[id]
+        if (selectedItems.has(index)) selectedItems.delete(index)
+        else selectedItems.add(index)
+        render(true)
+    }
     if (action === 'complete') {
+        if (state.selectedItems[id].size !== products[id].items.length) return
         control.disabled = true
         control.textContent = 'Building…'
         window.setTimeout(() => {
