@@ -793,11 +793,10 @@ h1 span::after {
 }
 
 .product-heading {
-    display: grid;
-    grid-template-columns: 92px 1fr;
-    gap: 18px;
-    align-items: center;
-    margin: 8px 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0 0 18px;
 }
 
 .large-medal {
@@ -812,7 +811,7 @@ h1 span::after {
 }
 
 .product-heading h1 {
-    margin-bottom: 7px;
+    margin: 0 0 6px;
     font-size: clamp(38px, 8vw, 52px);
 }
 
@@ -1500,14 +1499,7 @@ h1 span::after {
     }
 
     .product-heading {
-        grid-template-columns: 75px 1fr;
-        gap: 12px;
-    }
-
-    .large-medal {
-        width: 71px;
-        height: 71px;
-        font-size: 30px;
+        gap: 13px;
     }
 
     .product-heading h1 {

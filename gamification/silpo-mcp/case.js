@@ -153,12 +153,10 @@ function detailScreen(id) {
         <section class="screen screen--detail">
             ${topBar('hub')}
             <div class="screen-content detail-content">
-                ${circuitMark()}
                 <header class="product-heading">
-                    <span class="large-medal large-medal--${product.medal}">${product.rank}<small>${product.rank === 1 ? 'ST' : product.rank === 2 ? 'ND' : 'RD'}</small></span>
+                    <div class="product-visual product-visual--${id}" role="img" aria-label="${product.name} product illustration"></div>
                     <div><h1>${product.name}</h1><p>${product.short}</p></div>
                 </header>
-                <div class="product-visual product-visual--${id}" role="img" aria-label="${product.name} product illustration"></div>
                 <section class="task-panel">
                     <div class="task-panel-head"><h2>Your task</h2><span class="quest-state quest-state--${completed ? 'done' : started ? 'active' : 'idle'}">${status}</span></div>
                     <p>${product.mission}</p>
