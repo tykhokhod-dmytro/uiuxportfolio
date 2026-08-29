@@ -269,7 +269,15 @@ function render(preserveScroll = false) {
     if (state.screen === 'reward') app.innerHTML = rewardScreen(state.selected)
     if (state.screen === 'final') app.innerHTML = finalScreen()
     app.scrollTop = preserveScroll ? scrollPosition : 0
+    updateStickyHeader()
 }
+
+function updateStickyHeader() {
+    const header = app.querySelector('.top-bar')
+    if (header) header.classList.toggle('is-scrolled', app.scrollTop > 8)
+}
+
+app.addEventListener('scroll', updateStickyHeader, { passive: true })
 
 function openNextProduct() {
     state.selected = nextProduct()
