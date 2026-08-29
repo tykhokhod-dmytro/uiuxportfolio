@@ -981,7 +981,7 @@ h1 span::after {
 .quest-step {
     display: grid;
     min-height: 58px;
-    grid-template-columns: 31px minmax(0, 1fr) auto;
+    grid-template-columns: 31px minmax(0, 1fr);
     gap: 10px;
     align-items: center;
     padding: 8px 10px;
@@ -1019,13 +1019,6 @@ h1 span::after {
     line-height: 1.25;
 }
 
-.quest-step em {
-    color: #777065;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 800;
-}
-
 .quest-step.is-current {
     background: #fff0b7;
 }
@@ -1045,18 +1038,10 @@ h1 span::after {
     content: "";
 }
 
-.quest-step.is-current em {
-    color: #171717;
-}
-
 .quest-step.is-done > b {
     border-color: var(--green);
     color: #fff;
     background: var(--green);
-}
-
-.quest-step.is-done em {
-    color: var(--green);
 }
 
 .reward-panel {
