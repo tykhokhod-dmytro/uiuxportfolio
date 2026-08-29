@@ -173,19 +173,18 @@ function detailScreen(id) {
                     <div class="task-panel-head"><h2>Your task</h2><span class="quest-state quest-state--${completed ? 'done' : started ? 'active' : 'idle'}">${status}</span></div>
                     <p>${product.mission}</p>
                     <ol class="quest-steps">
-                        ${steps.map((step) => {
+                        ${steps.map((step, index) => {
                             const mode = step.done ? 'is-done' : step.current ? 'is-current' : 'is-todo'
-                            return `<li class="quest-step ${mode}"><b aria-hidden="true">${step.done ? '✓' : ''}</b><span><strong>${step.title}</strong><small>${step.note}</small></span></li>`
+                            return `<li class="quest-step ${mode}"><b aria-hidden="true">${step.done ? '✓' : ''}</b><span><strong>${step.title}</strong><small>${step.note}</small></span><button class="quest-go" type="button" data-action="quest-go" data-id="${id}" data-step="${index}" aria-label="Go to ${step.title}">Go</button></li>`
                         }).join('')}
                     </ol>
                 </section>
                 <section class="reward-panel ${completed && !claimed ? 'is-ready' : ''} ${claimed ? 'is-claimed' : ''}">
                     <span class="reward-coin" aria-hidden="true">●</span>
                     <div><small>${claimed ? 'Collected' : completed ? 'Ready to collect' : 'Quest reward'}</small><strong>${product.points} points</strong><em>${product.rewardExtra}</em></div>
-                    <button class="claim-button" type="button" data-action="claim" data-id="${id}" ${!completed || claimed ? 'disabled' : ''}>${claimed ? 'Claimed' : completed ? 'Claim' : 'Locked'}</button>
                 </section>
                 <div class="detail-actions">
-                    <button class="primary-button" type="button" data-action="open-demo" data-id="${id}">${completed ? 'Review mission' : started ? 'Continue mission' : 'Start mission'} ✦</button>
+                    <button class="primary-button" type="button" ${completed && !claimed ? `data-action="claim" data-id="${id}"` : 'disabled'}>${claimed ? 'Reward claimed ✓' : completed ? `Claim ${product.points} points ✦` : 'Complete quests to claim'}</button>
                 </div>
             </div>
         </section>`
@@ -288,6 +287,19 @@ function openNextProduct() {
     render()
 }
 
+function openQuestStep(id, step) {
+    state.started.add(id)
+    state.selected = id
+    state.screen = 'demo'
+    render()
+
+    if (step === 0) return
+    window.requestAnimationFrame(() => {
+        const target = app.querySelector(step === 1 ? '.item-list' : '[data-action="complete"]')
+        target?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+}
+
 function showToast() {
     window.clearTimeout(toastTimer)
     toast.hidden = false
@@ -363,7 +375,7 @@ document.addEventListener('click', (event) => {
     if (action === 'swipe-start' && event.detail === 0) openNextProduct()
     if (action === 'open-detail') { state.selected = id; state.screen = 'detail'; render() }
     if (action === 'detail') { state.screen = 'detail'; render() }
-    if (action === 'open-demo') { state.started.add(id); state.selected = id; state.screen = 'demo'; render() }
+    if (action === 'quest-go') openQuestStep(id, Number(control.dataset.step))
     if (action === 'toggle-item') {
         if (state.completed.has(id)) return
         const index = Number(control.dataset.index)

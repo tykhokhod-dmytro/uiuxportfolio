@@ -1093,7 +1093,7 @@ h1 span::after {
 .quest-step {
     display: grid;
     min-height: 62px;
-    grid-template-columns: 31px minmax(0, 1fr);
+    grid-template-columns: 31px minmax(0, 1fr) 54px;
     gap: 10px;
     align-items: center;
     padding: 10px 12px;
@@ -1156,6 +1156,33 @@ h1 span::after {
     background: var(--green);
 }
 
+.quest-go {
+    display: grid;
+    width: 54px;
+    height: 36px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    background: #2e63d5;
+    box-shadow: 0 4px 0 #193e91, 0 7px 14px rgba(30, 76, 171, .2);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 800;
+    transition: transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+
+.quest-go:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #193e91, 0 4px 9px rgba(30, 76, 171, .18);
+}
+
+.quest-step.is-current .quest-go {
+    background: #171717;
+    box-shadow: 0 4px 0 #000, 0 7px 14px rgba(0, 0, 0, .16);
+}
+
 .reward-panel {
     min-height: 92px;
     margin-top: 18px;
@@ -1199,40 +1226,14 @@ h1 span::after {
     background: #173f31;
 }
 
-.claim-button {
-    min-width: 72px;
-    min-height: 40px;
-    padding: 8px 13px;
-    border: 0;
-    border-radius: 999px;
-    color: #171717;
-    background: var(--yellow);
-    box-shadow: 0 5px 0 #bd8500;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 800;
-}
-
-.claim-button:active:not(:disabled) {
-    transform: translateY(2px);
-    box-shadow: 0 3px 0 #bd8500;
-}
-
-.claim-button:disabled {
-    color: rgba(255, 255, 255, .58);
-    background: rgba(255, 255, 255, .12);
-    box-shadow: none;
-    cursor: default;
-}
-
-.reward-panel.is-claimed .claim-button:disabled {
-    color: #173f31;
-    background: #d9f4e8;
-}
-
 .detail-actions {
     display: grid;
     margin-top: 18px;
+}
+
+.detail-actions .primary-button:disabled {
+    color: #686156;
+    background: #ddd7cd;
 }
 
 .demo-content > h1 {
