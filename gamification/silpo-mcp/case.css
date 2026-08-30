@@ -129,6 +129,31 @@ button:focus-visible {
     backdrop-filter: blur(14px) saturate(1.08);
 }
 
+.bonus-mark {
+    --bonus-size: 18px;
+    position: relative;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex: none;
+    box-sizing: border-box;
+    border: .27em solid #f20f78;
+    border-radius: 50%;
+    font-size: var(--bonus-size);
+}
+
+.bonus-mark::after {
+    position: absolute;
+    top: -.33em;
+    right: -.18em;
+    width: .56em;
+    height: .3em;
+    border-radius: .08em;
+    background: #20b9df;
+    content: "";
+    transform: rotate(-44deg);
+}
+
 .points-wallet {
     position: relative;
     display: inline-flex;
@@ -148,15 +173,8 @@ button:focus-visible {
     transition: transform .22s cubic-bezier(.2, 1.7, .4, 1), box-shadow .22s ease;
 }
 
-.points-wallet > span {
-    width: 15px;
-    height: 15px;
-    border: 3px solid #fff0a3;
-    border-radius: 50%;
-    color: #c48b00;
-    background: #e4a700;
-    box-shadow: inset 0 0 0 2px #fbc52c;
-    font-size: 0;
+.points-wallet > .bonus-mark {
+    --bonus-size: 18px;
 }
 
 .points-wallet.is-updated {
@@ -527,12 +545,8 @@ h1 span::after {
     white-space: nowrap;
 }
 
-.winner-progress-reward i {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #d99b00;
-    box-shadow: inset 0 0 0 2px #ffd965;
+.winner-progress-reward .bonus-mark {
+    --bonus-size: 11px;
 }
 
 .grand-card,
@@ -1143,17 +1157,9 @@ h1 span::after {
 }
 
 .reward-panel > .reward-coin {
-    display: grid;
-    width: 44px;
-    height: 44px;
+    --bonus-size: 42px;
     flex: none;
-    place-items: center;
-    border: 4px solid #fff0a3;
-    border-radius: 50%;
-    color: transparent;
-    background: #d99b00;
-    box-shadow: inset 0 0 0 3px #ffcf3b, 0 6px 14px rgba(255, 190, 0, .22);
-    font-size: 0;
+    filter: drop-shadow(0 6px 10px rgba(242, 15, 120, .22));
 }
 
 .reward-panel > div {
@@ -1336,9 +1342,22 @@ h1 span::after {
     font-size: 30px;
 }
 
-.reward-hero span {
-    font-size: 48px;
-    letter-spacing: .12em;
+.reward-symbols,
+.grand-prize-symbols {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.reward-symbols .bonus-mark {
+    --bonus-size: 54px;
+}
+
+.reward-symbols b,
+.grand-prize-symbols b {
+    color: var(--yellow-bright);
+    font-size: 38px;
 }
 
 .reward-content > .secondary-button,
@@ -1395,8 +1414,12 @@ h1 span::after {
     font-size: 31px;
 }
 
-.grand-prize > span {
-    font-size: 38px;
+.grand-prize-symbols .bonus-mark {
+    --bonus-size: 40px;
+}
+
+.grand-prize-symbols b:first-of-type {
+    font-size: 36px;
 }
 
 .success-toast {
@@ -1469,15 +1492,11 @@ h1 span::after {
 }
 
 .reward-token {
+    --bonus-size: 18px;
     position: fixed;
     z-index: 1000;
-    width: 18px;
-    height: 18px;
-    border: 3px solid #fff0a3;
-    border-radius: 50%;
     opacity: 0;
-    background: #d99b00;
-    box-shadow: inset 0 0 0 2px #ffcf3b, 0 4px 9px rgba(85, 55, 0, .2);
+    filter: drop-shadow(0 4px 6px rgba(98, 0, 44, .2));
     pointer-events: none;
     animation: reward-token-flight .9s var(--token-delay) cubic-bezier(.28, .75, .27, 1) both;
 }

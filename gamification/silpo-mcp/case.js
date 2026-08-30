@@ -73,7 +73,7 @@ function topBar(backAction = 'exit') {
         <nav class="top-bar">
             <button class="round-button" type="button" data-action="${backAction}" aria-label="Back">‹</button>
             <strong class="silpo-logo">Silpo</strong>
-            <div class="points-wallet" aria-label="${state.points} loyalty points"><span aria-hidden="true">●</span><b>${state.points}</b></div>
+            <div class="points-wallet" aria-label="${state.points} loyalty points"><span class="bonus-mark" aria-hidden="true"></span><b>${state.points}</b></div>
         </nav>`
 }
 
@@ -104,7 +104,7 @@ function winnerCard(id) {
                     <span class="winner-card-progress">
                         <span class="winner-progress-count">${progress}/3</span>
                         <span class="winner-progress-track" role="progressbar" aria-label="${product.name} mission progress" aria-valuemin="0" aria-valuemax="3" aria-valuenow="${progress}"><i style="--card-progress: ${(progress / 3) * 100}%"></i></span>
-                        <span class="winner-progress-reward"><i aria-hidden="true"></i>${product.points} points</span>
+                        <span class="winner-progress-reward"><i class="bonus-mark" aria-hidden="true"></i>${product.points} points</span>
                     </span>
                 </span>
         </button>`
@@ -176,7 +176,7 @@ function detailScreen(id) {
                     </ol>
                 </section>
                 <section class="reward-panel ${completed && !claimed ? 'is-ready' : ''} ${claimed ? 'is-claimed' : ''}">
-                    <span class="reward-coin" aria-hidden="true">●</span>
+                    <span class="bonus-mark reward-coin" aria-hidden="true"></span>
                     <div><small>${claimed ? 'Collected' : completed ? 'Ready to collect' : 'Quest reward'}</small><strong>${product.points} points</strong></div>
                 </section>
                 <div class="detail-actions">
@@ -227,7 +227,7 @@ function rewardScreen(id) {
                 <h1>Reward<br><span>unlocked!</span></h1>
                 <p>${product.name} complete. Points added to your balance.</p>
                 <div class="reward-summary"><span>✓ ${product.name}</span><b>🏆 ${state.claimed.size}/3</b></div>
-                <section class="reward-hero"><strong>${product.reward}</strong><span aria-hidden="true">🪙 ✦</span></section>
+                <section class="reward-hero"><strong>${product.reward}</strong><span class="reward-symbols" aria-hidden="true"><i class="bonus-mark"></i><b>✦</b></span></section>
                 <button class="primary-button" type="button" data-action="next">${state.claimed.size === 3 ? 'Open grand reward' : 'Next winner'} ✦</button>
                 <button class="secondary-button" type="button" data-action="hub">Back to event</button>
             </div>
@@ -244,7 +244,7 @@ function finalScreen() {
                 <h1>All winners<br><span>unlocked!</span></h1>
                 <p>You completed every AI Factory mission.</p>
                 <div class="completed-list">${Object.values(products).map((product) => `<span>✓ ${product.name}</span>`).join('')}</div>
-                <section class="grand-prize"><small>Grand reward</small><strong>100 loyalty points<br>+ 1 prize box</strong><span>🪙 🎁 ✦</span></section>
+                <section class="grand-prize"><small>Grand reward</small><strong>100 loyalty points<br>+ 1 prize box</strong><span class="grand-prize-symbols" aria-hidden="true"><i class="bonus-mark"></i><b>🎁</b><b>✦</b></span></section>
                 <button class="primary-button" type="button" data-action="play-grand">Play the prize game ✦</button>
                 <button class="secondary-button" type="button" data-action="hub">Back to event</button>
             </div>
@@ -317,7 +317,7 @@ function animateRewardClaim(control, id) {
 
     for (let index = 0; index < 7; index += 1) {
         const token = document.createElement('span')
-        token.className = 'reward-token'
+        token.className = 'reward-token bonus-mark'
         token.style.left = `${start.left + start.width / 2 - 9}px`
         token.style.top = `${start.top + start.height / 2 - 9}px`
         token.style.setProperty('--token-x', `${target.left + target.width / 2 - start.left - start.width / 2}px`)
