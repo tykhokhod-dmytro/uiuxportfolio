@@ -167,8 +167,7 @@ function detailScreen(id) {
             </header>
             <div class="screen-content detail-content">
                 <section class="task-panel">
-                    <div class="task-panel-head"><h2>Your task</h2><span class="quest-state quest-state--${completed ? 'done' : started ? 'active' : 'idle'}">${status}</span></div>
-                    <p>${product.mission}</p>
+                    <div class="task-panel-head"><h2>Your quests</h2><span class="quest-state quest-state--${completed ? 'done' : started ? 'active' : 'idle'}">${status}</span></div>
                     <ol class="quest-steps">
                         ${steps.map((step, index) => {
                             const mode = step.done ? 'is-done' : step.current ? 'is-current' : 'is-todo'
