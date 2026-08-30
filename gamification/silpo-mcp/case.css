@@ -1125,6 +1125,7 @@ h1 span::after {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    font-size: clamp(14px, 4vw, 18px);
     text-align: left;
 }
 
