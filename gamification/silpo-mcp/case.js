@@ -85,28 +85,31 @@ function circuitMark() {
     return '<div class="circuit-mark" aria-hidden="true"><span>AI</span><i></i><i></i><i></i><i></i></div>'
 }
 
-function progressMarkup() {
-    const count = state.completed.size
-    return `
-        <section class="progress-panel">
-            <div><strong>Your progress</strong><b>${count}/3</b></div>
-            <div class="checkpoint-track" aria-label="${count} of 3 missions complete">
-                ${Object.keys(products).map((id) => `<span class="${state.completed.has(id) ? 'done' : ''}" aria-label="${state.completed.has(id) ? 'Mission complete' : 'Mission not complete'}">${state.completed.has(id) ? '✓' : ''}</span>`).join('')}
-            </div>
-        </section>`
+function productProgress(id) {
+    if (state.completed.has(id)) return 3
+
+    const product = products[id]
+    let count = state.started.has(id) ? 1 : 0
+    if (state.selectedItems[id].size === product.items.length) count += 1
+    return count
 }
 
 function winnerCard(id) {
     const product = products[id]
     const completed = state.completed.has(id)
     const place = ['1st', '2nd', '3rd'][product.rank - 1]
+    const progress = productProgress(id)
     return `
         <button class="winner-card winner-card--${product.medal} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
             <span class="winner-thumb winner-thumb--${id}"></span>
                 <span class="winner-card-copy">
                     <span class="winner-card-title"><b>${product.name}</b><i class="rank-badge rank-badge--${product.medal}"><span aria-hidden="true">🏆</span>${place} place</i></span>
                     <small>${product.short}</small>
-                    <span class="winner-card-reward"><i aria-hidden="true">●</i>${product.points} points</span>
+                    <span class="winner-card-progress">
+                        <span class="winner-progress-count">${progress}/3</span>
+                        <span class="winner-progress-track" role="progressbar" aria-label="${product.name} mission progress" aria-valuemin="0" aria-valuemax="3" aria-valuenow="${progress}"><i style="--card-progress: ${(progress / 3) * 100}%"></i></span>
+                        <span class="winner-progress-reward"><i aria-hidden="true"></i>${product.points} points</span>
+                    </span>
                 </span>
             <span class="card-arrow" aria-hidden="true">→</span>
         </button>`
@@ -126,7 +129,6 @@ function hubScreen() {
                 <h1>AI Factory:<br><span>Meet the winners</span></h1>
                 <p class="hero-copy">Try three MCP-powered products. Complete their missions. Claim the rewards.</p>
                 <div class="chip-row"><span class="yellow-chip">● 12 days left</span><span class="dark-chip">🏆 3 winners</span></div>
-                ${progressMarkup()}
                 <div class="winner-cards">
                     ${winnerCard('cooklist')}${winnerCard('restock')}${winnerCard('gather')}
                 </div>
