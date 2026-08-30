@@ -176,7 +176,7 @@ function detailScreen(id) {
                     </ol>
                 </section>
                 <div class="detail-actions">
-                    <button class="primary-button claim-button" type="button" ${completed && !claimed ? `data-action="claim" data-id="${id}"` : 'disabled'}>
+                    <button class="primary-button claim-button ${completed && !claimed ? 'is-ready' : ''}" type="button" ${completed && !claimed ? `data-action="claim" data-id="${id}"` : 'disabled'}>
                         <span>${claimed ? 'Reward claimed' : completed ? 'Claim reward' : 'Complete quests to claim'}</span>
                         <span class="claim-button-reward"><span class="bonus-mark" aria-hidden="true"></span>${product.points} points${claimed ? ' ✓' : ''}</span>
                     </button>

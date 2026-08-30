@@ -1144,6 +1144,18 @@ h1 span::after {
     --bonus-size: 15px;
 }
 
+.claim-button.is-ready {
+    background: linear-gradient(110deg, var(--yellow) 0%, var(--yellow) 36%, #ffe67a 49%, var(--yellow-bright) 60%, var(--yellow) 74%);
+    background-position: 110% 50%;
+    background-size: 230% 100%;
+    animation: claim-button-shimmer 3.2s ease-in-out infinite;
+}
+
+.claim-button.is-ready .claim-button-reward {
+    animation: claim-reward-nudge 1.9s ease-in-out infinite;
+    transform-origin: center;
+}
+
 .detail-actions .primary-button:disabled {
     color: #686156;
     background: #ddd7cd;
@@ -1528,6 +1540,19 @@ h1 span::after {
 @keyframes arrow-fade {
     0%, 100% { opacity: .25; transform: translateX(0); }
     50% { opacity: .85; transform: translateX(5px); }
+}
+
+@keyframes claim-button-shimmer {
+    0%, 18% { background-position: 110% 50%; }
+    66%, 100% { background-position: -90% 50%; }
+}
+
+@keyframes claim-reward-nudge {
+    0%, 55%, 100% { transform: translateX(0) rotate(0) scale(1); }
+    64% { transform: translateX(-3px) rotate(-2deg) scale(1.025); }
+    72% { transform: translateX(3px) rotate(2deg) scale(1.04); }
+    80% { transform: translateX(-1px) rotate(-1deg) scale(1.025); }
+    88% { transform: translateX(0) rotate(0) scale(1); }
 }
 
 @keyframes circuit-float {
