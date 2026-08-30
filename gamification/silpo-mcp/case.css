@@ -539,7 +539,6 @@ h1 span::after {
 }
 
 .grand-card,
-.reward-panel,
 .reward-hero,
 .grand-prize {
     position: relative;
@@ -561,7 +560,6 @@ h1 span::after {
 }
 
 .grand-card::after,
-.reward-panel::after,
 .reward-hero::after,
 .grand-prize::after {
     position: absolute;
@@ -575,7 +573,6 @@ h1 span::after {
 
 .grand-card div,
 .grand-card span,
-.reward-panel > *,
 .reward-hero > *,
 .grand-prize > * {
     position: relative;
@@ -583,7 +580,6 @@ h1 span::after {
 }
 
 .grand-card small,
-.reward-panel small,
 .grand-prize small {
     display: block;
     margin-bottom: 4px;
@@ -594,7 +590,6 @@ h1 span::after {
 }
 
 .grand-card strong,
-.reward-panel strong,
 .reward-hero strong,
 .grand-prize strong {
     color: #fff;
@@ -1120,40 +1115,43 @@ h1 span::after {
     box-shadow: 0 2px 0 #d39d00, 0 4px 9px rgba(183, 128, 0, .16);
 }
 
-.reward-panel {
-    min-height: 92px;
-    margin-top: 18px;
-    padding: 17px 18px;
-    border: 1px solid rgba(255, 255, 255, .12);
-}
-
-.reward-panel > .reward-coin {
-    --bonus-size: 42px;
-    flex: none;
-    filter: drop-shadow(0 6px 10px rgba(242, 15, 120, .22));
-}
-
-.reward-panel > div {
-    min-width: 0;
-    flex: 1;
-}
-
-.reward-panel.is-ready {
-    box-shadow: 0 11px 26px rgba(200, 143, 0, .26);
-}
-
-.reward-panel.is-claimed {
-    background: #173f31;
-}
-
 .detail-actions {
     display: grid;
     margin-top: 18px;
 }
 
+.claim-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: left;
+}
+
+.claim-button-reward {
+    display: inline-flex;
+    min-height: 34px;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .68);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.claim-button-reward .bonus-mark {
+    --bonus-size: 15px;
+}
+
 .detail-actions .primary-button:disabled {
     color: #686156;
     background: #ddd7cd;
+}
+
+.detail-actions .primary-button:disabled .claim-button-reward {
+    color: #4e493f;
+    background: rgba(255, 255, 255, .58);
 }
 
 .demo-content > h1 {

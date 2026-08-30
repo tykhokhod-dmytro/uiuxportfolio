@@ -176,12 +176,11 @@ function detailScreen(id) {
                         }).join('')}
                     </ol>
                 </section>
-                <section class="reward-panel ${completed && !claimed ? 'is-ready' : ''} ${claimed ? 'is-claimed' : ''}">
-                    <span class="bonus-mark reward-coin" aria-hidden="true"></span>
-                    <div><small>${claimed ? 'Collected' : completed ? 'Ready to collect' : 'Quest reward'}</small><strong>${product.points} points</strong></div>
-                </section>
                 <div class="detail-actions">
-                    <button class="primary-button" type="button" ${completed && !claimed ? `data-action="claim" data-id="${id}"` : 'disabled'}>${claimed ? 'Reward claimed ✓' : completed ? `Claim ${product.points} points ✦` : 'Complete quests to claim'}</button>
+                    <button class="primary-button claim-button" type="button" ${completed && !claimed ? `data-action="claim" data-id="${id}"` : 'disabled'}>
+                        <span>${claimed ? 'Reward claimed' : completed ? 'Claim reward' : 'Complete quests'}</span>
+                        <span class="claim-button-reward"><span class="bonus-mark" aria-hidden="true"></span>${product.points} points${claimed ? ' ✓' : ''}</span>
+                    </button>
                 </div>
             </div>
         </section>`
