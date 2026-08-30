@@ -358,18 +358,18 @@ h1 span::after {
 .winner-card:nth-child(3) { animation: card-rise .4s .17s both; }
 
 .winner-card--cooklist {
-    background: linear-gradient(135deg, #ffb253, #ef6b3a);
-    box-shadow: 0 12px 26px rgba(177, 65, 30, .2);
+    background: linear-gradient(135deg, #ffc474, #f58a58);
+    box-shadow: 0 12px 26px rgba(177, 65, 30, .16);
 }
 
 .winner-card--restock {
-    background: linear-gradient(135deg, #a9ccf5, #7199df);
-    box-shadow: 0 12px 26px rgba(47, 80, 180, .2);
+    background: linear-gradient(135deg, #c5def8, #94b6eb);
+    box-shadow: 0 12px 26px rgba(47, 80, 180, .16);
 }
 
 .winner-card--gather {
-    background: linear-gradient(135deg, #d9a6e8, #c778bb);
-    box-shadow: 0 12px 26px rgba(92, 49, 170, .2);
+    background: linear-gradient(135deg, #e8cef0, #d79dcf);
+    box-shadow: 0 12px 26px rgba(92, 49, 170, .16);
 }
 
 .winner-card.is-complete {
