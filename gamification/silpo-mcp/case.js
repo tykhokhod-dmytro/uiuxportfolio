@@ -96,7 +96,7 @@ function winnerCard(id) {
     const place = ['1st', '2nd', '3rd'][product.rank - 1]
     const progress = productProgress(id)
     return `
-        <button class="winner-card winner-card--${product.medal} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
+        <button class="winner-card winner-card--${id} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
             <span class="winner-thumb winner-thumb--${id}"></span>
                 <span class="winner-card-copy">
                     <span class="winner-card-title"><b>${product.name}</b><i class="rank-badge rank-badge--${product.medal}"><span aria-hidden="true">🏆</span>${place} place</i></span>

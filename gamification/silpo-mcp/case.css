@@ -339,19 +339,19 @@ h1 span::after {
 .winner-card:nth-child(2) { animation: card-rise .4s .11s both; }
 .winner-card:nth-child(3) { animation: card-rise .4s .17s both; }
 
-.winner-card--gold {
-    background: linear-gradient(135deg, #ffe083, #ffb938);
-    box-shadow: 0 12px 26px rgba(178, 128, 0, .24);
+.winner-card--cooklist {
+    background: linear-gradient(135deg, #ffb253, #ef6b3a);
+    box-shadow: 0 12px 26px rgba(177, 65, 30, .2);
 }
 
-.winner-card--silver {
-    background: linear-gradient(135deg, #dfeaf2, #b9ccd9);
-    box-shadow: 0 12px 26px rgba(74, 84, 94, .18);
+.winner-card--restock {
+    background: linear-gradient(135deg, #a9ccf5, #7199df);
+    box-shadow: 0 12px 26px rgba(47, 80, 180, .2);
 }
 
-.winner-card--bronze {
-    background: linear-gradient(135deg, #f4c99d, #dc9c62);
-    box-shadow: 0 12px 26px rgba(140, 78, 20, .22);
+.winner-card--gather {
+    background: linear-gradient(135deg, #d9a6e8, #c778bb);
+    box-shadow: 0 12px 26px rgba(92, 49, 170, .2);
 }
 
 .winner-card.is-complete {
@@ -393,6 +393,24 @@ h1 span::after {
 
 .rank-badge span {
     font-size: 10px;
+}
+
+.rank-badge--gold {
+    color: #171717;
+    background: linear-gradient(135deg, #ffe987, #f4b800);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .5), 0 2px 5px rgba(121, 83, 0, .18);
+}
+
+.rank-badge--silver {
+    color: #171717;
+    background: linear-gradient(135deg, #fff, #bfc6cd);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .65), 0 2px 5px rgba(42, 47, 52, .16);
+}
+
+.rank-badge--bronze {
+    color: #fff;
+    background: linear-gradient(135deg, #d8945f, #9f522b);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3), 0 2px 5px rgba(83, 36, 13, .18);
 }
 
 .large-medal--silver {
