@@ -294,14 +294,6 @@ h1 span::after {
     line-height: 1.35;
 }
 
-.chip-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 24px;
-}
-
-.chip-row span,
 .reward-summary span,
 .reward-summary b {
     display: inline-flex;
@@ -314,12 +306,6 @@ h1 span::after {
     font-weight: 800;
 }
 
-.yellow-chip {
-    background: var(--yellow);
-    box-shadow: 0 5px 11px rgba(222, 160, 0, .22);
-}
-
-.dark-chip,
 .reward-summary b {
     color: #fff;
     background: var(--ink);

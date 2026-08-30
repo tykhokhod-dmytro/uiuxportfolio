@@ -127,7 +127,6 @@ function hubScreen() {
                 ${circuitMark()}
                 <h1>AI Factory:<br><span>Meet the winners</span></h1>
                 <p class="hero-copy">Try three MCP-powered products. Complete their missions. Claim the rewards.</p>
-                <div class="chip-row"><span class="yellow-chip">● 12 days left</span><span class="dark-chip">🏆 3 winners</span></div>
                 <div class="winner-cards">
                     ${winnerCard('cooklist')}${winnerCard('restock')}${winnerCard('gather')}
                 </div>
