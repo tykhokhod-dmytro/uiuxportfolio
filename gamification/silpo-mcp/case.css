@@ -1164,9 +1164,9 @@ h1 span::after {
     padding: 0;
     border: 0;
     border-radius: 999px;
-    color: #fff;
-    background: #2e63d5;
-    box-shadow: 0 4px 0 #193e91, 0 7px 14px rgba(30, 76, 171, .2);
+    color: #171717;
+    background: var(--yellow);
+    box-shadow: 0 4px 0 #d39d00, 0 7px 14px rgba(183, 128, 0, .18);
     cursor: pointer;
     font-size: 13px;
     font-weight: 800;
@@ -1175,12 +1175,7 @@ h1 span::after {
 
 .quest-go:active {
     transform: translateY(2px);
-    box-shadow: 0 2px 0 #193e91, 0 4px 9px rgba(30, 76, 171, .18);
-}
-
-.quest-step.is-current .quest-go {
-    background: #171717;
-    box-shadow: 0 4px 0 #000, 0 7px 14px rgba(0, 0, 0, .16);
+    box-shadow: 0 2px 0 #d39d00, 0 4px 9px rgba(183, 128, 0, .16);
 }
 
 .reward-panel {
