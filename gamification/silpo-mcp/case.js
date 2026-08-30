@@ -111,7 +111,6 @@ function winnerCard(id) {
                         <span class="winner-progress-reward"><i aria-hidden="true"></i>${product.points} points</span>
                     </span>
                 </span>
-            <span class="card-arrow" aria-hidden="true">→</span>
         </button>`
 }
 

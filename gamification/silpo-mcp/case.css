@@ -334,12 +334,12 @@ h1 span::after {
     position: relative;
     display: grid;
     min-height: 148px;
-    grid-template-columns: 128px minmax(0, 1fr) 44px;
-    gap: 16px;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 18px;
     align-items: center;
     width: 100%;
     overflow: hidden;
-    padding: 0 16px 0 12px;
+    padding: 0 20px 0 12px;
     border: 1px solid rgba(255, 255, 255, .92);
     border-radius: 24px;
     color: var(--ink);
@@ -451,7 +451,7 @@ h1 span::after {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
 }
 
 .winner-card-title {
@@ -478,23 +478,24 @@ h1 span::after {
 
 .winner-card-progress {
     display: grid;
-    grid-template-columns: auto minmax(36px, 1fr) auto;
+    grid-template-columns: auto minmax(52px, 1fr) auto;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
-    margin-top: 4px;
+    margin-top: 6px;
     color: #171717;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
 }
 
 .winner-progress-count {
-    min-width: 20px;
+    min-width: 25px;
+    font-size: 12px;
     font-variant-numeric: tabular-nums;
 }
 
 .winner-progress-track {
-    height: 6px;
+    height: 8px;
     overflow: hidden;
     border-radius: 999px;
     background: rgba(255, 255, 255, .62);
@@ -512,8 +513,13 @@ h1 span::after {
 
 .winner-progress-reward {
     display: inline-flex;
+    min-height: 25px;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .72);
+    box-shadow: 0 2px 7px rgba(23, 23, 23, .08);
     white-space: nowrap;
 }
 
@@ -523,19 +529,6 @@ h1 span::after {
     border-radius: 50%;
     background: #d99b00;
     box-shadow: inset 0 0 0 2px #ffd965;
-}
-
-.card-arrow {
-    display: grid;
-    width: 30px;
-    height: 30px;
-    place-items: center;
-    justify-self: end;
-    color: rgba(23, 23, 23, .82);
-    background: transparent;
-    font-size: 25px;
-    font-weight: 500;
-    transition: transform .18s ease, color .18s ease;
 }
 
 .grand-card,
@@ -812,11 +805,6 @@ h1 span::after {
     .winner-card:hover {
         box-shadow: 0 16px 30px rgba(96, 61, 0, .2);
         transform: translateY(-3px);
-    }
-
-    .winner-card:hover .card-arrow {
-        color: #000;
-        transform: translateX(4px);
     }
 
     .round-button:hover {
@@ -1705,10 +1693,10 @@ h1 span::after {
     }
 
     .winner-card {
-        grid-template-columns: 108px minmax(0, 1fr) 30px;
-        gap: 10px;
+        grid-template-columns: 108px minmax(0, 1fr);
+        gap: 12px;
         min-height: 132px;
-        padding: 0 12px 0 10px;
+        padding: 0 14px 0 10px;
     }
 
     .winner-card-title {
@@ -1725,18 +1713,23 @@ h1 span::after {
         font-size: 9px;
     }
 
-    .card-arrow {
-        width: 28px;
-        height: 28px;
-        font-size: 23px;
-    }
-
     .winner-card-copy b {
         font-size: 18px;
     }
 
     .winner-card-copy small {
         font-size: 11px;
+    }
+
+    .winner-card-progress {
+        grid-template-columns: auto minmax(38px, 1fr) auto;
+        gap: 7px;
+    }
+
+    .winner-progress-reward {
+        min-height: 23px;
+        padding: 2px 6px;
+        font-size: 10px;
     }
 
     .product-heading {
