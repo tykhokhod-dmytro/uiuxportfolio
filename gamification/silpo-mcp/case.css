@@ -424,9 +424,10 @@ h1 span::after {
 }
 
 .place-medal--card {
+    --medal-size: 44px;
     position: absolute;
-    bottom: 15px;
-    left: 22px;
+    bottom: 18px;
+    left: 20px;
 }
 
 .winner-thumb {
@@ -1620,9 +1621,9 @@ h1 span::after {
     }
 
     .place-medal--card {
-        --medal-size: 43px;
-        bottom: 13px;
-        left: 18px;
+        --medal-size: 40px;
+        bottom: 17px;
+        left: 17px;
     }
 
     .winner-card-copy b {
