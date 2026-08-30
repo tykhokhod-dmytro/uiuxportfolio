@@ -311,19 +311,28 @@ function animateRewardClaim(control, id) {
 
     const start = control.getBoundingClientRect()
     const target = wallet.getBoundingClientRect()
+    let pulseTimer = 0
+    const pulseWallet = () => {
+        window.clearTimeout(pulseTimer)
+        wallet.classList.remove('is-updated')
+        void wallet.offsetWidth
+        wallet.classList.add('is-updated')
+        pulseTimer = window.setTimeout(() => wallet.classList.remove('is-updated'), 360)
+    }
     control.disabled = true
     control.textContent = 'Claiming…'
 
     for (let index = 0; index < 7; index += 1) {
         const token = document.createElement('span')
         token.className = 'reward-token bonus-mark'
-        token.style.left = `${start.left + start.width / 2 - 9}px`
-        token.style.top = `${start.top + start.height / 2 - 9}px`
+        token.style.left = `${start.left + start.width / 2 - 12}px`
+        token.style.top = `${start.top + start.height / 2 - 12}px`
         token.style.setProperty('--token-x', `${target.left + target.width / 2 - start.left - start.width / 2}px`)
         token.style.setProperty('--token-y', `${target.top + target.height / 2 - start.top - start.height / 2}px`)
         token.style.setProperty('--token-scatter', `${(index - 3) * 7}px`)
         token.style.setProperty('--token-delay', `${index * 55}ms`)
         document.body.appendChild(token)
+        window.setTimeout(pulseWallet, 900 + index * 55)
         window.setTimeout(() => token.remove(), 1250)
     }
 
@@ -331,7 +340,7 @@ function animateRewardClaim(control, id) {
         state.points += product.points
         wallet.querySelector('b').textContent = state.points
         wallet.setAttribute('aria-label', `${state.points} loyalty points`)
-        wallet.classList.add('is-updated')
+        pulseWallet()
         const gain = document.createElement('span')
         gain.className = 'points-gain'
         gain.textContent = `+${product.points}`
@@ -340,14 +349,14 @@ function animateRewardClaim(control, id) {
             wallet.classList.remove('is-updated')
             gain.remove()
         }, 900)
-    }, 820)
+    }, 1300)
 
     window.setTimeout(() => {
         state.claimed.add(id)
         state.selected = id
         state.screen = 'reward'
         render()
-    }, 1280)
+    }, 1650)
 }
 
 document.addEventListener('click', (event) => {
