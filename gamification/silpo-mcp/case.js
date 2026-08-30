@@ -1165,12 +1165,12 @@ document.addEventListener('click', (event) => {
 })
 
 document.addEventListener('pointerdown', (event) => {
-    const thumb = event.target.closest('.swipe-thumb')
-    if (!thumb) return
-    const track = thumb.closest('.swipe-control')
+    const track = event.target.closest('.swipe-control')
+    if (!track) return
+    const thumb = track.querySelector('.swipe-thumb')
     const max = Math.max(1, track.clientWidth - thumb.offsetWidth - 10)
     swipeGesture = { pointerId: event.pointerId, startX: event.clientX, max, thumb, track }
-    thumb.setPointerCapture(event.pointerId)
+    track.setPointerCapture(event.pointerId)
     track.classList.add('is-dragging')
 })
 
@@ -1189,6 +1189,16 @@ function finishSwipe(event) {
     if (!swipeGesture || swipeGesture.pointerId !== event.pointerId) return
     const { track, thumb, max, distance = 0 } = swipeGesture
     swipeGesture = null
+
+    if (distance < 8 && window.innerWidth <= 620) {
+        track.classList.remove('is-dragging')
+        track.classList.add('is-complete')
+        track.style.setProperty('--swipe-progress', '100%')
+        track.style.setProperty('--swipe-ratio', '1')
+        thumb.style.transform = `translateX(${max}px)`
+        window.setTimeout(openNextProduct, 260)
+        return
+    }
 
     if (distance / max >= .72) {
         track.classList.remove('is-dragging')

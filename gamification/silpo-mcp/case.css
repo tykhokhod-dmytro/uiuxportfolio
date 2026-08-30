@@ -698,6 +698,8 @@ h1 span::after {
 .swipe-control {
     --swipe-progress: 0%;
     --swipe-ratio: 0;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
     position: relative;
     display: flex;
     height: 68px;
@@ -781,8 +783,15 @@ h1 span::after {
     transition: none;
 }
 
-.swipe-control.is-dragging .swipe-thumb {
+.swipe-control.is-dragging .swipe-thumb,
+.swipe-control.is-dragging {
     cursor: grabbing;
+}
+
+@media (max-width: 620px) {
+    .swipe-control {
+        cursor: pointer;
+    }
 }
 
 .swipe-control.is-dragging {
