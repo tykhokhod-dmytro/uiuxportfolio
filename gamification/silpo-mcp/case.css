@@ -723,11 +723,12 @@ h1 span::after {
     justify-content: center;
     overflow: hidden;
     margin-top: 18px;
-    border: 1px solid rgba(255, 255, 255, .92);
+    border: 0;
     border-radius: 999px;
     background: var(--yellow);
-    box-shadow: 0 12px 26px rgba(168, 119, 0, .2);
+    box-shadow: 0 5px 0 #d39d00, 0 10px 20px rgba(183, 128, 0, .18);
     user-select: none;
+    transition: transform .16s ease, box-shadow .16s ease;
 }
 
 .swipe-control::before {
@@ -735,7 +736,7 @@ h1 span::after {
     inset: 0 auto 0 0;
     width: var(--swipe-progress);
     border-radius: inherit;
-    background: var(--yellow-bright);
+    background: rgba(255, 255, 255, .24);
     content: "";
 }
 
@@ -760,8 +761,8 @@ h1 span::after {
 .swipe-thumb {
     position: absolute;
     z-index: 2;
-    top: 3px;
-    left: 3px;
+    top: 5px;
+    left: 5px;
     display: grid;
     width: 58px;
     height: 58px;
@@ -769,9 +770,9 @@ h1 span::after {
     place-items: center;
     border: 0;
     border-radius: 50%;
-    color: var(--yellow-bright);
-    background: #19151f;
-    box-shadow: 0 8px 18px rgba(25, 21, 31, .24);
+    color: var(--ink);
+    background: #fff8df;
+    box-shadow: 0 3px 0 #d39d00, 0 6px 12px rgba(183, 128, 0, .18);
     cursor: grab;
     font-size: 36px;
     line-height: 1;
@@ -787,6 +788,11 @@ h1 span::after {
 
 .swipe-control.is-dragging .swipe-thumb {
     cursor: grabbing;
+}
+
+.swipe-control.is-dragging {
+    transform: translateY(2px);
+    box-shadow: 0 3px 0 #d39d00, 0 6px 14px rgba(183, 128, 0, .16);
 }
 
 .swipe-control.is-complete > strong,
