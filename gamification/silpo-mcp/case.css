@@ -3135,7 +3135,19 @@ h1 span::after {
         border-radius: 16px;
     }
 
+    .demo-item--product,
+    .quest-step {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .demo-item--product:active,
+    .quest-step:active {
+        transform: scale(.99);
+    }
+
     .demo-item--product {
+        transition: background .18s ease, transform .14s ease;
         grid-template-columns: 52px minmax(0, 1fr) auto;
         grid-template-areas:
             "photo copy price"
@@ -3305,6 +3317,7 @@ h1 span::after {
     }
 
     .quest-step {
+        transition: transform .14s ease;
         min-height: 74px;
         grid-template-columns: 32px minmax(0, 1fr) 62px;
         gap: 12px;

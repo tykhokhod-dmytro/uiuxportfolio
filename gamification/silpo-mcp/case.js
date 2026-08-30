@@ -122,6 +122,7 @@ let toastTimer
 let swipeGesture = null
 let stickyAtRender = false
 let freshList = false
+let restoringRoute = false
 const visualLoads = new Map()
 const decodedVisuals = new Set()
 
@@ -315,7 +316,7 @@ function detailScreen(id) {
                     <ol class="quest-steps">
                         ${steps.map((step, index) => {
                             const mode = step.done ? 'is-done' : step.current ? 'is-current' : 'is-todo'
-                            return `<li class="quest-step ${mode}"><b aria-hidden="true">${step.done ? '✓' : ''}</b><span><strong>${step.title}</strong><small>${step.note}</small></span><button class="quest-go" type="button" data-action="quest-go" data-id="${id}" data-step="${index}" aria-label="Go to ${step.title}">Go</button></li>`
+                            return `<li class="quest-step ${mode}" data-action="row-quest" data-id="${id}" data-step="${index}"><b aria-hidden="true">${step.done ? '✓' : ''}</b><span><strong>${step.title}</strong><small>${step.note}</small></span><button class="quest-go" type="button" data-action="quest-go" data-id="${id}" data-step="${index}" aria-label="Go to ${step.title}">Go</button></li>`
                         }).join('')}
                     </ol>
                 </section>
@@ -362,7 +363,7 @@ function addPill(id, row, disabled) {
 
 function productRow(id, row, disabled, note = '') {
     return `
-        <li class="demo-item demo-item--product ${row.added ? 'is-added' : ''}" style="--row: ${row.index}">
+        <li class="demo-item demo-item--product ${row.added ? 'is-added' : ''}" style="--row: ${row.index}" data-action="row-toggle" data-id="${id}" data-index="${row.index}">
             ${photoTile(row.photo, row.emoji, 'demo-item-photo')}
             <span class="demo-item-copy"><b>${row.name}</b><small>${row.qty} ${row.unit}${note}</small></span>
             <b class="demo-item-price">${money(row.price)}</b>
@@ -632,6 +633,38 @@ function finalScreen() {
         </section>`
 }
 
+function currentRoute() {
+    return {
+        screen: state.screen,
+        selected: state.selected,
+        page: state.demo.cooklist.page
+    }
+}
+
+function sameRoute(a, b) {
+    return Boolean(a) && Boolean(b) && a.screen === b.screen && a.selected === b.selected && a.page === b.page
+}
+
+function syncHistory() {
+    if (restoringRoute) return
+    const route = currentRoute()
+    if (sameRoute(history.state?.route, route)) return
+    if (!history.state?.route) history.replaceState({ route }, '')
+    else history.pushState({ route }, '')
+}
+
+window.addEventListener('popstate', (event) => {
+    const route = event.state?.route
+    if (!route) return
+    restoringRoute = true
+    state.screen = route.screen
+    state.selected = route.selected
+    state.demo.cooklist.page = route.page
+    hideToast()
+    render()
+    restoringRoute = false
+})
+
 function render(preserveScroll = false, viaTransition = false) {
     const scrollPosition = app.scrollTop
     stickyAtRender = preserveScroll && scrollPosition > 8
@@ -645,6 +678,7 @@ function render(preserveScroll = false, viaTransition = false) {
     freshList = false
     app.scrollTop = preserveScroll ? scrollPosition : 0
     updateStickyHeader()
+    syncHistory()
 }
 
 function transitionTo(cardId, mutate) {
@@ -984,6 +1018,15 @@ document.addEventListener('click', (event) => {
     if (action === 'open-detail') transitionTo(id, () => { state.selected = id; state.screen = 'detail' })
     if (action === 'detail') { state.screen = 'detail'; render() }
     if (action === 'quest-go') openQuestStep(id, Number(control.dataset.step))
+    if (action === 'row-quest') {
+        if (window.innerWidth > 620) return
+        openQuestStep(id, Number(control.dataset.step))
+    }
+    if (action === 'row-toggle') {
+        if (window.innerWidth > 620) return
+        const pill = control.querySelector('.add-pill:not([disabled])')
+        pill?.click()
+    }
     if (action === 'toggle-item') {
         if (state.completed.has(id) && id !== 'cooklist') return
         const index = Number(control.dataset.index)
