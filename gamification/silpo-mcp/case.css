@@ -716,6 +716,7 @@ h1 span::after {
 
 .swipe-control {
     --swipe-progress: 0%;
+    --swipe-ratio: 0;
     position: relative;
     display: flex;
     height: 68px;
@@ -745,7 +746,9 @@ h1 span::after {
     z-index: 1;
     color: var(--ink);
     font-size: 15px;
-    transition: opacity .18s ease;
+    opacity: calc(1 - (var(--swipe-ratio) * .88));
+    transform: translateX(calc(var(--swipe-ratio) * -34px));
+    transition: opacity .2s ease, transform .2s ease;
 }
 
 .swipe-control > span {
@@ -755,6 +758,12 @@ h1 span::after {
     font-size: 20px;
     font-weight: 800;
     letter-spacing: -.2em;
+    opacity: calc(.4 - (var(--swipe-ratio) * .28));
+    transform: translateX(calc(var(--swipe-ratio) * 18px));
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.swipe-control:not(.is-dragging):not(.is-complete) > span {
     animation: arrow-fade 1.5s ease-in-out infinite;
 }
 
@@ -784,6 +793,11 @@ h1 span::after {
 .swipe-control.is-dragging .swipe-thumb,
 .swipe-control.is-complete .swipe-thumb {
     animation: none;
+}
+
+.swipe-control.is-dragging > strong,
+.swipe-control.is-dragging > span {
+    transition: none;
 }
 
 .swipe-control.is-dragging .swipe-thumb {

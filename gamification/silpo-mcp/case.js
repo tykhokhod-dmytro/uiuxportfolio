@@ -418,9 +418,11 @@ document.addEventListener('pointermove', (event) => {
     if (!swipeGesture || swipeGesture.pointerId !== event.pointerId) return
     event.preventDefault()
     const distance = Math.min(swipeGesture.max, Math.max(0, event.clientX - swipeGesture.startX))
+    const ratio = distance / swipeGesture.max
     swipeGesture.distance = distance
     swipeGesture.thumb.style.transform = `translateX(${distance}px)`
-    swipeGesture.track.style.setProperty('--swipe-progress', `${(distance / swipeGesture.max) * 100}%`)
+    swipeGesture.track.style.setProperty('--swipe-progress', `${ratio * 100}%`)
+    swipeGesture.track.style.setProperty('--swipe-ratio', ratio)
 })
 
 function finishSwipe(event) {
@@ -432,6 +434,7 @@ function finishSwipe(event) {
         track.classList.remove('is-dragging')
         track.classList.add('is-complete')
         track.style.setProperty('--swipe-progress', '100%')
+        track.style.setProperty('--swipe-ratio', '1')
         thumb.style.transform = `translateX(${max}px)`
         window.setTimeout(openNextProduct, 220)
         return
@@ -439,6 +442,7 @@ function finishSwipe(event) {
 
     track.classList.remove('is-dragging')
     track.style.setProperty('--swipe-progress', '0%')
+    track.style.setProperty('--swipe-ratio', '0')
     thumb.style.transform = ''
 }
 
