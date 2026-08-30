@@ -98,8 +98,9 @@ function winnerCard(id) {
     return `
         <button class="winner-card winner-card--${id} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
             <span class="winner-thumb winner-thumb--${id}"></span>
+            <span class="place-medal place-medal--${product.medal} place-medal--card" aria-label="${place} place"><b>${product.rank}</b></span>
                 <span class="winner-card-copy">
-                    <span class="winner-card-title"><b>${product.name}</b><i class="rank-badge rank-badge--${product.medal}"><span aria-hidden="true">🏆</span>${place} place</i></span>
+                    <span class="winner-card-title"><b>${product.name}</b></span>
                     <small>${product.short}</small>
                     <span class="winner-card-progress">
                         <span class="winner-progress-count">${progress}/3</span>
@@ -159,7 +160,7 @@ function detailScreen(id) {
             ${topBar('hub')}
             <header class="product-heading">
                 <div class="product-hero product-hero--${id}">
-                    <span class="product-place product-place--${product.medal}" aria-label="${place} place"><b>${product.rank}</b><small>place</small></span>
+                    <span class="place-medal place-medal--${product.medal} place-medal--detail" aria-label="${place} place"><b>${product.rank}</b></span>
                     <div class="product-visual product-visual--${id}" role="img" aria-label="${product.name} product illustration"></div>
                 </div>
                 <div class="product-intro"><h1>${product.name}</h1><p>${product.short}</p></div>
