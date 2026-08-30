@@ -12,8 +12,7 @@ const products = {
         mission: 'Add all 4 tomato pasta ingredients to your cart.',
         selectStep: 'Add 4 ingredients',
         points: 20,
-        reward: '20 loyalty points + 1 prize box',
-        rewardExtra: '+ 1 prize box',
+        reward: '20 loyalty points',
         action: 'Add all to cart',
         demoTitle: 'Tomato pasta for two',
         demoMeta: '25 min · UAH 368',
@@ -28,8 +27,7 @@ const products = {
         mission: 'Approve all 4 repeat buys for your Saturday AutoCart.',
         selectStep: 'Approve 4 repeat buys',
         points: 30,
-        reward: '30 loyalty points + free delivery',
-        rewardExtra: '+ free delivery',
+        reward: '30 loyalty points',
         action: 'Create AutoCart',
         demoTitle: 'Weekly essentials',
         demoMeta: 'Every Saturday · UAH 475',
@@ -44,8 +42,7 @@ const products = {
         mission: 'Add all 4 picnic picks to one shared cart.',
         selectStep: 'Add 4 picnic picks',
         points: 40,
-        reward: '40 loyalty points + 1 prize box',
-        rewardExtra: '+ 1 prize box',
+        reward: '40 loyalty points',
         action: 'Build event cart',
         demoTitle: 'Park picnic for four',
         demoMeta: '12 items · UAH 682',
@@ -64,8 +61,7 @@ const state = {
     },
     points: 0,
     completed: new Set(),
-    claimed: new Set(),
-    pickedPrize: null
+    claimed: new Set()
 }
 
 let toastTimer
@@ -131,7 +127,7 @@ function hubScreen() {
                     ${winnerCard('cooklist')}${winnerCard('restock')}${winnerCard('gather')}
                 </div>
                 <section class="grand-card ${allClaimed ? 'is-ready' : ''}">
-                    <div><small>${allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points</strong><em class="grand-chip">+ 3 prize boxes</em></div>
+                    <div><small>${allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points</strong><em class="grand-chip">+ 1 prize box</em></div>
                 </section>
                 ${allClaimed
                     ? '<button class="primary-button sticky-action" type="button" data-action="show-final">Open grand reward ✦</button>'
@@ -181,7 +177,7 @@ function detailScreen(id) {
                 </section>
                 <section class="reward-panel ${completed && !claimed ? 'is-ready' : ''} ${claimed ? 'is-claimed' : ''}">
                     <span class="reward-coin" aria-hidden="true">●</span>
-                    <div><small>${claimed ? 'Collected' : completed ? 'Ready to collect' : 'Quest reward'}</small><strong>${product.points} points</strong><em>${product.rewardExtra}</em></div>
+                    <div><small>${claimed ? 'Collected' : completed ? 'Ready to collect' : 'Quest reward'}</small><strong>${product.points} points</strong></div>
                 </section>
                 <div class="detail-actions">
                     <button class="primary-button" type="button" ${completed && !claimed ? `data-action="claim" data-id="${id}"` : 'disabled'}>${claimed ? 'Reward claimed ✓' : completed ? `Claim ${product.points} points ✦` : 'Complete quests to claim'}</button>
@@ -223,23 +219,15 @@ function demoScreen(id) {
 
 function rewardScreen(id) {
     const product = products[id]
-    const prize = state.pickedPrize
     return `
         <section class="screen screen--reward">
             ${topBar('hub')}
             <div class="screen-content reward-content">
                 ${circuitMark()}
                 <h1>Reward<br><span>unlocked!</span></h1>
-                <p>${product.name} mission complete.</p>
+                <p>${product.name} complete. Points added to your balance.</p>
                 <div class="reward-summary"><span>✓ ${product.name}</span><b>🏆 ${state.claimed.size}/3</b></div>
-                <section class="reward-hero"><strong>${product.reward}</strong><span>🪙 🎁 ✦</span></section>
-                <section class="prize-shelf">
-                    <h2>${prize ? 'Prize opened!' : 'Pick one prize box'}</h2>
-                    <p>${prize || 'One extra bonus is waiting inside.'}</p>
-                    <div class="gift-row">
-                        ${[0,1,2,3,4].map((index) => `<button type="button" data-action="pick-prize" data-index="${index}" ${prize ? 'disabled' : ''}>${prize && index === 2 ? '✨' : '🎁'}</button>`).join('')}
-                    </div>
-                </section>
+                <section class="reward-hero"><strong>${product.reward}</strong><span aria-hidden="true">🪙 ✦</span></section>
                 <button class="primary-button" type="button" data-action="next">${state.claimed.size === 3 ? 'Open grand reward' : 'Next winner'} ✦</button>
                 <button class="secondary-button" type="button" data-action="hub">Back to event</button>
             </div>
@@ -256,7 +244,7 @@ function finalScreen() {
                 <h1>All winners<br><span>unlocked!</span></h1>
                 <p>You completed every AI Factory mission.</p>
                 <div class="completed-list">${Object.values(products).map((product) => `<span>✓ ${product.name}</span>`).join('')}</div>
-                <section class="grand-prize"><small>Grand reward</small><strong>100 loyalty points<br>+ 3 prize boxes</strong><span>🪙 🎁 🎁 🎁</span></section>
+                <section class="grand-prize"><small>Grand reward</small><strong>100 loyalty points<br>+ 1 prize box</strong><span>🪙 🎁 ✦</span></section>
                 <button class="primary-button" type="button" data-action="play-grand">Play the prize game ✦</button>
                 <button class="secondary-button" type="button" data-action="hub">Back to event</button>
             </div>
@@ -358,7 +346,6 @@ function animateRewardClaim(control, id) {
     window.setTimeout(() => {
         state.claimed.add(id)
         state.selected = id
-        state.pickedPrize = null
         state.screen = 'reward'
         render()
     }, 1280)
@@ -400,11 +387,6 @@ document.addEventListener('click', (event) => {
         if (!state.completed.has(id) || state.claimed.has(id)) return
         animateRewardClaim(control, id)
     }
-    if (action === 'pick-prize') {
-        const prizes = ['+10 loyalty points', '10% off your next shop', 'Free delivery unlocked', '+1 extra prize box', '15% off fresh food']
-        state.pickedPrize = prizes[Number(control.dataset.index)]
-        render()
-    }
     if (action === 'next') {
         if (state.claimed.size === 3) state.screen = 'final'
         else { state.screen = 'hub'; state.selected = null }
@@ -414,7 +396,7 @@ document.addEventListener('click', (event) => {
     if (action === 'play-grand') {
         infoModal.querySelector('.modal-icon').textContent = '🎁'
         infoModal.querySelector('h2').textContent = 'Grand prize claimed!'
-        infoModal.querySelector('p').textContent = '100 loyalty points and 3 prize boxes are now yours.'
+        infoModal.querySelector('p').textContent = '100 loyalty points and 1 prize box are now yours.'
         infoModal.hidden = false
     }
     if (action === 'show-info') infoModal.hidden = false

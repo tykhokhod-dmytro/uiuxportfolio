@@ -775,8 +775,7 @@ h1 span::after {
 
 .screen--detail .product-visual,
 .screen--demo .demo-hero,
-.screen--reward .reward-hero,
-.screen--reward .prize-shelf {
+.screen--reward .reward-hero {
     animation: visual-in .5s .08s cubic-bezier(.2, .9, .3, 1) both;
 }
 
@@ -964,8 +963,7 @@ h1 span::after {
 }
 
 .task-panel,
-.demo-card,
-.prize-shelf {
+.demo-card {
     margin-top: 13px;
     padding: 18px;
     border: 0;
@@ -976,16 +974,14 @@ h1 span::after {
 
 .task-panel h2,
 .demo-task h2,
-.demo-card h2,
-.prize-shelf h2 {
+.demo-card h2 {
     margin-bottom: 4px;
     font-size: 20px;
     letter-spacing: -.04em;
 }
 
 .task-panel > p,
-.demo-card-head p,
-.prize-shelf p {
+.demo-card-head p {
     margin-bottom: 12px;
     color: #4b4740;
     font-size: 14px;
@@ -1145,15 +1141,6 @@ h1 span::after {
 .reward-panel > div {
     min-width: 0;
     flex: 1;
-}
-
-.reward-panel > div em {
-    display: block;
-    margin-top: 3px;
-    color: #fff;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 700;
 }
 
 .reward-panel.is-ready {
@@ -1334,50 +1321,6 @@ h1 span::after {
 .reward-hero span {
     font-size: 48px;
     letter-spacing: .12em;
-}
-
-.prize-shelf {
-    margin-bottom: 14px;
-    text-align: center;
-}
-
-.gift-row {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 7px;
-    padding: 12px 4px 22px;
-}
-
-.gift-row::after {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-    left: 0;
-    height: 17px;
-    border-radius: 4px 4px 8px 8px;
-    background: linear-gradient(#b87831, #815020);
-    box-shadow: 0 5px 0 #503015;
-    content: "";
-}
-
-.gift-row button {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    aspect-ratio: 1;
-    place-items: center;
-    border: 0;
-    border-radius: 14px;
-    color: #fff;
-    background: linear-gradient(145deg, #282828, #090909);
-    box-shadow: 0 5px 0 #b38200;
-    cursor: pointer;
-    font-size: 30px;
-}
-
-.gift-row button:hover:not(:disabled) {
-    transform: translateY(-4px) rotate(-2deg);
 }
 
 .reward-content > .secondary-button,
