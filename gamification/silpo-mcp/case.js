@@ -425,7 +425,6 @@ function recipeScreen(id) {
                     <ul class="item-list">${rows.map((row) => productRow(id, row, false)).join('')}</ul>
                     ${cartSummary(rows, addedTotal)}
                 </section>
-                ${done ? demoResult(id) : ''}
                 ${done
                     ? '<button class="primary-button" type="button" data-action="change-dish">Back</button>'
                     : `<button class="primary-button" type="button" data-action="complete" data-id="${id}">Add all to cart · ${money(demoRows(id).total)}</button>`}
@@ -504,7 +503,7 @@ function gatherCard(id, completed) {
     return `
         <section class="demo-card demo-card--photo">
             ${cardPhoto(occasion.photo, occasion.emoji, occasion.name)}
-            ${cardHead('🎉 Shared event cart', occasion.name, `Sat 14:00 · ${demo.guests} people · budget ${money(demo.budget).replace('.00', '')}`, completed ? '' : `<button class="text-button" type="button" data-action="edit-brief" data-id="${id}">Edit</button>`)}
+            ${cardHead('🎉 Shared event cart', occasion.name, `Sat 14:00 · ${demo.guests} people · budget ${money(demo.budget).replace('.00', '')}`)}
             <div class="budget">
                 <div><small>Budget</small><b>${money(addedTotal)} <span>/ ${money(demo.budget).replace('.00', '')}</span></b></div>
                 <span class="budget-track ${addedTotal > demo.budget ? 'is-over' : ''}" role="progressbar" aria-label="Budget used" aria-valuemin="0" aria-valuemax="${demo.budget}" aria-valuenow="${addedTotal.toFixed(2)}"><i style="--budget: ${share * 100}%"></i></span>
@@ -512,18 +511,6 @@ function gatherCard(id, completed) {
             </div>
             <ul class="item-list ${freshList ? 'is-fresh' : ''}">${rows.map((row) => productRow(id, row, completed, ` · <em class="${row.by === 'AI' ? 'by-ai' : ''}">${row.by === 'AI' ? '✦ AI pick' : `by ${row.by}`}</em>`)).join('')}</ul>
         </section>`
-}
-
-function demoResult(id) {
-    const product = products[id]
-    const { total } = demoRows(id)
-    const title = { cooklist: '4 ingredients added to your cart', restock: '4 recommendations added to your cart', gather: 'Event cart shared' }[id]
-    const summary = {
-        cooklist: () => '',
-        restock: () => `${money(total)} · suggested from your recent orders`,
-        gather: () => `${money(total)} · ≈ ${money(total / state.demo.gather.guests)} each · sent to ${state.demo.gather.guests - 1} friends`
-    }[id]()
-    return `<section class="demo-result"><b aria-hidden="true">✓</b><div><strong>${title}</strong>${summary ? `<small>${summary}</small>` : ''}</div></section>`
 }
 
 function demoAction(id, completed) {
@@ -553,13 +540,12 @@ function demoScreen(id) {
         : { cart: state.selectedItems[id].size }
     return `
         <section class="screen screen--demo screen--demo-${id}">
-            ${topBar('detail', appBarOptions)}
+            ${topBar(id === 'gather' && state.demo.gather.brief && !completed ? 'edit-brief' : 'detail', appBarOptions)}
             <div class="screen-content demo-content">
                 <span class="app-tag"><i class="app-tag-icon product-visual--${id}" ${visualAttrs(product)} aria-hidden="true"></i>${product.name}<span>by ${product.team}</span></span>
                 <h1 class="app-title">${product.heading}</h1>
                 <p class="app-lead">${product.short}</p>
                 ${card}
-                ${!isChooser && completed ? demoResult(id) : ''}
                 ${isChooser ? '' : demoAction(id, completed)}
             </div>
         </section>`
@@ -637,12 +623,13 @@ function currentRoute() {
     return {
         screen: state.screen,
         selected: state.selected,
-        page: state.demo.cooklist.page
+        page: state.demo.cooklist.page,
+        brief: state.demo.gather.brief
     }
 }
 
 function sameRoute(a, b) {
-    return Boolean(a) && Boolean(b) && a.screen === b.screen && a.selected === b.selected && a.page === b.page
+    return Boolean(a) && Boolean(b) && a.screen === b.screen && a.selected === b.selected && a.page === b.page && a.brief === b.brief
 }
 
 function syncHistory() {
@@ -660,6 +647,7 @@ window.addEventListener('popstate', (event) => {
     state.screen = route.screen
     state.selected = route.selected
     state.demo.cooklist.page = route.page
+    if (!state.completed.has('gather')) state.demo.gather.brief = route.brief
     hideToast()
     render()
     restoringRoute = false
@@ -746,7 +734,6 @@ function finishDish(id) {
         return
     }
     render(true)
-    app.querySelector('.demo-result')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 }
 
 function completeMission(id) {
@@ -755,7 +742,6 @@ function completeMission(id) {
     state.selected = id
     state.screen = 'demo'
     render(true)
-    app.querySelector('.demo-result')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     showToast()
 }
 
@@ -785,12 +771,13 @@ function flyToCart(control) {
         fab.classList.remove('is-bump')
         void fab.offsetWidth
         fab.classList.add('is-bump')
-        haptic(10)
+        haptic(HAPTIC.light)
     }, 620)
 }
 
 function showToast() {
     window.clearTimeout(toastTimer)
+    haptic(HAPTIC.success)
     const frame = app.getBoundingClientRect()
     toast.style.top = `${frame.top + 14}px`
     toast.style.left = `${frame.left + 16}px`
@@ -810,6 +797,38 @@ function hideToast() {
     toast.hidden = true
 }
 
+const HAPTIC = {
+    light: 14,
+    tap: 22,
+    select: 32,
+    remove: 16,
+    step: 26,
+    impact: 55,
+    success: [34, 45, 70],
+    grand: [30, 45, 30, 45, 90]
+}
+
+const ACTION_HAPTICS = {
+    'open-detail': HAPTIC.tap,
+    'quest-go': HAPTIC.tap,
+    'row-quest': HAPTIC.tap,
+    'pick-dish': HAPTIC.tap,
+    'change-dish': HAPTIC.light,
+    'edit-brief': HAPTIC.light,
+    'set-servings': HAPTIC.light,
+    'set-day': HAPTIC.light,
+    'set-occasion': HAPTIC.light,
+    'set-budget': HAPTIC.light,
+    'set-guests': HAPTIC.light,
+    'scan': HAPTIC.step,
+    'build-brief': HAPTIC.step,
+    'complete': HAPTIC.impact,
+    'play-grand': HAPTIC.tap,
+    'pick-box': HAPTIC.impact,
+    'show-final': HAPTIC.tap,
+    'scroll-cart': HAPTIC.light
+}
+
 function haptic(pattern) {
     if (typeof navigator.vibrate === 'function') navigator.vibrate(pattern)
 }
@@ -827,7 +846,7 @@ function sendPointsToWallet(origin, amount, onArrive) {
     let pulseTimer = 0
     const pulseWallet = () => {
         window.clearTimeout(pulseTimer)
-        haptic(8)
+        haptic(HAPTIC.light)
         wallet.classList.remove('is-updated')
         void wallet.offsetWidth
         wallet.classList.add('is-updated')
@@ -854,7 +873,7 @@ function sendPointsToWallet(origin, amount, onArrive) {
 
     window.setTimeout(() => {
         state.points += amount
-        haptic([14, 40, 30])
+        haptic(HAPTIC.success)
         wallet.querySelector('b').textContent = state.points
         wallet.setAttribute('aria-label', `${state.points} loyalty points`)
         onArrive?.()
@@ -866,7 +885,7 @@ function animateRewardClaim(control, id) {
     control.disabled = true
     control.classList.remove('is-ready')
     control.textContent = 'Claiming…'
-    haptic(20)
+    haptic(HAPTIC.impact)
 
     sendPointsToWallet(control, product.points, () => {
         state.claimed.add(id)
@@ -879,137 +898,12 @@ function animateRewardClaim(control, id) {
     })
 }
 
-function showToast() {
-    window.clearTimeout(toastTimer)
-    const frame = app.getBoundingClientRect()
-    toast.style.top = `${frame.top + 14}px`
-    toast.style.left = `${frame.left + 16}px`
-    toast.style.width = `${frame.width - 32}px`
-    toast.hidden = false
-    toast.classList.remove('is-visible')
-    requestAnimationFrame(() => toast.classList.add('is-visible'))
-    toastTimer = window.setTimeout(() => {
-        toast.classList.remove('is-visible')
-        window.setTimeout(() => { toast.hidden = true }, 240)
-    }, 5000)
-}
-
-function hideToast() {
-    window.clearTimeout(toastTimer)
-    toast.classList.remove('is-visible')
-    toast.hidden = true
-}
-
-function haptic(pattern) {
-    if (typeof navigator.vibrate === 'function') navigator.vibrate(pattern)
-}
-
-function sendPointsToWallet(origin, amount, onArrive) {
-    const wallet = document.querySelector('.points-wallet')
-    if (!wallet) {
-        state.points += amount
-        onArrive?.()
-        return
-    }
-
-    const start = origin.getBoundingClientRect()
-    const target = wallet.getBoundingClientRect()
-    let pulseTimer = 0
-    const pulseWallet = () => {
-        window.clearTimeout(pulseTimer)
-        haptic(8)
-        wallet.classList.remove('is-updated')
-        void wallet.offsetWidth
-        wallet.classList.add('is-updated')
-        pulseTimer = window.setTimeout(() => wallet.classList.remove('is-updated'), 360)
-    }
-    const flight = 900
-    const arrival = 700
-    const stagger = 55
-    const tokens = 7
-
-    for (let index = 0; index < tokens; index += 1) {
-        const token = document.createElement('span')
-        token.className = 'reward-token bonus-mark'
-        token.style.left = `${start.left + start.width / 2 - 12}px`
-        token.style.top = `${start.top + start.height / 2 - 12}px`
-        token.style.setProperty('--token-x', `${target.left + target.width / 2 - start.left - start.width / 2}px`)
-        token.style.setProperty('--token-y', `${target.top + target.height / 2 - start.top - start.height / 2}px`)
-        token.style.setProperty('--token-scatter', `${(index - 3) * 7}px`)
-        token.style.setProperty('--token-delay', `${index * stagger}ms`)
-        document.body.appendChild(token)
-        window.setTimeout(pulseWallet, arrival + index * stagger)
-        window.setTimeout(() => token.remove(), flight + index * stagger)
-    }
-
-    window.setTimeout(() => {
-        state.points += amount
-        haptic([14, 40, 30])
-        wallet.querySelector('b').textContent = state.points
-        wallet.setAttribute('aria-label', `${state.points} loyalty points`)
-        onArrive?.()
-    }, arrival + (tokens - 1) * stagger)
-}
-
-function animateRewardClaim(control, id) {
-    const product = products[id]
-    const wallet = document.querySelector('.points-wallet')
-    if (!wallet) return
-
-    const start = control.getBoundingClientRect()
-    const target = wallet.getBoundingClientRect()
-    let pulseTimer = 0
-    const pulseWallet = () => {
-        window.clearTimeout(pulseTimer)
-        haptic(8)
-        wallet.classList.remove('is-updated')
-        void wallet.offsetWidth
-        wallet.classList.add('is-updated')
-        pulseTimer = window.setTimeout(() => wallet.classList.remove('is-updated'), 360)
-    }
-    const flight = 900
-    const arrival = 700
-    const stagger = 55
-    const tokens = 7
-    control.disabled = true
-    control.classList.remove('is-ready')
-    control.textContent = 'Claiming…'
-    haptic(20)
-
-    for (let index = 0; index < tokens; index += 1) {
-        const token = document.createElement('span')
-        token.className = 'reward-token bonus-mark'
-        token.style.left = `${start.left + start.width / 2 - 12}px`
-        token.style.top = `${start.top + start.height / 2 - 12}px`
-        token.style.setProperty('--token-x', `${target.left + target.width / 2 - start.left - start.width / 2}px`)
-        token.style.setProperty('--token-y', `${target.top + target.height / 2 - start.top - start.height / 2}px`)
-        token.style.setProperty('--token-scatter', `${(index - 3) * 7}px`)
-        token.style.setProperty('--token-delay', `${index * stagger}ms`)
-        document.body.appendChild(token)
-        window.setTimeout(pulseWallet, arrival + index * stagger)
-        window.setTimeout(() => token.remove(), flight + index * stagger)
-    }
-
-    const lastArrival = arrival + (tokens - 1) * stagger
-    window.setTimeout(() => {
-        state.points += product.points
-        state.claimed.add(id)
-        haptic([14, 40, 30])
-        wallet.querySelector('b').textContent = state.points
-        wallet.setAttribute('aria-label', `${state.points} loyalty points`)
-        control.innerHTML = claimButtonContent(id)
-        control.removeAttribute('data-action')
-        control.insertAdjacentHTML('afterend', nextQuestButton(id, true))
-        window.requestAnimationFrame(() => {
-            app.querySelector('.next-quest-button')?.scrollIntoView({ behavior: 'smooth', block: 'end' })
-        })
-    }, lastArrival)
-}
 
 document.addEventListener('click', (event) => {
     const control = event.target.closest('[data-action]')
     if (!control) return
     const { action, id } = control.dataset
+    if (ACTION_HAPTICS[action] !== undefined) haptic(ACTION_HAPTICS[action])
 
     if (action === 'exit') window.location.href = '../'
     if (action === 'hub') { state.screen = 'hub'; render() }
@@ -1031,9 +925,12 @@ document.addEventListener('click', (event) => {
         if (state.completed.has(id) && id !== 'cooklist') return
         const index = Number(control.dataset.index)
         const selectedItems = state.selectedItems[id]
-        if (selectedItems.has(index)) selectedItems.delete(index)
-        else {
+        if (selectedItems.has(index)) {
+            selectedItems.delete(index)
+            haptic(HAPTIC.remove)
+        } else {
             selectedItems.add(index)
+            haptic(HAPTIC.select)
             flyToCart(control)
         }
         render(true)
@@ -1077,7 +974,7 @@ document.addEventListener('click', (event) => {
             elapsed += delay
             window.setTimeout(() => {
                 demo.found = index + 1
-                haptic(8)
+                haptic(HAPTIC.step)
                 render(true)
             }, elapsed)
         })
@@ -1085,6 +982,7 @@ document.addEventListener('click', (event) => {
             demo.scanning = false
             demo.scanned = true
             freshList = true
+            haptic(HAPTIC.select)
             render(true)
         }, elapsed + 620)
     }
@@ -1108,7 +1006,7 @@ document.addEventListener('click', (event) => {
         ;[560, 1060].forEach((delay, index) => {
             window.setTimeout(() => {
                 demo.building = index + 1
-                haptic(8)
+                haptic(HAPTIC.step)
                 render(true)
             }, delay)
         })
@@ -1116,6 +1014,7 @@ document.addEventListener('click', (event) => {
             demo.building = -1
             demo.brief = true
             freshList = true
+            haptic(HAPTIC.select)
             render(true)
         }, 1620)
     }
@@ -1152,6 +1051,7 @@ document.addEventListener('click', (event) => {
         window.setTimeout(() => {
             if (chosen) sendPointsToWallet(chosen, 100, () => {
                 state.grand.stage = 'done'
+                haptic(HAPTIC.grand)
                 render(true)
             })
             else {
@@ -1180,6 +1080,10 @@ document.addEventListener('pointermove', (event) => {
     const distance = Math.min(swipeGesture.max, Math.max(0, event.clientX - swipeGesture.startX))
     const ratio = distance / swipeGesture.max
     swipeGesture.distance = distance
+    if (ratio >= .72 && !swipeGesture.ticked) {
+        swipeGesture.ticked = true
+        haptic(HAPTIC.light)
+    }
     swipeGesture.thumb.style.transform = `translateX(${distance}px)`
     swipeGesture.track.style.setProperty('--swipe-progress', `${ratio * 100}%`)
     swipeGesture.track.style.setProperty('--swipe-ratio', ratio)
@@ -1191,6 +1095,7 @@ function finishSwipe(event) {
     swipeGesture = null
 
     if (distance < 8 && window.innerWidth <= 620) {
+        haptic(HAPTIC.tap)
         track.classList.remove('is-dragging')
         track.classList.add('is-complete')
         track.style.setProperty('--swipe-progress', '100%')
@@ -1201,6 +1106,7 @@ function finishSwipe(event) {
     }
 
     if (distance / max >= .72) {
+        haptic(HAPTIC.impact)
         track.classList.remove('is-dragging')
         track.classList.add('is-complete')
         track.style.setProperty('--swipe-progress', '100%')
@@ -1220,6 +1126,7 @@ document.addEventListener('pointerup', finishSwipe)
 document.addEventListener('pointercancel', finishSwipe)
 
 toast.addEventListener('click', () => {
+    haptic(HAPTIC.tap)
     hideToast()
     state.screen = 'detail'
     render()
