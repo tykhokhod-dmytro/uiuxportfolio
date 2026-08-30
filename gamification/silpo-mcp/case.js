@@ -4,8 +4,6 @@ const infoModal = document.querySelector('#info-modal')
 
 const products = {
     cooklist: {
-        rank: 1,
-        medal: 'gold',
         name: 'Cooklist',
         team: 'Kitchen Bots',
         visual: 'cooklist-square-v1.png',
@@ -41,8 +39,6 @@ const products = {
         ]
     },
     restock: {
-        rank: 2,
-        medal: 'silver',
         name: 'Restock',
         team: 'Loop Labs',
         visual: 'restock-square-v1.png',
@@ -65,8 +61,6 @@ const products = {
         ]
     },
     gather: {
-        rank: 3,
-        medal: 'bronze',
         name: 'Gather',
         team: 'Table for Five',
         visual: 'gather-square-v1.png',
@@ -114,18 +108,20 @@ const state = {
         gather: new Set()
     },
     points: 0,
+    grand: { stage: 'idle', box: null },
     completed: new Set(),
     claimed: new Set(),
     demo: {
         cooklist: { dish: null, page: 'choose', servings: 2, carts: {} },
-        restock: { scanned: false, scanning: false },
-        gather: { brief: false, occasion: 'picnic', guests: 4, budget: 35 }
+        restock: { scanned: false, scanning: false, found: 0 },
+        gather: { brief: false, building: -1, occasion: 'picnic', guests: 4, budget: 35 }
     }
 }
 
 let toastTimer
 let swipeGesture = null
 let stickyAtRender = false
+let freshList = false
 const visualLoads = new Map()
 const decodedVisuals = new Set()
 
@@ -212,19 +208,18 @@ function productProgress(id) {
 function winnerCard(id) {
     const product = products[id]
     const completed = state.completed.has(id)
-    const place = ['1st', '2nd', '3rd'][product.rank - 1]
+    const claimed = state.claimed.has(id)
     const progress = productProgress(id)
     return `
         <button class="winner-card winner-card--${id} ${completed ? 'is-complete' : ''}" type="button" data-action="open-detail" data-id="${id}">
             <span class="winner-thumb winner-thumb--${id}" data-visual="${product.visual}" style="--visual: url(${product.visual}); view-transition-name: thumb-${id}; view-transition-class: ghost"></span>
-            <span class="place-medal place-medal--${product.medal} place-medal--card" style="view-transition-name: medal-${id}; view-transition-class: ghost" aria-label="${place} place"><b>${product.rank}</b></span>
                 <span class="winner-card-copy" style="view-transition-name: copy-${id}; view-transition-class: ghost">
                     <span class="winner-card-title"><b>${product.name}</b></span>
                     <small>${product.short}</small>
                     <span class="winner-card-progress">
                         <span class="winner-progress-count">${progress}/3</span>
                         <span class="winner-progress-track" role="progressbar" aria-label="${product.name} mission progress" aria-valuemin="0" aria-valuemax="3" aria-valuenow="${progress}"><i style="--card-progress: ${(progress / 3) * 100}%"></i></span>
-                        <span class="winner-progress-reward"><i class="bonus-mark" aria-hidden="true"></i>${product.points} points</span>
+                        <span class="winner-progress-reward" aria-label="${product.points} points${claimed ? ', claimed' : ''}"><i class="bonus-mark" aria-hidden="true"></i>${product.points} points${claimed ? '<i class="reward-check" aria-hidden="true">✓</i>' : ''}</span>
                     </span>
                 </span>
         </button>`
@@ -255,7 +250,7 @@ function claimButtonContent(id) {
     const claimed = state.claimed.has(id)
     return `
         <span>${claimed ? 'Reward claimed' : completed ? 'Claim reward' : 'Complete quests to claim'}</span>
-        <span class="claim-button-reward"><span class="bonus-mark" aria-hidden="true"></span>${product.points} points${claimed ? ' ✓' : ''}</span>`
+        <span class="claim-button-reward" aria-label="${product.points} points${claimed ? ', claimed' : ''}"><span class="bonus-mark" aria-hidden="true"></span>${product.points} points${claimed ? '<i class="reward-check" aria-hidden="true">✓</i>' : ''}</span>`
 }
 
 function nextProduct() {
@@ -275,10 +270,15 @@ function hubScreen() {
                     ${winnerCard('cooklist')}${winnerCard('restock')}${winnerCard('gather')}
                 </div>
                 <section class="grand-card ${allClaimed ? 'is-ready' : ''}">
-                    <div><small>${allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points</strong><em class="grand-chip">+ 1 prize box</em></div>
+                    <div><small>${state.grand.stage === 'done' ? 'Grand reward claimed ✓' : allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points</strong><em class="grand-chip">${state.grand.stage === 'done' ? `+ ${prizeBoxes[state.grand.box].percent}% back on ${prizeBoxes[state.grand.box].category}` : '+ 1 bonus coupon'}</em></div>
+                    <span class="grand-coupons" aria-hidden="true">
+                        <img class="grand-coupon grand-coupon--one" src="bonus-coupon-v1.png" alt="">
+                        <img class="grand-coupon grand-coupon--two" src="bonus-coupon-v1.png" alt="">
+                        <img class="grand-coupon grand-coupon--three" src="bonus-coupon-v1.png" alt="">
+                    </span>
                 </section>
                 ${allClaimed
-                    ? '<button class="primary-button sticky-action" type="button" data-action="show-final">Open grand reward ✦</button>'
+                    ? `<button class="primary-button sticky-action" type="button" data-action="show-final">${state.grand.stage === 'done' ? 'See your grand reward' : 'Open grand reward ✦'}</button>`
                     : `<div class="swipe-control" data-swipe>
                         <button class="swipe-thumb" type="button" data-action="swipe-start" aria-label="Swipe right to ${state.completed.size ? 'continue' : 'start'}">›</button>
                         <strong>Swipe to ${state.completed.size ? 'continue' : 'start'}</strong>
@@ -307,7 +307,7 @@ function detailScreen(id) {
                 <div class="product-hero product-hero--${id}">
                     <div class="product-visual product-visual--${id}" ${visualAttrs(product)} role="img" aria-label="${product.name} product illustration"></div>
                 </div>
-                <div class="product-intro"><h1>${product.name}</h1><p>${product.short}</p><small class="mini-app-byline">Mini app by <b>${product.team}</b> · built on Silpo MCP</small></div>
+                <div class="product-intro"><div class="product-title-row"><h1>${product.name}</h1><span class="byline-badge">by ${product.team}</span></div><p>${product.short}</p></div>
             </header>
             <div class="screen-content detail-content">
                 <section class="task-panel">
@@ -362,7 +362,7 @@ function addPill(id, row, disabled) {
 
 function productRow(id, row, disabled, note = '') {
     return `
-        <li class="demo-item demo-item--product ${row.added ? 'is-added' : ''}">
+        <li class="demo-item demo-item--product ${row.added ? 'is-added' : ''}" style="--row: ${row.index}">
             ${photoTile(row.photo, row.emoji, 'demo-item-photo')}
             <span class="demo-item-copy"><b>${row.name}</b><small>${row.qty} ${row.unit}${note}</small></span>
             <b class="demo-item-price">${money(row.price)}</b>
@@ -436,20 +436,31 @@ function restockCard(id, completed) {
     const product = products[id]
     const demo = state.demo.restock
     if (!demo.scanned) {
+        const notes = [
+            'Reading your last 38 orders…',
+            'Spotting what you buy on repeat…',
+            'Checking what is running low…',
+            'Almost there…',
+            'Found 4 repeat buys!'
+        ]
         return `
             <section class="demo-card">
                 ${cardHead('↻ Order history', 'Find items to restock', 'We’ll scan your last 12 weeks of orders and suggest likely repeat buys')}
-                <div class="stat-row"><span><b>38</b><small>orders</small></span><span><b>12</b><small>weeks</small></span><span><b>4</b><small>likely repeats</small></span></div>
                 ${demo.scanning
-                    ? '<div class="scan-progress" role="progressbar" aria-label="Scanning orders"><i></i></div><p class="scan-note">Looking for repeat purchases…</p>'
-                    : `<button class="inline-button" type="button" data-action="scan" data-id="${id}">Find recommendations</button>`}
+                    ? `<div class="scan-stage">
+                        <div class="found-chips">${product.items.map((item, index) => `<span class="found-chip ${index < demo.found ? 'is-found' : ''}">${photoTile(item.photo, item.emoji, 'found-photo')}<i aria-hidden="true">✓</i></span>`).join('')}</div>
+                        <div class="scan-progress" role="progressbar" aria-label="Scanning orders" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${demo.found}"><i style="--scan: ${20 + demo.found * 20}%"></i></div>
+                        <p class="scan-note">${notes[demo.found]}</p>
+                    </div>`
+                    : `<div class="stat-row"><span><b>38</b><small>orders</small></span><span><b>12</b><small>weeks</small></span><span><b>4</b><small>likely repeats</small></span></div>
+                        <button class="inline-button" type="button" data-action="scan" data-id="${id}">Find recommendations</button>`}
             </section>`
     }
     const { rows, addedTotal } = demoRows(id)
     return `
         <section class="demo-card">
             ${cardHead('↻ Based on your orders', product.demoTitle, '4 suggestions based on your last 12 weeks of orders')}
-            <ul class="item-list">${rows.map((row) => productRow(id, row, completed, ` · Usually every ${row.every} days · last bought ${row.last} days ago`)).join('')}
+            <ul class="item-list ${freshList ? 'is-fresh' : ''}">${rows.map((row) => productRow(id, row, completed, ` · every ~${row.every} days · ${row.last} d ago`)).join('')}
             </ul>
             ${cartSummary(rows, addedTotal)}
         </section>`
@@ -459,6 +470,23 @@ function gatherCard(id, completed) {
     const product = products[id]
     const demo = state.demo.gather
     const occasion = product.occasions[demo.occasion]
+    if (demo.building >= 0) {
+        const helpers = product.guests.slice(0, demo.guests)
+        const notes = [
+            `Asking ${helpers.slice(1, 3).join(' and ')}…`,
+            `Matching the ${money(demo.budget).replace('.00', '')} budget…`,
+            `Picking 4 things for ${occasion.name.toLowerCase()}…`
+        ]
+        return `
+            <section class="demo-card">
+                ${cardHead('✦ Building your cart', 'Getting everyone on board', `${occasion.emoji} ${occasion.name} · ${demo.guests} people`)}
+                <div class="build-stage">
+                    <span class="avatars avatars--busy" aria-hidden="true">${helpers.slice(0, 5).map((guest, index) => `<i class="${index <= demo.building + 1 ? 'is-in' : ''}">${guest[0]}</i>`).join('')}</span>
+                    <div class="scan-progress" role="progressbar" aria-label="Building the cart"><i style="--scan: ${30 + demo.building * 35}%"></i></div>
+                    <p class="scan-note">${notes[demo.building]}</p>
+                </div>
+            </section>`
+    }
     if (!demo.brief) {
         return `
             <section class="demo-card">
@@ -481,7 +509,7 @@ function gatherCard(id, completed) {
                 <span class="budget-track ${addedTotal > demo.budget ? 'is-over' : ''}" role="progressbar" aria-label="Budget used" aria-valuemin="0" aria-valuemax="${demo.budget}" aria-valuenow="${addedTotal.toFixed(2)}"><i style="--budget: ${share * 100}%"></i></span>
                 <div><em>≈ ${money(addedTotal / demo.guests)} per person</em><span class="avatars" aria-label="${guests.join(', ')}">${guests.slice(0, 5).map((guest) => `<i>${guest[0]}</i>`).join('')}${guests.length > 5 ? `<i>+${guests.length - 5}</i>` : ''}</span></div>
             </div>
-            <ul class="item-list">${rows.map((row) => productRow(id, row, completed, ` · <em class="${row.by === 'AI' ? 'by-ai' : ''}">${row.by === 'AI' ? '✦ AI pick' : `by ${row.by}`}</em>`)).join('')}</ul>
+            <ul class="item-list ${freshList ? 'is-fresh' : ''}">${rows.map((row) => productRow(id, row, completed, ` · <em class="${row.by === 'AI' ? 'by-ai' : ''}">${row.by === 'AI' ? '✦ AI pick' : `by ${row.by}`}</em>`)).join('')}</ul>
         </section>`
 }
 
@@ -501,11 +529,7 @@ function demoAction(id, completed) {
     const product = products[id]
     const { total, remaining } = demoRows(id)
     if (completed) return '<button class="primary-button" type="button" data-action="detail">Back</button>'
-    if (!firstStepDone(id)) {
-        if (id === 'restock') return ''
-        const hint = { cooklist: 'Pick a dish to continue', restock: 'Scan your orders to continue', gather: 'Set up the event to continue' }[id]
-        return `<button class="primary-button" type="button" disabled>${hint}</button>`
-    }
+    if (!firstStepDone(id)) return ''
     if (id === 'cooklist') return `<button class="primary-button" type="button" data-action="complete" data-id="${id}">${remaining ? `Add all to cart · ${money(total)}` : `Go to cart · ${money(total)}`}</button>`
     if (remaining) {
         const hint = id === 'restock'
@@ -535,24 +559,75 @@ function demoScreen(id) {
                 <p class="app-lead">${product.short}</p>
                 ${card}
                 ${!isChooser && completed ? demoResult(id) : ''}
-                ${isChooser ? (firstStepDone(id) ? '' : '<button class="primary-button" type="button" disabled>Pick a dish to continue</button>') : demoAction(id, completed)}
+                ${isChooser ? '' : demoAction(id, completed)}
             </div>
         </section>`
 }
 
+const prizeBoxes = [
+    { key: 'cheese', emoji: '🧀', photo: 'parmesan.jpg', percent: 30, category: 'cheese & dairy', from: 'You cooked with it in Cooklist' },
+    { key: 'coffee', emoji: '☕', photo: 'coffee-beans.jpg', percent: 25, category: 'coffee & tea', from: 'Restock spotted it in your orders' },
+    { key: 'bakery', emoji: '🥐', photo: 'sourdough-bread.jpg', percent: 20, category: 'bakery', from: 'Gather picked it for your event' }
+]
+
+function prizeTicket(prize) {
+    return `
+        <div class="ticket ticket--${prize.key}">
+            <span class="ticket-photo"><i aria-hidden="true">${prize.emoji}</i><img src="photos/${prize.photo}" alt="" onerror="this.hidden = true"></span>
+            <span class="ticket-body">
+                <b class="ticket-percent">${prize.percent}%</b>
+                <span class="ticket-copy"><small>back in bonuses</small><b>on ${prize.category}</b></span>
+            </span>
+        </div>`
+}
+
+function grandCard() {
+    const { stage, box } = state.grand
+    if (stage === 'done') {
+        const prize = prizeBoxes[box]
+        return `
+            <section class="grand-prize grand-prize--won">
+                <small>Grand reward claimed</small>
+                <strong>100 loyalty points<br>+ ${prize.percent}% back in bonuses</strong>
+                ${prizeTicket(prize)}
+                <em class="ticket-note">${prize.from}</em>
+            </section>`
+    }
+    if (stage === 'pick' || stage === 'opening') {
+        return `
+            <section class="grand-prize grand-prize--game">
+                <small>${stage === 'opening' ? 'Opening…' : 'Pick a coupon'}</small>
+                <strong>${stage === 'opening' ? 'Opening your coupon' : 'One coupon is yours'}</strong>
+                <div class="prize-boxes">${prizeBoxes.map((prize, index) => {
+                    const chosen = box === index
+                    const mode = stage === 'opening' ? (chosen ? 'is-opening' : 'is-dimmed') : ''
+                    return `<button class="prize-box prize-box--${prize.key} ${mode}" type="button" data-action="pick-box" data-value="${index}" aria-label="Coupon ${index + 1}" ${stage === 'opening' ? 'disabled' : ''}><img class="prize-coupon-art" src="bonus-coupon-v1.png" alt=""><span class="prize-face" aria-hidden="true">${chosen && stage === 'opening' ? `${prize.percent}%` : '?'}</span></button>`
+                }).join('')}</div>
+            </section>`
+    }
+    return `
+        <section class="grand-prize">
+            <small>Grand reward</small>
+            <strong>100 loyalty points<br>+ 1 bonus coupon</strong>
+            <span class="grand-prize-symbols" aria-hidden="true"><i class="bonus-mark"></i><svg class="coupon-glyph" viewBox="0 0 44 30"><path d="M3 3h38a2 2 0 0 1 2 2v4.5a5.5 5.5 0 0 0 0 11V25a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-4.5a5.5 5.5 0 0 0 0-11V5a2 2 0 0 1 2-2z" fill="currentColor"/><path d="M30 7v16" stroke="#141414" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 4"/></svg></span>
+        </section>`
+}
+
 function finalScreen() {
+    const { stage } = state.grand
     return `
         <section class="screen screen--final">
             ${topBar('hub')}
             <div class="screen-content final-content">
                 ${circuitMark()}
-                <div class="trophy">🏆</div>
+                <div class="trophy" aria-hidden="true"><img src="winner-trophy-v1.png" alt=""></div>
                 <h1>All winners<br><span>unlocked!</span></h1>
-                <p>You completed every AI Factory mission.</p>
+                <p>${stage === 'done' ? 'Your grand reward is in your account.' : 'You completed every AI Factory mission.'}</p>
                 <div class="completed-list">${Object.values(products).map((product) => `<span>✓ ${product.name}</span>`).join('')}</div>
-                <section class="grand-prize"><small>Grand reward</small><strong>100 loyalty points<br>+ 1 prize box</strong><span class="grand-prize-symbols" aria-hidden="true"><i class="bonus-mark"></i><b>🎁</b><b>✦</b></span></section>
-                <button class="primary-button" type="button" data-action="play-grand">Play the prize game ✦</button>
-                <button class="secondary-button" type="button" data-action="hub">Back to event</button>
+                ${grandCard()}
+                ${stage === 'idle' ? `<button class="primary-button claim-button is-ready" type="button" data-action="play-grand"><span>Play the prize game</span><span class="claim-button-reward"><span class="bonus-mark" aria-hidden="true"></span>100 points<svg class="coupon-glyph coupon-glyph--chip" aria-hidden="true" viewBox="0 0 44 30"><path d="M3 3h38a2 2 0 0 1 2 2v4.5a5.5 5.5 0 0 0 0 11V25a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-4.5a5.5 5.5 0 0 0 0-11V5a2 2 0 0 1 2-2z" fill="currentColor"/><path d="M30 7v16" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 4"/></svg></span></button>` : ''}
+                ${stage === 'done' ? '<button class="primary-button" type="button" data-action="hub">Back to event</button>' : ''}
+                ${stage === 'idle' ? '<button class="secondary-button" type="button" data-action="hub">Back to event</button>' : ''}
             </div>
         </section>`
 }
@@ -567,6 +642,7 @@ function render(preserveScroll = false, viaTransition = false) {
     if (state.screen === 'demo') app.innerHTML = demoScreen(state.selected)
     if (state.screen === 'final') app.innerHTML = finalScreen()
     revealVisuals()
+    freshList = false
     app.scrollTop = preserveScroll ? scrollPosition : 0
     updateStickyHeader()
 }
@@ -704,6 +780,143 @@ function haptic(pattern) {
     if (typeof navigator.vibrate === 'function') navigator.vibrate(pattern)
 }
 
+function sendPointsToWallet(origin, amount, onArrive) {
+    const wallet = document.querySelector('.points-wallet')
+    if (!wallet) {
+        state.points += amount
+        onArrive?.()
+        return
+    }
+
+    const start = origin.getBoundingClientRect()
+    const target = wallet.getBoundingClientRect()
+    let pulseTimer = 0
+    const pulseWallet = () => {
+        window.clearTimeout(pulseTimer)
+        haptic(8)
+        wallet.classList.remove('is-updated')
+        void wallet.offsetWidth
+        wallet.classList.add('is-updated')
+        pulseTimer = window.setTimeout(() => wallet.classList.remove('is-updated'), 360)
+    }
+    const flight = 900
+    const arrival = 700
+    const stagger = 55
+    const tokens = 7
+
+    for (let index = 0; index < tokens; index += 1) {
+        const token = document.createElement('span')
+        token.className = 'reward-token bonus-mark'
+        token.style.left = `${start.left + start.width / 2 - 12}px`
+        token.style.top = `${start.top + start.height / 2 - 12}px`
+        token.style.setProperty('--token-x', `${target.left + target.width / 2 - start.left - start.width / 2}px`)
+        token.style.setProperty('--token-y', `${target.top + target.height / 2 - start.top - start.height / 2}px`)
+        token.style.setProperty('--token-scatter', `${(index - 3) * 7}px`)
+        token.style.setProperty('--token-delay', `${index * stagger}ms`)
+        document.body.appendChild(token)
+        window.setTimeout(pulseWallet, arrival + index * stagger)
+        window.setTimeout(() => token.remove(), flight + index * stagger)
+    }
+
+    window.setTimeout(() => {
+        state.points += amount
+        haptic([14, 40, 30])
+        wallet.querySelector('b').textContent = state.points
+        wallet.setAttribute('aria-label', `${state.points} loyalty points`)
+        onArrive?.()
+    }, arrival + (tokens - 1) * stagger)
+}
+
+function animateRewardClaim(control, id) {
+    const product = products[id]
+    control.disabled = true
+    control.classList.remove('is-ready')
+    control.textContent = 'Claiming…'
+    haptic(20)
+
+    sendPointsToWallet(control, product.points, () => {
+        state.claimed.add(id)
+        control.innerHTML = claimButtonContent(id)
+        control.removeAttribute('data-action')
+        control.insertAdjacentHTML('afterend', nextQuestButton(id, true))
+        window.requestAnimationFrame(() => {
+            app.querySelector('.next-quest-button')?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+        })
+    })
+}
+
+function showToast() {
+    window.clearTimeout(toastTimer)
+    const frame = app.getBoundingClientRect()
+    toast.style.top = `${frame.top + 14}px`
+    toast.style.left = `${frame.left + 16}px`
+    toast.style.width = `${frame.width - 32}px`
+    toast.hidden = false
+    toast.classList.remove('is-visible')
+    requestAnimationFrame(() => toast.classList.add('is-visible'))
+    toastTimer = window.setTimeout(() => {
+        toast.classList.remove('is-visible')
+        window.setTimeout(() => { toast.hidden = true }, 240)
+    }, 5000)
+}
+
+function hideToast() {
+    window.clearTimeout(toastTimer)
+    toast.classList.remove('is-visible')
+    toast.hidden = true
+}
+
+function haptic(pattern) {
+    if (typeof navigator.vibrate === 'function') navigator.vibrate(pattern)
+}
+
+function sendPointsToWallet(origin, amount, onArrive) {
+    const wallet = document.querySelector('.points-wallet')
+    if (!wallet) {
+        state.points += amount
+        onArrive?.()
+        return
+    }
+
+    const start = origin.getBoundingClientRect()
+    const target = wallet.getBoundingClientRect()
+    let pulseTimer = 0
+    const pulseWallet = () => {
+        window.clearTimeout(pulseTimer)
+        haptic(8)
+        wallet.classList.remove('is-updated')
+        void wallet.offsetWidth
+        wallet.classList.add('is-updated')
+        pulseTimer = window.setTimeout(() => wallet.classList.remove('is-updated'), 360)
+    }
+    const flight = 900
+    const arrival = 700
+    const stagger = 55
+    const tokens = 7
+
+    for (let index = 0; index < tokens; index += 1) {
+        const token = document.createElement('span')
+        token.className = 'reward-token bonus-mark'
+        token.style.left = `${start.left + start.width / 2 - 12}px`
+        token.style.top = `${start.top + start.height / 2 - 12}px`
+        token.style.setProperty('--token-x', `${target.left + target.width / 2 - start.left - start.width / 2}px`)
+        token.style.setProperty('--token-y', `${target.top + target.height / 2 - start.top - start.height / 2}px`)
+        token.style.setProperty('--token-scatter', `${(index - 3) * 7}px`)
+        token.style.setProperty('--token-delay', `${index * stagger}ms`)
+        document.body.appendChild(token)
+        window.setTimeout(pulseWallet, arrival + index * stagger)
+        window.setTimeout(() => token.remove(), flight + index * stagger)
+    }
+
+    window.setTimeout(() => {
+        state.points += amount
+        haptic([14, 40, 30])
+        wallet.querySelector('b').textContent = state.points
+        wallet.setAttribute('aria-label', `${state.points} loyalty points`)
+        onArrive?.()
+    }, arrival + (tokens - 1) * stagger)
+}
+
 function animateRewardClaim(control, id) {
     const product = products[id]
     const wallet = document.querySelector('.points-wallet')
@@ -781,7 +994,7 @@ document.addEventListener('click', (event) => {
             flyToCart(control)
         }
         render(true)
-        if ((id === 'cooklist' || id === 'restock') && selectedItems.size === itemsFor(id).length) {
+        if (selectedItems.size === itemsFor(id).length && !state.completed.has(id)) {
             const button = app.querySelector('.screen .primary-button')
             if (button) {
                 button.disabled = true
@@ -811,13 +1024,26 @@ document.addEventListener('click', (event) => {
         render()
     }
     if (action === 'scan') {
-        state.demo.restock.scanning = true
+        const demo = state.demo.restock
+        demo.scanning = true
+        demo.found = 0
         render(true)
+        const beats = [520, 400, 380, 400]
+        let elapsed = 0
+        beats.forEach((delay, index) => {
+            elapsed += delay
+            window.setTimeout(() => {
+                demo.found = index + 1
+                haptic(8)
+                render(true)
+            }, elapsed)
+        })
         window.setTimeout(() => {
-            state.demo.restock.scanning = false
-            state.demo.restock.scanned = true
+            demo.scanning = false
+            demo.scanned = true
+            freshList = true
             render(true)
-        }, 1100)
+        }, elapsed + 620)
     }
     if (action === 'set-occasion') {
         state.demo.gather.occasion = control.dataset.value
@@ -833,14 +1059,29 @@ document.addEventListener('click', (event) => {
         render(true)
     }
     if (action === 'build-brief') {
-        state.demo.gather.brief = true
+        const demo = state.demo.gather
+        demo.building = 0
         render(true)
+        ;[560, 1060].forEach((delay, index) => {
+            window.setTimeout(() => {
+                demo.building = index + 1
+                haptic(8)
+                render(true)
+            }, delay)
+        })
+        window.setTimeout(() => {
+            demo.building = -1
+            demo.brief = true
+            freshList = true
+            render(true)
+        }, 1620)
     }
     if (action === 'edit-brief') {
         if (state.completed.has(id)) return
         state.demo.gather.brief = false
         render(true)
     }
+
     if (action === 'complete') {
         if (!firstStepDone(id)) return
         if (id === 'cooklist') itemsFor(id).forEach((item, index) => state.selectedItems[id].add(index))
@@ -855,10 +1096,27 @@ document.addEventListener('click', (event) => {
     }
     if (action === 'show-final') { state.screen = 'final'; render() }
     if (action === 'play-grand') {
-        infoModal.querySelector('.modal-icon').textContent = '🎁'
-        infoModal.querySelector('h2').textContent = 'Grand prize claimed!'
-        infoModal.querySelector('p').textContent = '100 loyalty points and 1 prize box are now yours.'
-        infoModal.hidden = false
+        state.grand.stage = 'pick'
+        render(true)
+    }
+    if (action === 'pick-box') {
+        if (state.grand.stage !== 'pick') return
+        state.grand.box = Number(control.dataset.value)
+        state.grand.stage = 'opening'
+        haptic(20)
+        render(true)
+        const chosen = app.querySelector('.prize-box.is-opening')
+        window.setTimeout(() => {
+            if (chosen) sendPointsToWallet(chosen, 100, () => {
+                state.grand.stage = 'done'
+                render(true)
+            })
+            else {
+                state.points += 100
+                state.grand.stage = 'done'
+                render(true)
+            }
+        }, 700)
     }
     if (action === 'close-info') infoModal.hidden = true
 })

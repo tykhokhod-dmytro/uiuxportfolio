@@ -25,6 +25,7 @@ html {
 body {
     min-width: 320px;
     min-height: 100vh;
+    min-height: 100dvh;
     margin: 0;
     color: var(--ink);
     background:
@@ -52,6 +53,7 @@ button:focus-visible {
 .demo-stage {
     display: grid;
     min-height: 100vh;
+    min-height: 100dvh;
     place-items: center;
     padding: 28px;
 }
@@ -187,7 +189,7 @@ button:focus-visible {
 
 .screen-content {
     position: relative;
-    padding: 16px 32px 44px;
+    padding: 16px 32px calc(44px + env(safe-area-inset-bottom));
 }
 
 .screen-content > * {
@@ -328,60 +330,6 @@ h1 span::after {
     box-shadow: 0 11px 25px rgba(23, 23, 23, .12);
 }
 
-.place-medal {
-    --medal-size: 48px;
-    position: relative;
-    z-index: 3;
-    isolation: isolate;
-    display: grid;
-    width: var(--medal-size);
-    height: var(--medal-size);
-    place-items: center;
-    border: 3px solid var(--medal-edge);
-    border-radius: 50%;
-    color: var(--medal-ink);
-    background: var(--medal-fill);
-    box-shadow: inset 0 0 0 4px rgba(255, 255, 255, .34), 0 4px 0 var(--medal-shadow), 0 8px 15px rgba(42, 28, 18, .2);
-    font-size: var(--medal-size);
-}
-
-.place-medal b {
-    position: relative;
-    z-index: 1;
-    font-size: .43em;
-    font-weight: 800;
-    letter-spacing: -.07em;
-    line-height: 1;
-}
-
-.place-medal--gold {
-    --medal-edge: #f7ba00;
-    --medal-fill: linear-gradient(145deg, #fff2a0, #ffd437);
-    --medal-ink: #e97700;
-    --medal-shadow: #d69a00;
-}
-
-.place-medal--silver {
-    --medal-edge: #aab3b6;
-    --medal-fill: linear-gradient(145deg, #f8fbfb, #cbd2d4);
-    --medal-ink: #737c7f;
-    --medal-shadow: #879194;
-}
-
-.place-medal--bronze {
-    --medal-edge: #ef7b49;
-    --medal-fill: linear-gradient(145deg, #ffc29f, #f18a59);
-    --medal-ink: #dd5123;
-    --medal-shadow: #c85e34;
-}
-
-.place-medal--card {
-    --medal-size: 44px;
-    position: absolute;
-    bottom: 18px;
-    left: 20px;
-}
-
 .winner-thumb {
     align-self: stretch;
     margin: 10px 0;
@@ -509,6 +457,14 @@ h1 span::after {
     --bonus-size: 11px;
 }
 
+.reward-check {
+    color: var(--green);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 1;
+}
+
 .grand-card,
 .grand-prize {
     position: relative;
@@ -523,21 +479,25 @@ h1 span::after {
     border: 0;
     border-radius: 20px;
     color: #fff;
-    background:
-        radial-gradient(circle at 82% 15%, rgba(255, 203, 24, .32), transparent 28%),
-        linear-gradient(135deg, #0d0d0d, #202020);
+    background: linear-gradient(135deg, #0d0d0d, #202020);
     box-shadow: 0 8px 20px rgba(0, 0, 0, .18);
 }
 
 .grand-card::after,
 .grand-prize::after {
     position: absolute;
-    inset: 0;
+    inset: -21px;
     opacity: .38;
     background-image: radial-gradient(var(--yellow) 1px, transparent 1px);
     background-size: 21px 21px;
     content: "";
     pointer-events: none;
+    animation: dots-drift 14s linear infinite;
+}
+
+@keyframes dots-drift {
+    from { background-position: 0 0; }
+    to { background-position: 21px 21px; }
 }
 
 .grand-card div,
@@ -574,13 +534,75 @@ h1 span::after {
     min-height: 148px;
     padding: 22px 24px;
     border: 2px solid rgba(255, 255, 255, .14);
-    background-color: #101010;
-    background-image:
-        linear-gradient(90deg, #101010 0%, #101010 43%, rgba(16, 16, 16, .08) 72%),
-        url("reward-banner-wide-v2.png");
-    background-repeat: no-repeat;
-    background-position: center, right 8px center;
-    background-size: 100% 100%, auto 100%;
+    isolation: isolate;
+    background: linear-gradient(135deg, #0d0d0d, #202020);
+}
+
+.grand-card > div {
+    z-index: 3;
+    max-width: 62%;
+}
+
+.grand-coupons {
+    position: absolute !important;
+    z-index: 2 !important;
+    top: 0;
+    right: 14px;
+    bottom: 0;
+    width: 48%;
+    pointer-events: none;
+}
+
+.grand-coupon {
+    position: absolute;
+    width: 132px;
+    height: auto;
+    filter: drop-shadow(0 9px 10px rgba(0, 0, 0, .42));
+    transform-origin: 50% 55%;
+    animation: coupon-wobble 3.8s ease-in-out infinite;
+}
+
+.grand-coupon--one {
+    --coupon-angle: 8deg;
+    --coupon-angle-a: 12deg;
+    --coupon-angle-b: 5deg;
+    --coupon-x-a: 3px;
+    --coupon-x-b: -2px;
+    z-index: 3;
+    top: 11px;
+    right: -5px;
+}
+
+.grand-coupon--two {
+    --coupon-angle: -11deg;
+    --coupon-angle-a: -7deg;
+    --coupon-angle-b: -14deg;
+    --coupon-x-a: -4px;
+    --coupon-x-b: 2px;
+    z-index: 2;
+    top: 48px;
+    right: 54px;
+    width: 124px;
+    animation-delay: -.9s;
+}
+
+.grand-coupon--three {
+    --coupon-angle: 15deg;
+    --coupon-angle-a: 10deg;
+    --coupon-angle-b: 18deg;
+    --coupon-x-a: 2px;
+    --coupon-x-b: -3px;
+    z-index: 1;
+    top: 75px;
+    right: -12px;
+    width: 113px;
+    animation-delay: -1.8s;
+}
+
+@keyframes coupon-wobble {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--coupon-angle)); }
+    38% { transform: translate3d(var(--coupon-x-a), -6px, 0) rotate(var(--coupon-angle-a)); }
+    72% { transform: translate3d(var(--coupon-x-b), 3px, 0) rotate(var(--coupon-angle-b)); }
 }
 
 .grand-card::after {
@@ -809,14 +831,14 @@ h1 span::after {
 }
 
 .product-heading h1 {
-    margin: 0 0 9px;
+    margin: 0;
     font-size: clamp(32px, 7vw, 40px);
     letter-spacing: -.055em;
     line-height: .98;
 }
 
 .product-heading p {
-    margin: 0;
+    margin: 9px 0 0;
     max-width: 430px;
     color: #48433b;
     font-size: 15px;
@@ -878,16 +900,26 @@ h1 span::after {
     padding: 28px 32px 0;
 }
 
-.mini-app-byline {
-    display: block;
-    margin-top: 8px;
-    color: #7a7367;
-    font-size: 12px;
-    font-weight: 700;
+.product-title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
 }
 
-.mini-app-byline b {
-    color: var(--ink);
+.byline-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 5px 13px;
+    border-radius: 999px;
+    color: #5d574c;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(90, 62, 0, .07), inset 0 0 0 1px rgba(23, 23, 23, .05);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: -.01em;
+    white-space: nowrap;
 }
 
 .screen--detail .silpo-logo {
@@ -934,15 +966,13 @@ h1 span::after {
 }
 
 .task-panel h2,
-.demo-task h2,
 .demo-card h2 {
     margin-bottom: 4px;
     font-size: 20px;
     letter-spacing: -.04em;
 }
 
-.task-panel-head,
-.demo-task > div {
+.task-panel-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1111,6 +1141,16 @@ h1 span::after {
     --bonus-size: 15px;
 }
 
+.final-content .claim-button {
+    text-align: left;
+}
+
+.claim-button-reward .reward-check,
+.detail-actions .primary-button:disabled .claim-button-reward .reward-check {
+    color: var(--green);
+    font-size: 15px;
+}
+
 .claim-button.is-ready {
     background: var(--yellow);
 }
@@ -1197,27 +1237,6 @@ h1 span::after {
     font-size: 14px;
     font-weight: 650;
     line-height: 1.4;
-}
-
-.demo-task {
-    margin-bottom: 13px;
-    padding: 14px 18px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, .86);
-    box-shadow: 0 7px 18px rgba(90, 62, 0, .07);
-}
-
-.demo-task h2 {
-    margin: 0;
-    font-size: 16px;
-}
-
-.demo-task p {
-    margin: 6px 0 0;
-    color: #3f3a33;
-    font-size: 13px;
-    font-weight: 650;
-    line-height: 1.35;
 }
 
 .demo-card {
@@ -1374,9 +1393,9 @@ h1 span::after {
 }
 
 .add-pill[aria-pressed="true"] {
-    color: #fff;
-    background: var(--green);
-    box-shadow: 0 3px 0 #07563b, 0 6px 12px rgba(7, 86, 59, .16);
+    color: var(--green);
+    background: #fff;
+    box-shadow: 0 3px 0 #cfded6, 0 6px 12px rgba(7, 86, 59, .12), inset 0 0 0 1.5px rgba(15, 115, 80, .22);
 }
 
 .add-pill:active {
@@ -1385,7 +1404,7 @@ h1 span::after {
 }
 
 .add-pill[aria-pressed="true"]:active {
-    box-shadow: 0 1px 0 #07563b, 0 3px 7px rgba(7, 86, 59, .14);
+    box-shadow: 0 1px 0 #cfded6, 0 3px 7px rgba(7, 86, 59, .12), inset 0 0 0 1.5px rgba(15, 115, 80, .22);
 }
 
 .add-pill:disabled {
@@ -1658,10 +1677,10 @@ h1 span::after {
 }
 
 .dish-tile-go.is-done {
-    color: #fff;
-    background: var(--green);
-    box-shadow: 0 4px 0 #0a5a3e, 0 8px 16px rgba(0, 0, 0, .25);
-    font-size: 22px;
+    color: var(--green);
+    background: #fff;
+    box-shadow: 0 4px 0 #cfded6, 0 8px 16px rgba(0, 0, 0, .25);
+    font-size: 24px;
 }
 
 .dish-tile-go {
@@ -1780,7 +1799,7 @@ h1 span::after {
     isolation: isolate;
     min-height: 420px;
     margin-top: -36px;
-    padding: 12px 32px 48px;
+    padding: 12px 32px calc(48px + env(safe-area-inset-bottom));
     border-radius: 34px 34px 0 0;
     background: var(--paper);
     box-shadow: 0 -12px 30px rgba(52, 43, 32, .12);
@@ -1992,23 +2011,135 @@ h1 span::after {
 
 .scan-progress i {
     display: block;
+    width: var(--scan, 20%);
     height: 100%;
     border-radius: inherit;
     background: var(--accent);
-    animation: scan-fill 1.1s cubic-bezier(.3, .6, .3, 1) both;
+    transition: width .45s cubic-bezier(.3, .8, .3, 1);
 }
 
 .scan-note {
-    margin: 8px 0 0;
+    margin: 0;
     color: #6a6359;
     font-size: 12px;
     font-weight: 700;
     text-align: center;
 }
 
-@keyframes scan-fill {
-    from { width: 4%; }
-    to { width: 100%; }
+.scan-stage,
+.build-stage {
+    display: grid;
+    gap: 14px;
+    justify-items: center;
+    padding: 6px 0 2px;
+}
+
+.found-chips {
+    display: flex;
+    gap: 10px;
+}
+
+.found-chip {
+    position: relative;
+    display: grid;
+    width: 56px;
+    height: 56px;
+    place-items: center;
+    opacity: .28;
+    filter: grayscale(1);
+    transform: scale(.86);
+    transition: opacity .3s ease, filter .3s ease, transform .3s cubic-bezier(.2, 1.6, .4, 1);
+}
+
+.found-chip.is-found {
+    opacity: 1;
+    filter: none;
+    transform: scale(1);
+}
+
+.found-photo {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+    place-items: center;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(23, 23, 23, .1);
+    font-size: 24px;
+    font-style: normal;
+}
+
+.found-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.found-chip > i {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    display: grid;
+    width: 22px;
+    height: 22px;
+    place-items: center;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--green);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 800;
+    opacity: 0;
+    transform: scale(.4);
+    transition: opacity .2s ease, transform .3s cubic-bezier(.2, 1.7, .4, 1);
+}
+
+.found-chip.is-found > i {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.scan-stage .scan-progress,
+.build-stage .scan-progress {
+    width: 100%;
+    margin-top: 2px;
+}
+
+.avatars--busy i {
+    animation: avatar-wait 1.2s ease-in-out infinite;
+    opacity: .35;
+    transform: scale(.9);
+    transition: opacity .3s ease, transform .35s cubic-bezier(.2, 1.6, .4, 1);
+}
+
+.avatars--busy i.is-in {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.avatars--busy i:nth-child(2) { animation-delay: .12s; }
+.avatars--busy i:nth-child(3) { animation-delay: .24s; }
+.avatars--busy i:nth-child(4) { animation-delay: .36s; }
+.avatars--busy i:nth-child(5) { animation-delay: .48s; }
+
+@keyframes avatar-wait {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -4px; }
+}
+
+.item-list.is-fresh .demo-item {
+    animation: row-in .42s cubic-bezier(.2, .9, .3, 1) both;
+    animation-delay: calc(var(--row, 0) * 70ms);
+}
+
+@keyframes row-in {
+    from { opacity: 0; transform: translateY(14px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .field {
@@ -2145,9 +2276,18 @@ h1 span::after {
 }
 
 .trophy {
-    margin: 8px 0 15px;
-    font-size: 104px;
-    filter: drop-shadow(0 16px 16px rgba(198, 138, 0, .26));
+    display: grid;
+    min-height: 172px;
+    margin: 0 0 8px;
+    place-items: center;
+}
+
+.trophy img {
+    display: block;
+    width: 174px;
+    max-width: 48vw;
+    height: auto;
+    filter: drop-shadow(0 15px 15px rgba(198, 138, 0, .25));
 }
 
 .final-content h1,
@@ -2189,9 +2329,219 @@ h1 span::after {
     --bonus-size: 40px;
 }
 
-.grand-prize-symbols b:first-of-type {
-    font-size: 36px;
+.coupon-glyph {
+    width: 52px;
+    height: 36px;
+    color: var(--yellow-bright);
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .35));
 }
+
+.coupon-glyph--chip {
+    width: 26px;
+    height: 18px;
+    color: #171717;
+    filter: none;
+}
+
+.grand-prize--game strong,
+.grand-prize--won strong {
+    font-size: 26px;
+}
+
+.prize-boxes {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.prize-box {
+    position: relative;
+    display: grid;
+    width: 112px;
+    height: 86px;
+    padding: 0;
+    place-items: center;
+    overflow: visible;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    cursor: pointer;
+    transition: transform .2s cubic-bezier(.2, 1.6, .4, 1), opacity .3s ease;
+    animation: prize-wobble 1.6s ease-in-out infinite;
+}
+
+.prize-coupon-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 7px 7px rgba(0, 0, 0, .35));
+    pointer-events: none;
+}
+
+.prize-box:nth-child(2) { animation-delay: .18s; }
+.prize-box:nth-child(3) { animation-delay: .36s; }
+
+.prize-face {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 8px;
+    place-items: center;
+    border: 2px solid rgba(255, 255, 255, .85);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(20, 20, 20, .88);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .28);
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -.04em;
+    line-height: 1;
+}
+
+.prize-box:active {
+    transform: scale(.94);
+}
+
+.prize-box.is-dimmed {
+    opacity: .2;
+    animation: none;
+}
+
+.prize-box.is-opening {
+    animation: prize-open .7s cubic-bezier(.2, .9, .3, 1) both;
+}
+
+.prize-box.is-opening .prize-face {
+    min-width: 56px;
+    color: #161616;
+    background: var(--yellow);
+    border-color: #fff;
+    font-size: 21px;
+}
+
+.ticket {
+    display: grid;
+    width: 100%;
+    max-width: 420px;
+    grid-template-columns: 104px minmax(0, 1fr);
+    align-items: stretch;
+    margin-top: 4px;
+    padding: 10px;
+    border-radius: 20px;
+    background: var(--ticket-color);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .34);
+    text-align: left;
+    animation: ticket-in .5s cubic-bezier(.2, .9, .3, 1) both;
+}
+
+.ticket--cheese { --ticket-color: linear-gradient(150deg, #8b5cf6, #6d3fd1); }
+.ticket--coffee { --ticket-color: linear-gradient(150deg, #21bfa0, #0f8f79); }
+.ticket--bakery { --ticket-color: linear-gradient(150deg, #ff9f43, #f4761f); }
+
+.ticket-photo {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+    place-items: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .18);
+    font-size: 34px;
+    font-style: normal;
+}
+
+.ticket-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ticket-body {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    min-height: 92px;
+    margin-left: 10px;
+    padding: 12px 14px 12px 8px;
+    border-radius: 14px;
+    background: #fff;
+    -webkit-mask-image:
+        radial-gradient(circle 9px at 0 0, transparent 98%, #000),
+        radial-gradient(circle 9px at 0 100%, transparent 98%, #000);
+    mask-image:
+        radial-gradient(circle 9px at 0 0, transparent 98%, #000),
+        radial-gradient(circle 9px at 0 100%, transparent 98%, #000);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+}
+
+.ticket-percent {
+    color: #171717;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -.05em;
+    line-height: 1;
+    text-align: center;
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+}
+
+.ticket-copy {
+    display: grid;
+    gap: 3px;
+}
+
+.ticket-copy small {
+    color: #6d3fd1;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.ticket--coffee .ticket-copy small { color: #0f8f79; }
+.ticket--bakery .ticket-copy small { color: #d1600f; }
+
+.ticket-copy b {
+    color: #171717;
+    font-size: 15px;
+    letter-spacing: -.02em;
+    line-height: 1.2;
+}
+
+.ticket-note {
+    margin-top: 2px;
+    color: rgba(255, 255, 255, .75);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+}
+
+@keyframes ticket-in {
+    from { opacity: 0; transform: translateY(16px) scale(.96) rotate(-1.5deg); }
+    to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes prize-wobble {
+    0%, 70%, 100% { transform: rotate(0) translateY(0); }
+    78% { transform: rotate(-5deg) translateY(-4px); }
+    86% { transform: rotate(5deg) translateY(-2px); }
+    94% { transform: rotate(-2deg) translateY(0); }
+}
+
+@keyframes prize-open {
+    0% { transform: scale(1) rotate(0); }
+    30% { transform: scale(1.06) rotate(-6deg); }
+    55% { transform: scale(1.06) rotate(6deg); }
+    100% { transform: scale(1.18) rotate(0); }
+}
+
+
 
 .success-toast {
     position: fixed;
@@ -2407,6 +2757,34 @@ h1 span::after {
 }
 
 @media (max-width: 620px) {
+    .prize-box {
+        width: 102px;
+        height: 78px;
+    }
+
+    .prize-face {
+        min-width: 34px;
+        min-height: 34px;
+        font-size: 22px;
+    }
+
+    .ticket {
+        grid-template-columns: 88px minmax(0, 1fr);
+    }
+
+    .ticket-body {
+        grid-template-columns: 40px minmax(0, 1fr);
+        min-height: 86px;
+    }
+
+    .ticket-percent {
+        font-size: 26px;
+    }
+
+    .ticket-copy b {
+        font-size: 14px;
+    }
+
     html,
     body {
         background: var(--paper);
@@ -2417,9 +2795,16 @@ h1 span::after {
         padding: 0;
     }
 
+    html,
+    body {
+        height: 100dvh;
+        overflow: hidden;
+    }
+
     .event-app {
         width: 100%;
         height: 100vh;
+        height: 100dvh;
         min-height: 0;
         border: 0;
         border-radius: 0;
@@ -2451,12 +2836,6 @@ h1 span::after {
 
     .winner-card-title {
         gap: 5px;
-    }
-
-    .place-medal--card {
-        --medal-size: 40px;
-        bottom: 17px;
-        left: 17px;
     }
 
     .winner-card-copy b {
@@ -2535,22 +2914,7 @@ h1 span::after {
     }
 
     .demo-item--product .demo-item-price {
-        grid-column: 2;
-        grid-row: 2;
         font-size: 13px;
-    }
-
-    .demo-item--product .demo-item-copy {
-        grid-row: 1;
-    }
-
-    .demo-item--product .add-pill {
-        grid-column: 3;
-        grid-row: 1 / 3;
-    }
-
-    .demo-item--product .demo-item-photo {
-        grid-row: 1 / 3;
     }
 
     .demo-item-photo {
@@ -2707,6 +3071,303 @@ h1 span::after {
     @keyframes vt-card-open {
         from { border-radius: 24px; }
         to { border-radius: 0 0 48% 48% / 0 0 13% 13%; }
+    }
+}
+
+/* mobile: larger type, roomier containers */
+@media (max-width: 620px) {
+    .app-tag {
+        margin-bottom: 18px;
+        padding: 6px 15px 6px 6px;
+        font-size: 14px;
+    }
+
+    .app-tag-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .app-lead {
+        margin-bottom: 22px;
+        font-size: 15px;
+    }
+
+    .ai-chip {
+        min-height: 28px;
+        padding: 5px 11px;
+        font-size: 12px;
+    }
+
+    .quest-state {
+        min-height: 28px;
+        padding: 5px 11px;
+        font-size: 12px;
+    }
+
+    .demo-card,
+    .recipe-block {
+        padding: 20px 16px 22px;
+        border-radius: 24px;
+    }
+
+    .demo-card-head {
+        margin-bottom: 14px;
+    }
+
+    .demo-card h2,
+    .recipe-block h2 {
+        font-size: 20px;
+    }
+
+    .demo-card-head p {
+        font-size: 14px;
+    }
+
+    .item-list {
+        gap: 9px;
+    }
+
+    .demo-item {
+        min-height: 70px;
+        padding: 10px 10px 10px 10px;
+        border-radius: 16px;
+    }
+
+    .demo-item--product {
+        grid-template-columns: 52px minmax(0, 1fr) auto;
+        grid-template-areas:
+            "photo copy price"
+            "photo copy pill";
+        gap: 4px 10px;
+        align-items: center;
+    }
+
+    .demo-item--product .demo-item-photo {
+        grid-area: photo;
+        align-self: center;
+    }
+
+    .demo-item--product .demo-item-copy {
+        grid-area: copy;
+        align-self: center;
+    }
+
+    .demo-item--product .demo-item-price {
+        grid-area: price;
+        align-self: end;
+        text-align: right;
+    }
+
+    .demo-item--product .add-pill {
+        grid-area: pill;
+        align-self: start;
+        justify-self: end;
+    }
+
+    .demo-item-photo {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+    }
+
+    .demo-item-copy b {
+        font-size: 15px;
+    }
+
+    .demo-item-copy small {
+        font-size: 12.5px;
+        line-height: 1.3;
+    }
+
+    .demo-item--product .demo-item-price {
+        font-size: 14px;
+    }
+
+    .add-pill {
+        min-height: 40px;
+        padding: 0 14px;
+        font-size: 13px;
+    }
+
+    .add-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .cart-summary {
+        margin-top: 14px;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .cart-summary-total {
+        font-size: 16px;
+    }
+
+    .segmented button {
+        min-height: 36px;
+        padding: 0 15px;
+        font-size: 14px;
+    }
+
+    .field > small {
+        font-size: 12px;
+    }
+
+    .stepper button {
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+    }
+
+    .stepper b {
+        min-width: 32px;
+        font-size: 16px;
+    }
+
+    .stat-row span {
+        padding: 12px 10px;
+    }
+
+    .stat-row b {
+        font-size: 22px;
+    }
+
+    .stat-row small {
+        font-size: 12px;
+    }
+
+    .scan-note,
+    .inline-button,
+    .text-button {
+        font-size: 14px;
+    }
+
+    .inline-button {
+        min-height: 52px;
+    }
+
+    .text-button {
+        padding: 10px 14px;
+    }
+
+    .meta-chips span {
+        min-height: 30px;
+        padding: 5px 12px;
+        font-size: 13px;
+    }
+
+    .dish-tile-copy small {
+        margin-top: 7px;
+        font-size: 14px;
+    }
+
+    .dish-tile-time {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .budget {
+        gap: 10px;
+        padding: 14px 16px;
+    }
+
+    .budget small {
+        font-size: 12px;
+    }
+
+    .budget b {
+        font-size: 18px;
+    }
+
+    .budget b span,
+    .budget em {
+        font-size: 13px;
+    }
+
+    .demo-result {
+        padding: 16px 18px;
+    }
+
+    .demo-result strong {
+        font-size: 16px;
+    }
+
+    .demo-result small {
+        font-size: 13px;
+    }
+
+    .quest-steps {
+        gap: 10px;
+    }
+
+    .quest-step {
+        min-height: 74px;
+        grid-template-columns: 32px minmax(0, 1fr) 62px;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 18px;
+    }
+
+    .quest-step span strong {
+        font-size: 15px;
+    }
+
+    .quest-step span small {
+        margin-top: 3px;
+        font-size: 12.5px;
+    }
+
+    .quest-go {
+        width: 62px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .task-panel {
+        padding: 22px 18px;
+    }
+
+    .task-panel h2 {
+        font-size: 21px;
+    }
+
+    .claim-button-reward {
+        min-height: 36px;
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .winner-card-copy small {
+        font-size: 12.5px;
+    }
+
+    .winner-progress-count {
+        font-size: 13px;
+    }
+
+    .winner-progress-reward {
+        min-height: 26px;
+        padding: 3px 9px;
+        font-size: 11.5px;
+    }
+
+    .product-heading p {
+        font-size: 15px;
+    }
+
+    .grand-card small,
+    .grand-prize small {
+        font-size: 13px;
+    }
+
+    .success-toast strong {
+        font-size: 16px;
+    }
+
+    .success-toast small {
+        font-size: 13px;
     }
 }
 
