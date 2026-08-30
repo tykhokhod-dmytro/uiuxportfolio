@@ -525,7 +525,7 @@ function demoScreen(id) {
     const isChooser = id === 'cooklist'
     const appBarOptions = isChooser
         ? { cart: cooklistCartCount() }
-        : id === 'restock' ? { cart: state.selectedItems.restock.size } : {}
+        : { cart: state.selectedItems[id].size }
     return `
         <section class="screen screen--demo screen--demo-${id}">
             ${topBar('detail', appBarOptions)}

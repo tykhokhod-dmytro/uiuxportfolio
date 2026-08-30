@@ -1374,12 +1374,18 @@ h1 span::after {
 }
 
 .add-pill[aria-pressed="true"] {
+    color: #fff;
     background: var(--green);
+    box-shadow: 0 3px 0 #07563b, 0 6px 12px rgba(7, 86, 59, .16);
 }
 
 .add-pill:active {
     box-shadow: 0 1px 0 #d39d00, 0 3px 7px rgba(183, 128, 0, .12);
     transform: translateY(2px) scale(.96);
+}
+
+.add-pill[aria-pressed="true"]:active {
+    box-shadow: 0 1px 0 #07563b, 0 3px 7px rgba(7, 86, 59, .14);
 }
 
 .add-pill:disabled {
