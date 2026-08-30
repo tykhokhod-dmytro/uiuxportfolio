@@ -393,28 +393,6 @@ h1 span::after {
     font-size: var(--medal-size);
 }
 
-.place-medal::before,
-.place-medal::after {
-    position: absolute;
-    z-index: -1;
-    top: 63%;
-    width: 31%;
-    height: 72%;
-    background: linear-gradient(90deg, #ff4938 0 72%, #ffd330 72% 82%, #ff4938 82%);
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
-    content: "";
-}
-
-.place-medal::before {
-    left: 18%;
-    transform: rotate(1deg);
-}
-
-.place-medal::after {
-    right: 18%;
-    transform: scaleX(-1) rotate(1deg);
-}
-
 .place-medal b {
     position: relative;
     z-index: 1;
