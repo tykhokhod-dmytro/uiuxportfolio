@@ -6,7 +6,7 @@ const products = {
     cooklist: {
         name: 'Cooklist',
         team: 'Kitchen Bots',
-        visual: 'cooklist-square-v1.png',
+        visual: 'cooklist-square-v1.webp',
         type: 'Recipe-to-cart',
         short: 'Pick a recipe and add all its ingredients to your cart in one tap.',
         mission: 'Pick a dish and get all 4 of its ingredients into your cart.',
@@ -18,30 +18,30 @@ const products = {
         verb: 'Add',
         heading: 'What are we cooking?',
         dishes: [
-            { emoji: '🍝', name: 'Tomato pasta', time: '25 min', level: 'Easy', rating: 4.8, photo: 'dish-tomato-pasta.jpg', items: [
-                { emoji: '🍝', name: 'Tagliatelle', photo: 'tagliatelle.jpg', qty: 250, unit: 'g', price: 3.2 },
-                { emoji: '🍅', name: 'Cherry tomatoes', photo: 'cherry-tomatoes.jpg', qty: 400, unit: 'g', price: 4.9 },
-                { emoji: '🧀', name: 'Parmesan', photo: 'parmesan.jpg', qty: 80, unit: 'g', price: 7.1 },
-                { emoji: '🌿', name: 'Fresh basil', photo: 'basil.jpg', qty: 1, unit: 'bunch', plural: 'bunches', price: 3.2 }
+            { emoji: '🍝', name: 'Tomato pasta', time: '25 min', level: 'Easy', rating: 4.8, photo: 'dish-tomato-pasta.webp', items: [
+                { emoji: '🍝', name: 'Tagliatelle', photo: 'tagliatelle.webp', qty: 250, unit: 'g', price: 3.2 },
+                { emoji: '🍅', name: 'Cherry tomatoes', photo: 'cherry-tomatoes.webp', qty: 400, unit: 'g', price: 4.9 },
+                { emoji: '🧀', name: 'Parmesan', photo: 'parmesan.webp', qty: 80, unit: 'g', price: 7.1 },
+                { emoji: '🌿', name: 'Fresh basil', photo: 'basil.webp', qty: 1, unit: 'bunch', plural: 'bunches', price: 3.2 }
             ] },
-            { emoji: '🥗', name: 'Greek salad', time: '15 min', level: 'Easy', rating: 4.6, photo: 'dish-greek-salad.jpg', items: [
-                { emoji: '🥒', name: 'Cucumber', photo: 'cucumber.jpg', qty: 2, unit: 'pcs', price: 1.9 },
-                { emoji: '🍅', name: 'Tomatoes', photo: 'tomatoes.jpg', qty: 400, unit: 'g', price: 4.9 },
-                { emoji: '🧀', name: 'Feta', photo: 'feta.jpg', qty: 200, unit: 'g', price: 5.6 },
-                { emoji: '🫒', name: 'Kalamata olives', photo: 'olives.jpg', qty: 150, unit: 'g', price: 3.8 }
+            { emoji: '🥗', name: 'Greek salad', time: '15 min', level: 'Easy', rating: 4.6, photo: 'dish-greek-salad.webp', items: [
+                { emoji: '🥒', name: 'Cucumber', photo: 'cucumber.webp', qty: 2, unit: 'pcs', price: 1.9 },
+                { emoji: '🍅', name: 'Tomatoes', photo: 'tomatoes.webp', qty: 400, unit: 'g', price: 4.9 },
+                { emoji: '🧀', name: 'Feta', photo: 'feta.webp', qty: 200, unit: 'g', price: 5.6 },
+                { emoji: '🫒', name: 'Kalamata olives', photo: 'olives.webp', qty: 150, unit: 'g', price: 3.8 }
             ] },
-            { emoji: '🍄', name: 'Mushroom risotto', time: '40 min', level: 'Medium', rating: 4.9, photo: 'dish-mushroom-risotto.jpg', items: [
-                { emoji: '🍚', name: 'Arborio rice', photo: 'arborio-rice.jpg', qty: 300, unit: 'g', price: 4.4 },
-                { emoji: '🍄', name: 'Mushrooms', photo: 'mushrooms.jpg', qty: 400, unit: 'g', price: 5.2 },
-                { emoji: '🧀', name: 'Parmesan', photo: 'parmesan.jpg', qty: 80, unit: 'g', price: 7.1 },
-                { emoji: '🍷', name: 'Dry white wine', photo: 'white-wine.jpg', qty: 1, unit: 'bottle', plural: 'bottles', price: 8.9 }
+            { emoji: '🍄', name: 'Mushroom risotto', time: '40 min', level: 'Medium', rating: 4.9, photo: 'dish-mushroom-risotto.webp', items: [
+                { emoji: '🍚', name: 'Arborio rice', photo: 'arborio-rice.webp', qty: 300, unit: 'g', price: 4.4 },
+                { emoji: '🍄', name: 'Mushrooms', photo: 'mushrooms.webp', qty: 400, unit: 'g', price: 5.2 },
+                { emoji: '🧀', name: 'Parmesan', photo: 'parmesan.webp', qty: 80, unit: 'g', price: 7.1 },
+                { emoji: '🍷', name: 'Dry white wine', photo: 'white-wine.webp', qty: 1, unit: 'bottle', plural: 'bottles', price: 8.9 }
             ] }
         ]
     },
     restock: {
         name: 'Restock',
         team: 'Loop Labs',
-        visual: 'restock-square-v1.png',
+        visual: 'restock-square-v1.webp',
         type: 'Routine shopper',
         short: 'Uses your recent order history to suggest items you may need again.',
         mission: 'Add all 4 recommendations to your cart.',
@@ -54,16 +54,16 @@ const products = {
         heading: 'Recommended restock',
         demoTitle: 'Recommended for you',
         items: [
-            { emoji: '🥛', name: 'Milk 2.5%', photo: 'milk.jpg', qty: 2, unit: 'pcs', price: 4.2, every: 7, last: 6, history: [1, 1, 1, 1, 1, 1] },
-            { emoji: '🥚', name: 'Free-range eggs', photo: 'eggs.jpg', qty: 10, unit: 'pcs', price: 4.45, every: 7, last: 5, history: [1, 1, 0, 1, 1, 1] },
-            { emoji: '☕', name: 'Coffee beans', photo: 'coffee-beans.jpg', qty: 1, unit: 'kg', price: 12.45, every: 14, last: 13, history: [1, 0, 1, 0, 1, 0] },
-            { emoji: '🍞', name: 'Sourdough bread', photo: 'sourdough-bread.jpg', qty: 1, unit: 'loaf', price: 2.65, every: 7, last: 7, history: [1, 1, 1, 0, 1, 1] }
+            { emoji: '🥛', name: 'Milk 2.5%', photo: 'milk.webp', qty: 2, unit: 'pcs', price: 4.2, every: 7, last: 6, history: [1, 1, 1, 1, 1, 1] },
+            { emoji: '🥚', name: 'Free-range eggs', photo: 'eggs.webp', qty: 10, unit: 'pcs', price: 4.45, every: 7, last: 5, history: [1, 1, 0, 1, 1, 1] },
+            { emoji: '☕', name: 'Coffee beans', photo: 'coffee-beans.webp', qty: 1, unit: 'kg', price: 12.45, every: 14, last: 13, history: [1, 0, 1, 0, 1, 0] },
+            { emoji: '🍞', name: 'Sourdough bread', photo: 'sourdough-bread.webp', qty: 1, unit: 'loaf', price: 2.65, every: 7, last: 7, history: [1, 1, 1, 0, 1, 1] }
         ]
     },
     gather: {
         name: 'Gather',
         team: 'Table for Five',
-        visual: 'gather-square-v1.png',
+        visual: 'gather-square-v1.webp',
         type: 'Group planner',
         short: 'Plans an occasion with friends and builds one shared cart within budget.',
         mission: 'Set up an occasion and add all 4 picks to the shared cart.',
@@ -77,23 +77,23 @@ const products = {
         guests: ['You', 'Olya', 'Max', 'Ira', 'Dan', 'Kate', 'Lev', 'Ann'],
         budgets: [25, 35, 50],
         occasions: {
-            picnic: { emoji: '🧺', label: 'Picnic', name: 'Park picnic', photo: 'occasion-picnic.jpg', items: [
-                { emoji: '🥖', name: 'Baguettes', photo: 'baguettes.jpg', qty: 2, unit: 'pcs', price: 6.8, by: 'Olya' },
-                { emoji: '🧀', name: 'Cheese selection', photo: 'cheese-board.jpg', qty: 1, unit: 'box', plural: 'boxes', price: 14.45, by: 'AI' },
-                { emoji: '🍇', name: 'Seedless grapes', photo: 'grapes.jpg', qty: 1, unit: 'kg', price: 6.35, by: 'Max' },
-                { emoji: '🥤', name: 'Craft lemonade', photo: 'lemonade.jpg', qty: 4, unit: 'pcs', price: 6.5, by: 'AI' }
+            picnic: { emoji: '🧺', label: 'Picnic', name: 'Park picnic', photo: 'occasion-picnic.webp', items: [
+                { emoji: '🥖', name: 'Baguettes', photo: 'baguettes.webp', qty: 2, unit: 'pcs', price: 6.8, by: 'Olya' },
+                { emoji: '🧀', name: 'Cheese selection', photo: 'cheese-board.webp', qty: 1, unit: 'box', plural: 'boxes', price: 14.45, by: 'AI' },
+                { emoji: '🍇', name: 'Seedless grapes', photo: 'grapes.webp', qty: 1, unit: 'kg', price: 6.35, by: 'Max' },
+                { emoji: '🥤', name: 'Craft lemonade', photo: 'lemonade.webp', qty: 4, unit: 'pcs', price: 6.5, by: 'AI' }
             ] },
-            birthday: { emoji: '🎂', label: 'Birthday', name: 'Birthday at home', photo: 'occasion-birthday.jpg', items: [
-                { emoji: '🎂', name: 'Chocolate cake', photo: 'chocolate-cake.jpg', qty: 1, unit: 'pc', plural: 'pcs', price: 18, by: 'AI' },
-                { emoji: '🕯️', name: 'Candles', photo: 'candles.jpg', qty: 1, unit: 'pack', plural: 'packs', price: 2.5, by: 'Olya' },
-                { emoji: '🍾', name: 'Sparkling juice', photo: 'sparkling-juice.jpg', qty: 2, unit: 'pcs', price: 6.9, by: 'Max' },
-                { emoji: '🎈', name: 'Balloons', photo: 'balloons.jpg', qty: 1, unit: 'set', plural: 'sets', price: 4.4, by: 'AI' }
+            birthday: { emoji: '🎂', label: 'Birthday', name: 'Birthday at home', photo: 'occasion-birthday.webp', items: [
+                { emoji: '🎂', name: 'Chocolate cake', photo: 'chocolate-cake.webp', qty: 1, unit: 'pc', plural: 'pcs', price: 18, by: 'AI' },
+                { emoji: '🕯️', name: 'Candles', photo: 'candles.webp', qty: 1, unit: 'pack', plural: 'packs', price: 2.5, by: 'Olya' },
+                { emoji: '🍾', name: 'Sparkling juice', photo: 'sparkling-juice.webp', qty: 2, unit: 'pcs', price: 6.9, by: 'Max' },
+                { emoji: '🎈', name: 'Balloons', photo: 'balloons.webp', qty: 1, unit: 'set', plural: 'sets', price: 4.4, by: 'AI' }
             ] },
-            movie: { emoji: '🍿', label: 'Movie', name: 'Movie night', photo: 'occasion-movie.jpg', items: [
-                { emoji: '🍿', name: 'Popcorn kernels', photo: 'popcorn.jpg', qty: 500, unit: 'g', price: 3.6, by: 'AI' },
-                { emoji: '🌮', name: 'Nachos & salsa', photo: 'nachos-salsa.jpg', qty: 1, unit: 'set', plural: 'sets', price: 6.2, by: 'Max' },
-                { emoji: '🍨', name: 'Ice cream', photo: 'ice-cream.jpg', qty: 1, unit: 'L', price: 7.4, by: 'Olya' },
-                { emoji: '🥤', name: 'Cola', photo: 'cola.jpg', qty: 4, unit: 'pcs', price: 5.9, by: 'AI' }
+            movie: { emoji: '🍿', label: 'Movie', name: 'Movie night', photo: 'occasion-movie.webp', items: [
+                { emoji: '🍿', name: 'Popcorn kernels', photo: 'popcorn.webp', qty: 500, unit: 'g', price: 3.6, by: 'AI' },
+                { emoji: '🌮', name: 'Nachos & salsa', photo: 'nachos-salsa.webp', qty: 1, unit: 'set', plural: 'sets', price: 6.2, by: 'Max' },
+                { emoji: '🍨', name: 'Ice cream', photo: 'ice-cream.webp', qty: 1, unit: 'L', price: 7.4, by: 'Olya' },
+                { emoji: '🥤', name: 'Cola', photo: 'cola.webp', qty: 4, unit: 'pcs', price: 5.9, by: 'AI' }
             ] }
         }
     }
@@ -273,9 +273,9 @@ function hubScreen() {
                 <section class="grand-card ${allClaimed ? 'is-ready' : ''}">
                     <div><small>${state.grand.stage === 'done' ? 'Grand reward claimed ✓' : allClaimed ? 'Grand reward ready' : 'Complete all 3 missions'}</small><strong>100 points</strong><em class="grand-chip">${state.grand.stage === 'done' ? `+ ${prizeBoxes[state.grand.box].percent}% back on ${prizeBoxes[state.grand.box].category}` : '+ 1 bonus coupon'}</em></div>
                     <span class="grand-coupons" aria-hidden="true">
-                        <img class="grand-coupon grand-coupon--one" src="bonus-coupon-v1.png" alt="">
-                        <img class="grand-coupon grand-coupon--two" src="bonus-coupon-v1.png" alt="">
-                        <img class="grand-coupon grand-coupon--three" src="bonus-coupon-v1.png" alt="">
+                        <img class="grand-coupon grand-coupon--one" src="bonus-coupon-v1.webp" alt="">
+                        <img class="grand-coupon grand-coupon--two" src="bonus-coupon-v1.webp" alt="">
+                        <img class="grand-coupon grand-coupon--three" src="bonus-coupon-v1.webp" alt="">
                     </span>
                 </section>
                 ${allClaimed
@@ -552,9 +552,9 @@ function demoScreen(id) {
 }
 
 const prizeBoxes = [
-    { key: 'cheese', emoji: '🧀', photo: 'parmesan.jpg', percent: 30, category: 'cheese & dairy', from: 'You cooked with it in Cooklist' },
-    { key: 'coffee', emoji: '☕', photo: 'coffee-beans.jpg', percent: 25, category: 'coffee & tea', from: 'Restock spotted it in your orders' },
-    { key: 'bakery', emoji: '🥐', photo: 'sourdough-bread.jpg', percent: 20, category: 'bakery', from: 'Gather picked it for your event' }
+    { key: 'cheese', emoji: '🧀', photo: 'parmesan.webp', percent: 30, category: 'cheese & dairy', from: 'You cooked with it in Cooklist' },
+    { key: 'coffee', emoji: '☕', photo: 'coffee-beans.webp', percent: 25, category: 'coffee & tea', from: 'Restock spotted it in your orders' },
+    { key: 'bakery', emoji: '🥐', photo: 'sourdough-bread.webp', percent: 20, category: 'bakery', from: 'Gather picked it for your event' }
 ]
 
 function prizeTicket(prize) {
@@ -588,7 +588,7 @@ function grandCard() {
                 <div class="prize-boxes">${prizeBoxes.map((prize, index) => {
                     const chosen = box === index
                     const mode = stage === 'opening' ? (chosen ? 'is-opening' : 'is-dimmed') : ''
-                    return `<button class="prize-box prize-box--${prize.key} ${mode}" type="button" data-action="pick-box" data-value="${index}" aria-label="Coupon ${index + 1}" ${stage === 'opening' ? 'disabled' : ''}><img class="prize-coupon-art" src="bonus-coupon-v1.png" alt=""><span class="prize-face" aria-hidden="true">${chosen && stage === 'opening' ? `${prize.percent}%` : '?'}</span></button>`
+                    return `<button class="prize-box prize-box--${prize.key} ${mode}" type="button" data-action="pick-box" data-value="${index}" aria-label="Coupon ${index + 1}" ${stage === 'opening' ? 'disabled' : ''}><img class="prize-coupon-art" src="bonus-coupon-v1.webp" alt=""><span class="prize-face" aria-hidden="true">${chosen && stage === 'opening' ? `${prize.percent}%` : '?'}</span></button>`
                 }).join('')}</div>
             </section>`
     }
@@ -607,7 +607,7 @@ function finalScreen() {
             ${topBar('hub')}
             <div class="screen-content final-content">
                 ${circuitMark()}
-                <div class="trophy" aria-hidden="true"><img src="winner-trophy-v1.png" alt=""></div>
+                <div class="trophy" aria-hidden="true"><img src="winner-trophy-v1.webp" alt=""></div>
                 <h1>All winners<br><span>unlocked!</span></h1>
                 <p>${stage === 'done' ? 'Your grand reward is in your account.' : 'You completed every AI Factory mission.'}</p>
                 <div class="completed-list">${Object.values(products).map((product) => `<span>✓ ${product.name}</span>`).join('')}</div>
